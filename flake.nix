@@ -17,14 +17,14 @@
       pkgs = import nixpkgs {
         inherit system;
       };
-      lr_pkgs = lowrisc-nix.outputs.packages.${system};
+      lowriscPkgs = lowrisc-nix.outputs.packages.${system};
 
       sonata-simulator = pkgs.stdenv.mkDerivation {
         pname = "sonata-system-simulator";
         version = sonata_version;
         src = ./.;
         buildInputs = with pkgs; [libelf zlib];
-        nativeBuildInputs = [pkgs.python311Packages.pip] ++ (with lr_pkgs; [python_ot verilator_ot]);
+        nativeBuildInputs = [pkgs.python311Packages.pip] ++ (with lowriscPkgs; [python_ot verilator_ot]);
         buildPhase = ''
           HOME=$TMPDIR fusesoc --cores-root=. run \
             --target=sim --tool=verilator --setup \
@@ -39,7 +39,9 @@
       formatter = pkgs.alejandra;
       devShells.default = pkgs.mkShell {
         name = "sonata-system-devshell";
-        packages = [pkgs.gtkwave] ++ (with sonata-simulator; buildInputs ++ nativeBuildInputs);
+        packages = (with pkgs; [gtkwave openfpgaloader gnumake magic-enum srecord])
+            ++ (with lowriscPkgs; [llvm_cheriot xmake])
+            ++ (with sonata-simulator; buildInputs ++ nativeBuildInputs);
       };
       packages = {inherit sonata-simulator;};
     };
