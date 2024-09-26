@@ -6,10 +6,14 @@
 import subprocess
 from enum import Enum
 from pathlib import Path
+from typing import NamedTuple
 
 import toml
 from mako.template import Template
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator, model_validator
+from typing_extensions import Self
+
+# from pprint import pprint
 
 
 class BlockIoType(str, Enum):
@@ -28,54 +32,74 @@ class BlockIo(BaseModel):
     name: str
     type: BlockIoType
     combine: str | None = None
-    default: int | None = None
+    default: int = 0
     length: int | None = None
     pins: list[list[list[str]]] = []
 
+    @model_validator(mode="after")
+    def verify_square(self) -> Self:
+        assert (
+            self.type != BlockIoType.INOUT or self.default == 0
+        ), "An inout block IO cannot have a default value other than 0."
+        return self
 
-class Block(BaseModel):
+
+class Block(BaseModel, frozen=True):
     name: str
     instances: int
     ios: list[BlockIo]
 
 
-class PinIo(BaseModel):
+class PinBlockIoPointer(BaseModel, frozen=True):
     block: str
     instance: int
     io: str | int
 
 
-class Pin(BaseModel):
+class Pin(BaseModel, frozen=True):
     name: str
     length: int | None = None
-    block_ios: list[PinIo]
-    block_outputs: list[tuple[str, str, int, str, bool]] = []
+    block_ios: list[PinBlockIoPointer]
 
 
-class Config(BaseModel):
+class Config(BaseModel, frozen=True):
     blocks: list[Block]
     pins: list[Pin]
 
+    @field_validator("pins")
+    @staticmethod
+    def check_pins(pins: list[Pin]) -> list[Pin]:
+        all_names = {pin.name for pin in pins}
+        if len(all_names) != len(pins):
+            raise ValueError("All pins must have unique names.")
+        return pins
+
+    def get_block(self, name: str) -> Block:
+        try:
+            return next(block for block in self.blocks if block.name == name)
+        except StopIteration:
+            print(f"A '{name}' block could not be found.")
+            exit(3)
+
+    def get_pin(self, name: str) -> Pin:
+        try:
+            return next(pin for pin in self.pins if pin.name == name)
+        except StopIteration:
+            print(f"A pin named '{name}' could not be found.")
+            exit(3)
+
 
 if __name__ == "__main__":
+    # load the configuration
     toml_path = Path("data/top_config.toml")
     with toml_path.open() as file:
         config = Config(**toml.load(file))
 
-    def get_block(name: str) -> Block:
-        return next(block for block in config.blocks if block.name == name)
-
-    def get_pin(name: str) -> Pin:
-        return next(pin for pin in config.pins if pin.name == name)
-
-    try:
-        gpio = get_block("gpio")
-        uart = get_block("uart")
-        i2c = get_block("i2c")
-        spi = get_block("spi")
-    except StopIteration:
-        print("One or more blocks not present in configuration.")
-        exit(3)
+    # blocks
+    gpio = config.get_block("gpio")
+    uart = config.get_block("uart")
+    i2c = config.get_block("i2c")
+    spi = config.get_block("spi")
 
     # Parse blocks
     block_ios = []
@@ -84,53 +108,73 @@ if __name__ == "__main__":
         instances = block.instances
         for io in block.ios:
             name = block.name + "_" + io.name
-            width = ""
-            io_type = io.type
-            length = 1
+
             # Generate pinmux module input and outputs
-            if io.name == "ios" and io.length is not None:
-                width = "[" + str(io.length - 1) + ":0] "
-                length = io.length
-            if io_type == BlockIoType.OUTPUT:
-                block_ios.append(("input ", width, name + "_i", instances))
-            elif io_type == BlockIoType.INPUT:
-                block_ios.append(("output", width, name + "_o", instances))
-            elif io_type == BlockIoType.INOUT:
-                block_ios.append(("input ", width, name + "_i", instances))
-                block_ios.append(("input ", width, name + "_en_i", instances))
-                block_ios.append(("output", width, name + "_o", instances))
+            (width, length) = (
+                (f"[{io.length - 1}:0] ", io.length)
+                if io.name == "ios" and io.length is not None
+                else ("", 1)
+            )
+            match io.type:
+                case BlockIoType.OUTPUT:
+                    block_ios.append(("input ", width, name + "_i", instances))
+                case BlockIoType.INPUT:
+                    block_ios.append(("output", width, name + "_o", instances))
+                case BlockIoType.INOUT:
+                    block_ios.append(("input ", width, name + "_i", instances))
+                    block_ios.append(
+                        ("input ", width, name + "_en_i", instances)
+                    )
+                    block_ios.append(("output", width, name + "_o", instances))
+
             io.pins = [[[] for _ in range(instances)] for _ in range(length)]
+
+    # the pins that a block IO can connect to
+    # block_io_pins[block_name][index][block_instance][connections]
+    # == pin_name
+    block_io_pins: dict[str, list[list[list[str]]]] = {}
 
     pin_ios = []
     for pin in config.pins:
-        pin_name = pin.name
-        width = ""
-        arrayed = False
-        if pin.length is not None:
-            width = "[" + str(pin.length - 1) + ":0] "
-            arrayed = True
-        pin_ios.append((width, pin_name))
-        pin.block_outputs = []
+        (width, arrayed) = (
+            (f"[{pin.length - 1}:0] ", True)
+            if pin.length is not None
+            else ("", False)
+        )
+
+        pin_ios.append((width, pin.name))
+
         # Populate block parameters with which pins can connect to them.
-        for bio in pin.block_ios:
-            if isinstance(bio.io, int):
-                bio_name = "ios"
-                index = bio.io
-            else:
-                bio_name = bio.io
-                index = 0
-            for bio2 in get_block(bio.block).ios:
-                if bio_name == bio2.name:
+        for block_io in pin.block_ios:
+            (block_io_name, index) = (
+                ("ios", block_io.io)
+                if isinstance(block_io.io, int)
+                else (block_io.io, 0)
+            )
+            for bio2 in config.get_block(block_io.block).ios:
+                if block_io_name == bio2.name:
                     if arrayed and pin.length is not None:
                         for i in range(pin.length):
-                            bio2.pins[index + i][bio.instance].append(pin_name)
+                            bio2.pins[index + i][block_io.instance].append(
+                                pin.name
+                            )
                     else:
-                        bio2.pins[index][bio.instance].append(pin_name)
+                        bio2.pins[index][block_io.instance].append(pin.name)
 
     # After populating the pins field in block parameters generate input list
     # and populate outputs for pins.
     input_list = []
     combine_list = []
+
+    class BlockPointer(NamedTuple):
+        block: str
+        io: str
+        instance: int
+        bit_index_str: str
+        is_inout: bool
+
+    # maps a pin name to a list of blocks
+    block_outputs: dict[str, list[BlockPointer]] = {}
 
     for block in config.blocks:
         for io in block.ios:
@@ -139,24 +183,18 @@ if __name__ == "__main__":
                 and io.combine == BlockIoCombine.MUX
             ):
                 for bit_idx, pin_list in enumerate(io.pins):
-                    bit_str = "" if len(io.pins) == 1 else "_" + str(bit_idx)
+                    bit_str = "" if len(io.pins) == 1 else f"_{bit_idx}"
                     for inst_idx, pins in enumerate(pin_list):
-                        input_name = block.name + "_" + io.name
-                        if io.type == BlockIoType.INOUT:
-                            def_val = "1'b0"
-                        else:
-                            def_val = "1'b" + str(io.default)
-                        input_pins = [def_val]
+                        default_value = f"1'b{io.default}"
+                        input_pins = [default_value]
                         for pin_name in pins:
                             pin_with_idx = pin_name
-                            pin = get_pin(pin_name)
+                            pin = config.get_pin(pin_name)
                             if pin.length is not None:
                                 if isinstance(pin.block_ios[0].io, int):
                                     pin_with_idx = (
                                         pin_name
-                                        + "["
-                                        + str(bit_idx - pin.block_ios[0].io)
-                                        + "]"
+                                        + f"[{bit_idx - pin.block_ios[0].io}]"
                                     )
                                 else:
                                     print("This IO must be an int.")
@@ -166,27 +204,25 @@ if __name__ == "__main__":
                         # list because the second one is always selected by
                         # default in the RTL.
                         if len(input_pins) == 1:
-                            input_pins.append(def_val)
+                            input_pins.append(default_value)
                         input_list.append(
                             (
-                                input_name,
+                                f"{block.name}_{io.name}",
                                 inst_idx,
                                 bit_idx,
                                 bit_str,
                                 input_pins,
                             )
                         )
-            if io.type == BlockIoType.OUTPUT or io.type == BlockIoType.INOUT:
+            if io.type in (BlockIoType.OUTPUT, BlockIoType.INOUT):
                 for bit_idx, pin_list in enumerate(io.pins):
-                    if len(io.pins) == 1:
-                        bit_str = ""
-                    else:
-                        bit_str = "[" + str(bit_idx) + "]"
+                    bit_str = "" if len(io.pins) == 1 else f"[{bit_idx}]"
+
                     for inst_idx, pins in enumerate(pin_list):
                         for pin_name in pins:
-                            pin = get_pin(pin_name)
-                            pin.block_outputs.append(
-                                (
+                            pin = config.get_pin(pin_name)
+                            block_outputs.setdefault(pin.name, []).append(
+                                BlockPointer(
                                     block.name,
                                     io.name,
                                     inst_idx,
@@ -211,9 +247,9 @@ if __name__ == "__main__":
                     combine_pins = pins
                     combine_pin_selectors = []
                     for pin_name in combine_pins:
-                        pin = get_pin(pin_name)
+                        pin = config.get_pin(pin_name)
                         for sel_idx, block_output in enumerate(
-                            pin.block_outputs
+                            block_outputs[pin.name]
                         ):
                             if block_output[3] != "":
                                 print(
@@ -242,13 +278,10 @@ if __name__ == "__main__":
                         )
                     )
 
-    output_list: list[
-        tuple[str, str, str, list[tuple[str, str, int, str, bool]]]
-    ] = []
+    output_list: list[tuple[str, str, str, list[BlockPointer]]] = []
 
     for pin in config.pins:
-        outputs = pin.block_outputs
-        if outputs != []:
+        if outputs := block_outputs.get(pin.name):
             if pin.length is not None:
                 if pin.length != len(outputs):
                     print(
@@ -256,31 +289,54 @@ if __name__ == "__main__":
                     )
                     exit()
                 output_list.extend(
-                    (pin.name, "_" + str(i), "[" + str(i) + "]", [outputs[i]])
+                    (pin.name, f"_{i}", f"[{i}]", [outputs[i]])
                     for i in range(pin.length)
                 )
             else:
                 output_list.append((pin.name, "", "", outputs))
 
+    class BlockIoTuple(NamedTuple):
+        direction: str
+        width: str
+        name: str
+        instances: int
+
+    class PinIoTuple(NamedTuple):
+        width: str
+        name: str
+
+    class InputListTuple(NamedTuple):
+        block_input: str
+        instances: int
+        bit_idx: int
+        bit_str: int
+
+    class OutputListTuple(NamedTuple):
+        pin_output: str
+        idx_str: str  # index with preceding underscore
+        idx_alt: str  # index surrounded by square brackets
+        block_ptr: BlockPointer
+
+    # block_ios = [BlockIoTuple(*block_io) for block_io in block_ios]
+    # pin_ios = [PinIoTuple(*pin_io) for pin_io in pin_ios]
+
+    # pprint(block_ios)
+    # pprint(pin_ios)
+    # pprint(input_list)
+    # pprint(output_list)
+    # pprint(combine_list)
+
     # Then we use those parameters to generate our SystemVerilog using Mako
-    xbar_spec = ("data/xbar_main.hjson", "data/xbar_main_generated.hjson")
-    sonata_xbar_spec = (
-        "rtl/templates/sonata_xbar_main.sv.tpl",
-        "rtl/bus/sonata_xbar_main.sv",
-    )
-    pkg_spec = ("rtl/templates/sonata_pkg.sv.tpl", "rtl/system/sonata_pkg.sv")
-    pinmux_spec = ("rtl/templates/pinmux.sv.tpl", "rtl/system/pinmux.sv")
-    pinmux_doc_spec = ("doc/ip/pinmux.md.tpl", "doc/ip/pinmux.md")
-
-    specs = [
-        xbar_spec,
-        sonata_xbar_spec,
-        pkg_spec,
-        pinmux_spec,
-        pinmux_doc_spec,
-    ]
-
-    for template_file, output_file in specs:
+    for template_file, output_file in (
+        ("data/xbar_main.hjson", "data/xbar_main_generated.hjson"),
+        (
+            "rtl/templates/sonata_xbar_main.sv.tpl",
+            "rtl/bus/sonata_xbar_main.sv",
+        ),
+        ("rtl/templates/sonata_pkg.sv.tpl", "rtl/system/sonata_pkg.sv"),
+        ("rtl/templates/pinmux.sv.tpl", "rtl/system/pinmux.sv"),
+        ("doc/ip/pinmux.md.tpl", "doc/ip/pinmux.md"),
+    ):
         print("Generating from template: " + template_file)
         template = Template(filename=template_file)
         content = template.render(
