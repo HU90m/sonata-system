@@ -27,13 +27,12 @@ class BlockIoCombine(str, Enum):
     MUX = "mux"
 
 
-class BlockIo(BaseModel):
+class BlockIo(BaseModel, frozen=True):
     name: str
     type: BlockIoType
     combine: str | None = None
     default: int = 0
     length: int | None = None
-    pins: list[list[list[str]]] = []
 
     @model_validator(mode="after")
     def verify_square(self) -> Self:
@@ -130,30 +129,49 @@ def block_ios_iter(config: TopConfig) -> Iterator[PinmuxIoToBlocks]:
                     )
 
 
-def fill_pins(config: TopConfig) -> None:
+BlockIoId: TypeAlias = tuple[str, str]
+PinName: TypeAlias = str
+BlockIoConnectionMap: TypeAlias = dict[BlockIoId, list[list[list[PinName]]]]
+"""
+the pins that a block IO can connect to
+block_io_pins[block_io_id][block_instance][index][connections] == pin_name
+"""
+
+
+def block_io_connection_map(config: TopConfig) -> BlockIoConnectionMap:
+    block_io_connections: BlockIoConnectionMap = {}
+
     for block in config.blocks:
         instances = block.instances
         for io in block.ios:
             length = 1 if io.length is None else io.length
-            io.pins = [[[] for _ in range(length)] for _ in range(instances)]
+            block_io_connections[(block.name, io.name)] = [
+                [[] for _ in range(length)] for _ in range(instances)
+            ]
 
     for pin in config.pins:
         # Populate block parameters with which pins can connect to them.
-        for block_io in pin.block_ios:
+        for pin_block_io in pin.block_ios:
             (block_io_name, index) = (
-                ("ios", block_io.io)
-                if isinstance(block_io.io, int)
-                else (block_io.io, 0)
+                ("ios", pin_block_io.io)
+                if isinstance(pin_block_io.io, int)
+                else (pin_block_io.io, 0)
             )
-            for bio2 in config.get_block(block_io.block).ios:
-                if block_io_name == bio2.name:
+            block = config.get_block(pin_block_io.block)
+            for block_io in block.ios:
+                if block_io_name == block_io.name:
+                    block_io_id: BlockIoId = (block.name, block_io_name)
                     if pin.length is not None:
                         for i in range(pin.length):
-                            bio2.pins[block_io.instance][index + i].append(
-                                pin.name
-                            )
+                            block_io_connections[block_io_id][
+                                pin_block_io.instance
+                            ][index + i].append(pin.name)
                     else:
-                        bio2.pins[block_io.instance][index].append(pin.name)
+                        block_io_connections[block_io_id][
+                            pin_block_io.instance
+                        ][index].append(pin.name)
+
+    return block_io_connections
 
 
 class InputListTuple(NamedTuple):
@@ -164,17 +182,20 @@ class InputListTuple(NamedTuple):
     pinmux_input_connections: list[str]
 
 
-def input_list_iter(config: TopConfig) -> Iterator[InputListTuple]:
+def input_list_iter(
+    config: TopConfig, block_connections: BlockIoConnectionMap
+) -> Iterator[InputListTuple]:
     for block in config.blocks:
         for io in block.ios:
             if io.type == BlockIoType.INPUT or (
                 io.type == BlockIoType.INOUT
                 and io.combine == BlockIoCombine.MUX
             ):
-                for bit_idx in range(len(io.pins[0])):
-                    for inst_idx in range(len(io.pins)):
-                        inst_pins = io.pins[inst_idx]
-                        pins = io.pins[inst_idx][bit_idx]
+                connections = block_connections[(block.name, io.name)]
+                for bit_idx in range(len(connections[0])):
+                    for inst_idx in range(len(connections)):
+                        inst_pins = connections[inst_idx]
+                        pins = connections[inst_idx][bit_idx]
 
                         bit_str = "" if len(inst_pins) == 1 else f"_{bit_idx}"
                         default_value = f"1'b{io.default}"
@@ -215,14 +236,17 @@ class BlockPointer(NamedTuple):
     is_inout: bool
 
 
-def block_outputs_dict(config: TopConfig) -> dict[str, list[BlockPointer]]:
+def block_outputs_dict(
+    config: TopConfig, block_connections: BlockIoConnectionMap
+) -> dict[str, list[BlockPointer]]:
     # maps a pin name to a list of blocks
     block_outputs: dict[str, list[BlockPointer]] = {}
 
     for block in config.blocks:
         for io in block.ios:
             if io.type in (BlockIoType.OUTPUT, BlockIoType.INOUT):
-                for inst_idx, inst_pins in enumerate(io.pins):
+                connections = block_connections[(block.name, io.name)]
+                for inst_idx, inst_pins in enumerate(connections):
                     for bit_idx, pins in enumerate(inst_pins):
                         bit_str = "" if len(inst_pins) == 1 else f"[{bit_idx}]"
                         for pin_name in pins:
@@ -241,7 +265,9 @@ def block_outputs_dict(config: TopConfig) -> dict[str, list[BlockPointer]]:
 
 
 def combine_list_iter(
-    config: TopConfig, block_outputs: dict[str, list[BlockPointer]]
+    config: TopConfig,
+    block_connections: BlockIoConnectionMap,
+    block_outputs: dict[str, list[BlockPointer]],
 ) -> Iterator[Any]:
     for block in config.blocks:
         for io in block.ios:
@@ -249,7 +275,8 @@ def combine_list_iter(
                 io.type == BlockIoType.INOUT
                 and io.combine != BlockIoCombine.MUX
             ):
-                for inst_idx, inst_pins in enumerate(io.pins):
+                connections = block_connections[(block.name, io.name)]
+                for inst_idx, inst_pins in enumerate(connections):
                     if len(inst_pins) != 1:
                         print(
                             "Currently we don't support indexing inout "
@@ -338,32 +365,20 @@ def main() -> None:
         for pin in config.pins
     ]
 
-    # the pins that a block IO can connect to
-    # block_io_pins[block_name][block_instance][index][connections]
-    # == pin_name
-    BlockName: TypeAlias = str
-    PinName: TypeAlias = str
-    """
-    block_io_pins: dict[BlockName, list[list[list[PinName]]]] = {
+    block_connections = block_io_connection_map(config)
 
-        for io in block.ios
-        for block in config.blocks
-    }
-    """
-    _block_io_pins: dict[BlockName, list[list[list[PinName]]]] = {}
-
-    fill_pins(config)
-
-    block_outputs: dict[str, list[BlockPointer]] = block_outputs_dict(config)
+    block_outputs = block_outputs_dict(config, block_connections)
 
     # After populating the pins field in block parameters generate input list
     # and populate outputs for pins.
-    input_list = list(input_list_iter(config))
+    input_list = list(input_list_iter(config, block_connections))
 
     output_list: list[OutputListTuple] = list(
         output_list_iter(config, block_outputs)
     )
-    combine_list = list(combine_list_iter(config, block_outputs))
+    combine_list = list(
+        combine_list_iter(config, block_connections, block_outputs)
+    )
 
     pprint([])
 
