@@ -7,7 +7,7 @@ import subprocess
 from enum import Enum
 from pathlib import Path
 from pprint import pprint
-from typing import NamedTuple
+from typing import Any, Iterator, NamedTuple, TypeAlias
 
 import toml
 from mako.template import Template
@@ -95,20 +95,14 @@ class TopConfig(BaseModel, frozen=True):
             exit(3)
 
 
-def main() -> None:
-    # load the configuration
-    toml_path = Path("data/top_config.toml")
-    with toml_path.open() as file:
-        config = TopConfig(**toml.load(file))
+class PinmuxIoToBlocks(NamedTuple):
+    direction: str
+    width: str
+    name: str
+    instances: int
 
-    class BlockIoTuple(NamedTuple):
-        direction: str
-        width: str
-        name: str
-        instances: int
 
-    block_ios: list[BlockIoTuple] = []
-
+def block_ios_iter(config: TopConfig) -> Iterator[PinmuxIoToBlocks]:
     for block in config.blocks:
         instances = block.instances
         for io in block.ios:
@@ -117,38 +111,26 @@ def main() -> None:
             # Generate pinmux module input and outputs
             match io.type:
                 case BlockIoType.OUTPUT:
-                    block_ios.append(
-                        BlockIoTuple("input ", width, name + "_i", instances)
+                    yield PinmuxIoToBlocks(
+                        "input ", width, name + "_i", instances
                     )
                 case BlockIoType.INPUT:
-                    block_ios.append(
-                        BlockIoTuple("output", width, name + "_o", instances)
+                    yield PinmuxIoToBlocks(
+                        "output", width, name + "_o", instances
                     )
                 case BlockIoType.INOUT:
-                    block_ios.append(
-                        BlockIoTuple("input ", width, name + "_i", instances)
+                    yield PinmuxIoToBlocks(
+                        "input ", width, name + "_i", instances
                     )
-                    block_ios.append(
-                        BlockIoTuple(
-                            "input ", width, name + "_en_i", instances
-                        )
+                    yield PinmuxIoToBlocks(
+                        "input ", width, name + "_en_i", instances
                     )
-                    block_ios.append(
-                        BlockIoTuple("output", width, name + "_o", instances)
+                    yield PinmuxIoToBlocks(
+                        "output", width, name + "_o", instances
                     )
 
-    class PinIoTuple(NamedTuple):
-        width: str
-        name: str
 
-    pin_ios: list[PinIoTuple] = [
-        PinIoTuple(
-            width="" if pin.length is None else f"[{pin.length - 1}:0] ",
-            name=pin.name,
-        )
-        for pin in config.pins
-    ]
-
+def fill_pins(config: TopConfig) -> None:
     for block in config.blocks:
         instances = block.instances
         for io in block.ios:
@@ -173,21 +155,16 @@ def main() -> None:
                     else:
                         bio2.pins[block_io.instance][index].append(pin.name)
 
-    # After populating the pins field in block parameters generate input list
-    # and populate outputs for pins.
-    input_list = []
-    combine_list = []
 
-    class BlockPointer(NamedTuple):
-        block: str
-        io: str
-        instance: int
-        bit_index_str: str
-        is_inout: bool
+class InputListTuple(NamedTuple):
+    block_input: str
+    instances: int
+    bit_idx: int
+    bit_str: str
+    pinmux_input_connections: list[str]
 
-    # maps a pin name to a list of blocks
-    block_outputs: dict[str, list[BlockPointer]] = {}
 
+def input_list_iter(config: TopConfig) -> Iterator[InputListTuple]:
     for block in config.blocks:
         for io in block.ios:
             if io.type == BlockIoType.INPUT or (
@@ -221,15 +198,29 @@ def main() -> None:
                         # default in the RTL.
                         if len(input_pins) == 1:
                             input_pins.append(default_value)
-                        input_list.append(
-                            (
-                                f"{block.name}_{io.name}",
-                                inst_idx,
-                                bit_idx,
-                                bit_str,
-                                input_pins,
-                            )
+                        yield InputListTuple(
+                            f"{block.name}_{io.name}",
+                            inst_idx,
+                            bit_idx,
+                            bit_str,
+                            input_pins,
                         )
+
+
+class BlockPointer(NamedTuple):
+    block: str
+    io: str
+    instance: int
+    bit_index_str: str
+    is_inout: bool
+
+
+def block_outputs_dict(config: TopConfig) -> dict[str, list[BlockPointer]]:
+    # maps a pin name to a list of blocks
+    block_outputs: dict[str, list[BlockPointer]] = {}
+
+    for block in config.blocks:
+        for io in block.ios:
             if io.type in (BlockIoType.OUTPUT, BlockIoType.INOUT):
                 for inst_idx, inst_pins in enumerate(io.pins):
                     for bit_idx, pins in enumerate(inst_pins):
@@ -245,6 +236,13 @@ def main() -> None:
                                     io.type == BlockIoType.INOUT,
                                 )
                             )
+
+    return block_outputs
+
+
+def combine_list_iter(
+    config: TopConfig, block_outputs: dict[str, list[BlockPointer]]
+) -> Iterator[Any]:
     for block in config.blocks:
         for io in block.ios:
             if (
@@ -285,18 +283,25 @@ def main() -> None:
                     if len(combine_pins) != len(combine_pin_selectors):
                         print("Could not fill combine pin selectors properly.")
                         exit()
-                    combine_list.append(
-                        (
-                            input_name,
-                            inst_idx,
-                            combine_pins,
-                            combine_pin_selectors,
-                            io.combine,
-                        )
+                    yield (
+                        input_name,
+                        inst_idx,
+                        combine_pins,
+                        combine_pin_selectors,
+                        io.combine,
                     )
 
-    output_list: list[tuple[str, str, str, list[BlockPointer]]] = []
 
+class OutputListTuple(NamedTuple):
+    pin_output: str
+    idx_str: str  # index with preceding underscore
+    idx_alt: str  # index surrounded by square brackets
+    block_ptr: list[BlockPointer]
+
+
+def output_list_iter(
+    config: TopConfig, block_outputs: dict[str, list[BlockPointer]]
+) -> Iterator[OutputListTuple]:
     for pin in config.pins:
         if outputs := block_outputs.get(pin.name):
             if pin.length is not None:
@@ -305,33 +310,61 @@ def main() -> None:
                         "Arrayed pin must have complete mapping: " + pin.name
                     )
                     exit()
-                output_list.extend(
-                    (pin.name, f"_{i}", f"[{i}]", [outputs[i]])
-                    for i in range(pin.length)
-                )
+                for i in range(pin.length):
+                    yield OutputListTuple(
+                        pin.name, f"_{i}", f"[{i}]", [outputs[i]]
+                    )
             else:
-                output_list.append((pin.name, "", "", outputs))
+                yield OutputListTuple(pin.name, "", "", outputs)
 
-    class InputListTuple(NamedTuple):
-        block_input: str
-        instances: int
-        bit_idx: int
-        bit_str: int
 
-    class OutputListTuple(NamedTuple):
-        pin_output: str
-        idx_str: str  # index with preceding underscore
-        idx_alt: str  # index surrounded by square brackets
-        block_ptr: BlockPointer
+def main() -> None:
+    # load the configuration
+    toml_path = Path("data/top_config.toml")
+    with toml_path.open() as file:
+        config = TopConfig(**toml.load(file))
 
-    # block_ios = [BlockIoTuple(*block_io) for block_io in block_ios]
-    # pin_ios = [PinIoTuple(*pin_io) for pin_io in pin_ios]
+    block_ios: list[PinmuxIoToBlocks] = list(block_ios_iter(config))
 
-    # pprint(block_ios)
-    # pprint(pin_ios)
-    # pprint(input_list)
-    # pprint(output_list)
-    # pprint(combine_list)
+    class PinmuxIoOffSystem(NamedTuple):
+        width: str
+        name: str
+
+    pin_ios: list[PinmuxIoOffSystem] = [
+        PinmuxIoOffSystem(
+            width="" if pin.length is None else f"[{pin.length - 1}:0] ",
+            name=pin.name,
+        )
+        for pin in config.pins
+    ]
+
+    # the pins that a block IO can connect to
+    # block_io_pins[block_name][block_instance][index][connections]
+    # == pin_name
+    BlockName: TypeAlias = str
+    PinName: TypeAlias = str
+    """
+    block_io_pins: dict[BlockName, list[list[list[PinName]]]] = {
+
+        for io in block.ios
+        for block in config.blocks
+    }
+    """
+    _block_io_pins: dict[BlockName, list[list[list[PinName]]]] = {}
+
+    fill_pins(config)
+
+    block_outputs: dict[str, list[BlockPointer]] = block_outputs_dict(config)
+
+    # After populating the pins field in block parameters generate input list
+    # and populate outputs for pins.
+    input_list = list(input_list_iter(config))
+
+    output_list: list[OutputListTuple] = list(
+        output_list_iter(config, block_outputs)
+    )
+    combine_list = list(combine_list_iter(config, block_outputs))
+
     pprint([])
 
     # Then we use those parameters to generate our SystemVerilog using Mako
