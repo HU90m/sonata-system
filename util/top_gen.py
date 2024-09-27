@@ -6,14 +6,13 @@
 import subprocess
 from enum import Enum
 from pathlib import Path
+from pprint import pprint
 from typing import NamedTuple
 
 import toml
 from mako.template import Template
 from pydantic import BaseModel, field_validator, model_validator
 from typing_extensions import Self
-
-# from pprint import pprint
 
 
 class BlockIoType(str, Enum):
@@ -49,6 +48,13 @@ class Block(BaseModel, frozen=True):
     instances: int
     ios: list[BlockIo]
 
+    @field_validator("instances")
+    @staticmethod
+    def check_pins(instances: int) -> int:
+        if instances < 1:
+            raise ValueError("Must have one or more instances of a block.")
+        return instances
+
 
 class PinBlockIoPointer(BaseModel, frozen=True):
     block: str
@@ -62,7 +68,7 @@ class Pin(BaseModel, frozen=True):
     block_ios: list[PinBlockIoPointer]
 
 
-class Config(BaseModel, frozen=True):
+class TopConfig(BaseModel, frozen=True):
     blocks: list[Block]
     pins: list[Pin]
 
@@ -89,61 +95,67 @@ class Config(BaseModel, frozen=True):
             exit(3)
 
 
-if __name__ == "__main__":
+def main() -> None:
     # load the configuration
     toml_path = Path("data/top_config.toml")
     with toml_path.open() as file:
-        config = Config(**toml.load(file))
+        config = TopConfig(**toml.load(file))
 
-    # blocks
-    gpio = config.get_block("gpio")
-    uart = config.get_block("uart")
-    i2c = config.get_block("i2c")
-    spi = config.get_block("spi")
+    class BlockIoTuple(NamedTuple):
+        direction: str
+        width: str
+        name: str
+        instances: int
 
-    # Parse blocks
-    block_ios = []
+    block_ios: list[BlockIoTuple] = []
 
     for block in config.blocks:
         instances = block.instances
         for io in block.ios:
-            name = block.name + "_" + io.name
-
+            name = f"{block.name}_{io.name}"
+            width = "" if io.length is None else f"[{io.length - 1}:0] "
             # Generate pinmux module input and outputs
-            (width, length) = (
-                (f"[{io.length - 1}:0] ", io.length)
-                if io.name == "ios" and io.length is not None
-                else ("", 1)
-            )
             match io.type:
                 case BlockIoType.OUTPUT:
-                    block_ios.append(("input ", width, name + "_i", instances))
-                case BlockIoType.INPUT:
-                    block_ios.append(("output", width, name + "_o", instances))
-                case BlockIoType.INOUT:
-                    block_ios.append(("input ", width, name + "_i", instances))
                     block_ios.append(
-                        ("input ", width, name + "_en_i", instances)
+                        BlockIoTuple("input ", width, name + "_i", instances)
                     )
-                    block_ios.append(("output", width, name + "_o", instances))
+                case BlockIoType.INPUT:
+                    block_ios.append(
+                        BlockIoTuple("output", width, name + "_o", instances)
+                    )
+                case BlockIoType.INOUT:
+                    block_ios.append(
+                        BlockIoTuple("input ", width, name + "_i", instances)
+                    )
+                    block_ios.append(
+                        BlockIoTuple(
+                            "input ", width, name + "_en_i", instances
+                        )
+                    )
+                    block_ios.append(
+                        BlockIoTuple("output", width, name + "_o", instances)
+                    )
 
-            io.pins = [[[] for _ in range(instances)] for _ in range(length)]
+    class PinIoTuple(NamedTuple):
+        width: str
+        name: str
 
-    # the pins that a block IO can connect to
-    # block_io_pins[block_name][index][block_instance][connections]
-    # == pin_name
-    block_io_pins: dict[str, list[list[list[str]]]] = {}
-
-    pin_ios = []
-    for pin in config.pins:
-        (width, arrayed) = (
-            (f"[{pin.length - 1}:0] ", True)
-            if pin.length is not None
-            else ("", False)
+    pin_ios: list[PinIoTuple] = [
+        PinIoTuple(
+            width="" if pin.length is None else f"[{pin.length - 1}:0] ",
+            name=pin.name,
         )
+        for pin in config.pins
+    ]
 
-        pin_ios.append((width, pin.name))
+    for block in config.blocks:
+        instances = block.instances
+        for io in block.ios:
+            length = 1 if io.length is None else io.length
+            io.pins = [[[] for _ in range(length)] for _ in range(instances)]
 
+    for pin in config.pins:
         # Populate block parameters with which pins can connect to them.
         for block_io in pin.block_ios:
             (block_io_name, index) = (
@@ -153,13 +165,13 @@ if __name__ == "__main__":
             )
             for bio2 in config.get_block(block_io.block).ios:
                 if block_io_name == bio2.name:
-                    if arrayed and pin.length is not None:
+                    if pin.length is not None:
                         for i in range(pin.length):
-                            bio2.pins[index + i][block_io.instance].append(
+                            bio2.pins[block_io.instance][index + i].append(
                                 pin.name
                             )
                     else:
-                        bio2.pins[index][block_io.instance].append(pin.name)
+                        bio2.pins[block_io.instance][index].append(pin.name)
 
     # After populating the pins field in block parameters generate input list
     # and populate outputs for pins.
@@ -182,14 +194,18 @@ if __name__ == "__main__":
                 io.type == BlockIoType.INOUT
                 and io.combine == BlockIoCombine.MUX
             ):
-                for bit_idx, pin_list in enumerate(io.pins):
-                    bit_str = "" if len(io.pins) == 1 else f"_{bit_idx}"
-                    for inst_idx, pins in enumerate(pin_list):
+                for bit_idx in range(len(io.pins[0])):
+                    for inst_idx in range(len(io.pins)):
+                        inst_pins = io.pins[inst_idx]
+                        pins = io.pins[inst_idx][bit_idx]
+
+                        bit_str = "" if len(inst_pins) == 1 else f"_{bit_idx}"
                         default_value = f"1'b{io.default}"
                         input_pins = [default_value]
                         for pin_name in pins:
                             pin_with_idx = pin_name
                             pin = config.get_pin(pin_name)
+                            # the pin is an array
                             if pin.length is not None:
                                 if isinstance(pin.block_ios[0].io, int):
                                     pin_with_idx = (
@@ -215,10 +231,9 @@ if __name__ == "__main__":
                             )
                         )
             if io.type in (BlockIoType.OUTPUT, BlockIoType.INOUT):
-                for bit_idx, pin_list in enumerate(io.pins):
-                    bit_str = "" if len(io.pins) == 1 else f"[{bit_idx}]"
-
-                    for inst_idx, pins in enumerate(pin_list):
+                for inst_idx, inst_pins in enumerate(io.pins):
+                    for bit_idx, pins in enumerate(inst_pins):
+                        bit_str = "" if len(inst_pins) == 1 else f"[{bit_idx}]"
                         for pin_name in pins:
                             pin = config.get_pin(pin_name)
                             block_outputs.setdefault(pin.name, []).append(
@@ -236,13 +251,15 @@ if __name__ == "__main__":
                 io.type == BlockIoType.INOUT
                 and io.combine != BlockIoCombine.MUX
             ):
-                if len(io.pins) != 1:
-                    print(
-                        "Currently we don't support indexing inout "
-                        + "signals that are combined through muxing."
-                    )
-                    exit()
-                for inst_idx, pins in enumerate(io.pins[0]):
+                for inst_idx, inst_pins in enumerate(io.pins):
+                    if len(inst_pins) != 1:
+                        print(
+                            "Currently we don't support indexing inout "
+                            + "signals that are combined through muxing."
+                        )
+                        exit()
+                    pins = inst_pins[0]
+
                     input_name = block.name + "_" + io.name
                     combine_pins = pins
                     combine_pin_selectors = []
@@ -295,16 +312,6 @@ if __name__ == "__main__":
             else:
                 output_list.append((pin.name, "", "", outputs))
 
-    class BlockIoTuple(NamedTuple):
-        direction: str
-        width: str
-        name: str
-        instances: int
-
-    class PinIoTuple(NamedTuple):
-        width: str
-        name: str
-
     class InputListTuple(NamedTuple):
         block_input: str
         instances: int
@@ -325,8 +332,20 @@ if __name__ == "__main__":
     # pprint(input_list)
     # pprint(output_list)
     # pprint(combine_list)
+    pprint([])
 
     # Then we use those parameters to generate our SystemVerilog using Mako
+    template_variables = {
+        "gpio_num": config.get_block("gpio").instances,
+        "uart_num": config.get_block("uart").instances,
+        "i2c_num": config.get_block("i2c").instances,
+        "spi_num": config.get_block("spi").instances,
+        "block_ios": block_ios,
+        "pin_ios": pin_ios,
+        "input_list": input_list,
+        "output_list": output_list,
+        "combine_list": combine_list,
+    }
     for template_file, output_file in (
         ("data/xbar_main.hjson", "data/xbar_main_generated.hjson"),
         (
@@ -338,19 +357,11 @@ if __name__ == "__main__":
         ("doc/ip/pinmux.md.tpl", "doc/ip/pinmux.md"),
     ):
         print("Generating from template: " + template_file)
-        template = Template(filename=template_file)
-        content = template.render(
-            gpio_num=gpio.instances,
-            uart_num=uart.instances,
-            i2c_num=i2c.instances,
-            spi_num=spi.instances,
-            block_ios=block_ios,
-            pin_ios=pin_ios,
-            input_list=input_list,
-            output_list=output_list,
-            combine_list=combine_list,
-        )
-        generated_file = Path(output_file)
-        generated_file.write_text(content)
+        content = Template(filename=template_file).render(**template_variables)
+        Path(output_file).write_text(content)
 
     subprocess.call(["sh", "util/generate_xbar.sh"])
+
+
+if __name__ == "__main__":
+    main()
