@@ -7,7 +7,7 @@ import subprocess
 from enum import Enum
 from pathlib import Path
 from pprint import pprint
-from typing import Any, Iterator, NamedTuple, TypeAlias
+from typing import Iterator, NamedTuple, TypeAlias
 
 import toml
 from mako.template import Template
@@ -30,7 +30,7 @@ class BlockIoCombine(str, Enum):
 class BlockIo(BaseModel, frozen=True):
     name: str
     type: BlockIoType
-    combine: str | None = None
+    combine: BlockIoCombine | None = None
     default: int = 0
     length: int | None = None
 
@@ -281,16 +281,24 @@ def input_list_iter(
                         )
 
 
+class CombineListTuple(NamedTuple):
+    block_input: str
+    instance: int
+    pins_to_combine: list[str]
+    pin_selectors: list[int]
+    combine_type: BlockIoCombine
+
+
 def combine_list_iter(
     config: TopConfig,
     block_connections: BlockIoConnectionMap,
     pin_connections: PinIoConnectionMap,
-) -> Iterator[Any]:
+) -> Iterator[CombineListTuple]:
     for block in config.blocks:
         for io in block.ios:
-            if (
-                io.type == BlockIoType.INOUT
-                and io.combine != BlockIoCombine.MUX
+            if io.type == BlockIoType.INOUT and io.combine in (
+                BlockIoCombine.AND,
+                BlockIoCombine.OR,
             ):
                 connections = block_connections[(block.name, io.name)]
                 for inst_idx, inst_pins in enumerate(connections):
@@ -327,7 +335,7 @@ def combine_list_iter(
                     if len(combine_pins) != len(combine_pin_selectors):
                         print("Could not fill combine pin selectors properly.")
                         exit()
-                    yield (
+                    yield CombineListTuple(
                         input_name,
                         inst_idx,
                         combine_pins,
