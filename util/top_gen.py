@@ -258,14 +258,14 @@ def input_list_iter(
                             pin = config.get_pin(pin_name)
                             # the pin is an array
                             if pin.length is not None:
-                                if isinstance(pin.block_ios[0].io, int):
-                                    pin_with_idx = (
-                                        pin_name
-                                        + f"[{bit_idx - pin.block_ios[0].io}]"
-                                    )
-                                else:
-                                    print("This IO must be an int.")
-                                    exit()
+                                assert isinstance(pin.block_ios[0].io, int), (
+                                    f"Pin Array '{pin.name}' must be "
+                                    "connected to a block io of type int."
+                                )
+                                pin_with_idx = (
+                                    f"{pin_name}"
+                                    f"[{bit_idx - pin.block_ios[0].io}]"
+                                )
                             input_pins.append(pin_with_idx)
                         # Make sure there are always two values in the input
                         # list because the second one is always selected by
@@ -302,39 +302,34 @@ def combine_list_iter(
             ):
                 connections = block_connections[(block.name, io.name)]
                 for inst_idx, inst_pins in enumerate(connections):
-                    if len(inst_pins) != 1:
-                        print(
-                            "Currently we don't support indexing inout "
-                            + "signals that are combined through muxing."
-                        )
-                        exit()
-                    pins = inst_pins[0]
-
-                    input_name = block.name + "_" + io.name
-                    combine_pins = pins
+                    assert len(inst_pins) == 1, (
+                        "Currently we don't support indexing inout "
+                        "signals that are combined through muxing."
+                    )
+                    combine_pins = inst_pins[0]
+                    input_name = f"{block.name}_{io.name}"
                     combine_pin_selectors = []
                     for pin_name in combine_pins:
                         pin = config.get_pin(pin_name)
                         for sel_idx, block_output in enumerate(
                             pin_connections[pin.name]
                         ):
-                            if block_output[3] != "":
-                                print(
-                                    "Combining indexed pins is currently "
-                                    + "unsupported."
-                                )
-                                exit()
-                            if block_output[0] is block.name and (
-                                block_output[1] is io.name
-                                and block_output[2] is inst_idx
-                            ):
+                            assert block_output.bit_index_str == "", (
+                                "Combining indexed pins is currently "
+                                "unsupported."
+                            )
+                            if (
+                                block_output.block,
+                                block_output.io,
+                                block_output.instance,
+                            ) == (block.name, io.name, inst_idx):
                                 combine_pin_selectors.append(
                                     1 << (sel_idx + 1)
                                 )
                                 break
-                    if len(combine_pins) != len(combine_pin_selectors):
-                        print("Could not fill combine pin selectors properly.")
-                        exit()
+                    assert len(combine_pins) == len(
+                        combine_pin_selectors
+                    ), "Could not fill combine pin selectors properly."
                     yield CombineListTuple(
                         input_name,
                         inst_idx,
@@ -357,11 +352,9 @@ def output_list_iter(
     for pin in config.pins:
         if outputs := block_outputs.get(pin.name):
             if pin.length is not None:
-                if pin.length != len(outputs):
-                    print(
-                        "Arrayed pin must have complete mapping: " + pin.name
-                    )
-                    exit()
+                assert pin.length == len(
+                    outputs
+                ), f"Arrayed pin '{pin.name}' must have complete mapping"
                 for i in range(pin.length):
                     yield OutputListTuple(
                         pin.name, f"_{i}", f"[{i}]", [outputs[i]]
