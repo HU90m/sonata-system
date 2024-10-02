@@ -259,6 +259,8 @@ module top_verilator (input logic clk_i, rst_ni);
     .pmod0(),
     .pmod1(),
 
+    .pins_io (),
+
     .tl_i(tlul_pkg::TL_H2D_DEFAULT),
     .tl_o()
   );

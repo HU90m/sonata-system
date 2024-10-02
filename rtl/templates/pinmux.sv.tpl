@@ -20,6 +20,8 @@ module pinmux (
   inout logic ${width}${name},
   % endfor
 
+  inout wire sonata_pkg::sonata_pins_t pins_io,
+
   // TileLink interfaces.
   input  tlul_pkg::tl_h2d_t tl_i,
   output tlul_pkg::tl_d2h_t tl_o
@@ -69,6 +71,44 @@ module pinmux (
     .rdata_i      (reg_rdata),
     .error_i      (1'b0)
   );
+
+  // Pad Ring
+  prim_pad_wrapper_pkg::pad_attr_t pad_attr = '{
+    default:'0,
+    drive_strength: '1
+  };
+
+  // verilator lint_off UNDRIVEN
+  sonata_pkg::sonata_pins_t pins_from_pad_en;
+  sonata_pkg::sonata_pins_t pins_to_pad_en;
+  sonata_pkg::sonata_pins_t pins_to_pad;
+  // verilator lint_on UNDRIVEN
+  // verilator lint_off UNUSEDSIGNAL
+  sonata_pkg::sonata_pins_t pins_from_pad;
+  // verilator lint_on UNUSEDSIGNAL
+
+  // One day all tools will be fine with `foreach (pins_io.array[idx])`
+  for (genvar idx = 0; idx < $size(pins_io.array); ++idx) begin
+    // Declare a temperator veriable to work around
+    // https://github.com/verilator/verilator/issues/1278
+    wire pin_io = pins_io.array[idx];
+    prim_pad_wrapper u_pad (
+      .inout_io (pin_io),
+      .in_o (pins_from_pad.array[idx]),
+      .ie_i (pins_from_pad_en.array[idx]),
+      .out_i (pins_to_pad.array[idx]),
+      .oe_i (pins_to_pad_en.array[idx]),
+      .attr_i (pad_attr),
+
+      // Don't care
+      .in_raw_o (),
+      // Unused in the generic wrapper
+      .clk_scan_i (),
+      .scanmode_i (),
+      .pok_i ()
+    );
+  end
+
 
   // Outputs - Blocks IO is muxed to choose which drives the output and output
   // enable of a physical pin

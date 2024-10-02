@@ -336,6 +336,9 @@ module top_sonata (
     .mb8,
     .pmod0,
     .pmod1,
+
+    .pins_io (),
+
     .tl_i(tl_pinmux_h2d),
     .tl_o(tl_pinmux_d2h)
   );
