@@ -161,6 +161,8 @@ class InputPin(NamedTuple):
     instances: int
     bit_idx: int
     bit_str: str
+    default_value: int
+    num_options: int
     pinmux_input_connections: list[str]
 
 
@@ -184,8 +186,7 @@ def input_pins_iter(
                     pins = inst_pins[bit_idx]
 
                     bit_str = "" if len(inst_pins) == 1 else f"_{bit_idx}"
-                    default_value = f"1'b{io.default}"
-                    input_pins = [default_value]
+                    input_pins = []
                     for pin_name in pins:
                         pin = config.get_pin(pin_name)
                         if pin.length is None:
@@ -198,16 +199,14 @@ def input_pins_iter(
                             input_pins.append(
                                 f"{pin_name}[{bit_idx - pin.block_ios[0].io}]"
                             )
-                    # Make sure there are always two values in the input
-                    # list because the second one is always selected by
-                    # default in the RTL.
-                    if len(input_pins) == 1:
-                        input_pins.append(default_value)
+                    num_options = len(input_pins) + 1 if len(input_pins) > 0 else 2
                     yield InputPin(
                         f"{block.name}_{io.name}",
                         inst_idx,
                         bit_idx,
                         bit_str,
+                        io.default,
+                        num_options,
                         input_pins,
                     )
 

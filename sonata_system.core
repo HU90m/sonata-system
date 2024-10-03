@@ -20,6 +20,7 @@ filesets:
       - lowrisc:ip:xadc
       - lowrisc:opentitan:top_earlgrey_rv_plic
       - lowrisc:prim:onehot
+      - lowrisc:prim:pad_wrapper
       - lowrisc:tlul:adapter_host
       - lowrisc:tlul:adapter_reg
     files:
@@ -32,6 +33,7 @@ filesets:
       - rtl/system/gpio.sv
       - rtl/system/gpio_array.sv
       - rtl/system/pinmux.sv
+      - rtl/system/padring.sv
       - rtl/system/pwm.sv
       - rtl/system/pwm_wrapper.sv
       - rtl/system/pwm_fade.sv
