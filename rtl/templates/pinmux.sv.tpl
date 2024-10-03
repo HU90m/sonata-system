@@ -5,7 +5,10 @@
 // rtl/system/pinmux.sv is automatically generated using util/top_gen.py from rtl/templates/pinmux.sv.tpl
 // Please make any edits to the template file.
 
-module pinmux (
+module pinmux
+  import sonata_pkg::sonata_pins_t;
+  import sonata_pkg::NUM_PINS;
+(
   // Clock and reset.
   input logic clk_i,
   input logic rst_ni,
@@ -15,10 +18,11 @@ module pinmux (
   ${label} logic ${width}${name}[${instances}],
   % endfor
 
-  // List of pins.
-  % for width, name in pin_ios:
-  inout logic ${width}${name},
-  % endfor
+  // Pin Signals
+  input  sonata_pins_t from_pins_i,
+  output sonata_pins_t from_pins_en_o,
+  output sonata_pins_t to_pins_o,
+  output sonata_pins_t to_pins_en_o,
 
   // TileLink interfaces.
   input  tlul_pkg::tl_h2d_t tl_i,
@@ -75,8 +79,6 @@ module pinmux (
   % for output_idx, (pin_output, idx_str, idx_alt, possible_blocks) in enumerate(output_list):
 
   logic [${len(possible_blocks)}:0] ${pin_output}${idx_str}_sel;
-  logic ${pin_output}${idx_str}_o;
-  logic ${pin_output}${idx_str}_en_o;
   logic ${pin_output}${idx_str}_sel_addressed;
 
   // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
@@ -109,7 +111,7 @@ module pinmux (
       % endfor
     }),
     .sel_i(${pin_output}${idx_str}_sel),
-    .out_o(${pin_output}${idx_str}_o)
+    .out_o(to_pins_o.names.${pin_output}${idx_alt})
   );
 
   prim_onehot_mux #(
@@ -125,16 +127,20 @@ module pinmux (
       % endfor
     }),
     .sel_i(${pin_output}${idx_str}_sel),
-    .out_o(${pin_output}${idx_str}_en_o)
+    .out_o(to_pins_en_o.names.${pin_output}${idx_alt})
   );
-
-  assign ${pin_output}${idx_alt} = ${pin_output}${idx_str}_en_o ? ${pin_output}${idx_str}_o : 1'bz;
   % endfor
 
   // Inputs - Physical pin inputs are muxed to particular block IO
-  % for input_idx, (block_input, inst, bit_idx, bit_str, possible_pins) in enumerate(input_list):
+  for (genvar idx = 0; idx < NUM_PINS; ++idx) begin
+    assign from_pins_en_o.array[idx] = 1'b1;
+  end
 
-  logic [${len(possible_pins)-1}:0] ${block_input}_${inst}${bit_str}_sel;
+  //assign from_pins_en_o.array[0:NUM_PINS-1] = '{NUM_PINS{1'b1}};
+
+  % for input_idx, (block_input, inst, bit_idx, bit_str, default_value, num_options, possible_pins) in enumerate(input_list):
+
+  logic [${num_options-1}:0] ${block_input}_${inst}${bit_str}_sel;
   logic ${block_input}_${inst}${bit_str}_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
@@ -146,24 +152,28 @@ module pinmux (
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      ${block_input}_${inst}${bit_str}_sel <= ${len(possible_pins)}'b10;
+      ${block_input}_${inst}${bit_str}_sel <= ${num_options}'b10;
     end else begin
       if (reg_we & ${block_input}_${inst}${bit_str}_sel_addressed) begin
-        ${block_input}_${inst}${bit_str}_sel <= reg_wdata[${(input_idx%4)*8}+:${len(possible_pins)}];
+        ${block_input}_${inst}${bit_str}_sel <= reg_wdata[${(input_idx%4)*8}+:${num_options}];
       end
     end
   end
 
   prim_onehot_mux #(
     .Width(1),
-    .Inputs(${len(possible_pins)})
+    .Inputs(${num_options})
   ) ${block_input}_${inst}${bit_str}_mux (
     .clk_i,
     .rst_ni,
     .in_i({
+      1'b${default_value},
       % for idx, pin in enumerate(possible_pins):
-      ${pin}${',' if idx < len(possible_pins)-1 else ''}
+      from_pins_i.names.${pin}${',' if idx < len(possible_pins)-1 else ''}
       % endfor
+      % if len(possible_pins) == 0:
+      1'b${default_value}
+      % endif
     }),
     .sel_i(${block_input}_${inst}${bit_str}_sel),
     .out_o(${block_input}_o[${inst}]${'' if bit_str == '' else '['+str(bit_idx)+']'})
@@ -174,7 +184,7 @@ module pinmux (
   % for block_input, inst, combine_pins, combine_pin_selectors, combine_type in combine_list:
   assign ${block_input}_o[${inst}] =
     % for idx, pin in enumerate(combine_pins):
-    (${pin}_sel == ${combine_pin_selectors[idx]} ? ${pin} : ${'1' if combine_type == 'and' else '0'})${';' if idx == len(combine_pins)-1 else ' &' if combine_type == 'and' else ' |'}
+    (${pin}_sel == ${combine_pin_selectors[idx]} ? from_pins_i.names.${pin} : ${'1' if combine_type == 'and' else '0'})${';' if idx == len(combine_pins)-1 else ' &' if combine_type == 'and' else ' |'}
     % endfor
   % endfor
 endmodule

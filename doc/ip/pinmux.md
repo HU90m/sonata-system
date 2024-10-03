@@ -103,7 +103,7 @@ Besides the output pin selectors, there are also selectors for which pin should 
 | 0x803 | uart_rx_o(3) | 1'b1, mb8, |
 | 0x804 | uart_rx_o(4) | 1'b1, rs232_rx, |
 | 0x805 | spi_rx_o(0) | 1'b0, appspi_d1, |
-| 0x806 | spi_rx_o(1) | 1'b0, 1'b0, |
+| 0x806 | spi_rx_o(1) | 1'b0, |
 | 0x807 | spi_rx_o(2) | 1'b0, ethmac_cipo, |
 | 0x808 | spi_rx_o(3) | 1'b0, rph_g9_cipo, ah_tmpio12, |
 | 0x809 | spi_rx_o(4) | 1'b0, rph_g19_cipo, mb3, |
@@ -157,52 +157,52 @@ Besides the output pin selectors, there are also selectors for which pin should 
 | 0x839 | gpio_ios_o(2)(15) | 1'b0, pmod1[7], |
 | 0x83a | gpio_ios_o(0)(16) | 1'b0, rph_g16_ce2, |
 | 0x83b | gpio_ios_o(1)(16) | 1'b0, ah_tmpio16, |
-| 0x83c | gpio_ios_o(2)(16) | 1'b0, 1'b0, |
+| 0x83c | gpio_ios_o(2)(16) | 1'b0, |
 | 0x83d | gpio_ios_o(0)(17) | 1'b0, rph_g17, |
 | 0x83e | gpio_ios_o(1)(17) | 1'b0, ah_tmpio17, |
-| 0x83f | gpio_ios_o(2)(17) | 1'b0, 1'b0, |
+| 0x83f | gpio_ios_o(2)(17) | 1'b0, |
 | 0x840 | gpio_ios_o(0)(18) | 1'b0, rph_g18, |
-| 0x841 | gpio_ios_o(1)(18) | 1'b0, 1'b0, |
-| 0x842 | gpio_ios_o(2)(18) | 1'b0, 1'b0, |
+| 0x841 | gpio_ios_o(1)(18) | 1'b0, |
+| 0x842 | gpio_ios_o(2)(18) | 1'b0, |
 | 0x843 | gpio_ios_o(0)(19) | 1'b0, rph_g19_cipo, |
-| 0x844 | gpio_ios_o(1)(19) | 1'b0, 1'b0, |
-| 0x845 | gpio_ios_o(2)(19) | 1'b0, 1'b0, |
+| 0x844 | gpio_ios_o(1)(19) | 1'b0, |
+| 0x845 | gpio_ios_o(2)(19) | 1'b0, |
 | 0x846 | gpio_ios_o(0)(20) | 1'b0, rph_g20_copi, |
-| 0x847 | gpio_ios_o(1)(20) | 1'b0, 1'b0, |
-| 0x848 | gpio_ios_o(2)(20) | 1'b0, 1'b0, |
+| 0x847 | gpio_ios_o(1)(20) | 1'b0, |
+| 0x848 | gpio_ios_o(2)(20) | 1'b0, |
 | 0x849 | gpio_ios_o(0)(21) | 1'b0, rph_g21_sclk, |
-| 0x84a | gpio_ios_o(1)(21) | 1'b0, 1'b0, |
-| 0x84b | gpio_ios_o(2)(21) | 1'b0, 1'b0, |
+| 0x84a | gpio_ios_o(1)(21) | 1'b0, |
+| 0x84b | gpio_ios_o(2)(21) | 1'b0, |
 | 0x84c | gpio_ios_o(0)(22) | 1'b0, rph_g22, |
-| 0x84d | gpio_ios_o(1)(22) | 1'b0, 1'b0, |
-| 0x84e | gpio_ios_o(2)(22) | 1'b0, 1'b0, |
+| 0x84d | gpio_ios_o(1)(22) | 1'b0, |
+| 0x84e | gpio_ios_o(2)(22) | 1'b0, |
 | 0x84f | gpio_ios_o(0)(23) | 1'b0, rph_g23, |
-| 0x850 | gpio_ios_o(1)(23) | 1'b0, 1'b0, |
-| 0x851 | gpio_ios_o(2)(23) | 1'b0, 1'b0, |
+| 0x850 | gpio_ios_o(1)(23) | 1'b0, |
+| 0x851 | gpio_ios_o(2)(23) | 1'b0, |
 | 0x852 | gpio_ios_o(0)(24) | 1'b0, rph_g24, |
-| 0x853 | gpio_ios_o(1)(24) | 1'b0, 1'b0, |
-| 0x854 | gpio_ios_o(2)(24) | 1'b0, 1'b0, |
+| 0x853 | gpio_ios_o(1)(24) | 1'b0, |
+| 0x854 | gpio_ios_o(2)(24) | 1'b0, |
 | 0x855 | gpio_ios_o(0)(25) | 1'b0, rph_g25, |
-| 0x856 | gpio_ios_o(1)(25) | 1'b0, 1'b0, |
-| 0x857 | gpio_ios_o(2)(25) | 1'b0, 1'b0, |
+| 0x856 | gpio_ios_o(1)(25) | 1'b0, |
+| 0x857 | gpio_ios_o(2)(25) | 1'b0, |
 | 0x858 | gpio_ios_o(0)(26) | 1'b0, rph_g26, |
-| 0x859 | gpio_ios_o(1)(26) | 1'b0, 1'b0, |
-| 0x85a | gpio_ios_o(2)(26) | 1'b0, 1'b0, |
+| 0x859 | gpio_ios_o(1)(26) | 1'b0, |
+| 0x85a | gpio_ios_o(2)(26) | 1'b0, |
 | 0x85b | gpio_ios_o(0)(27) | 1'b0, rph_g27, |
-| 0x85c | gpio_ios_o(1)(27) | 1'b0, 1'b0, |
-| 0x85d | gpio_ios_o(2)(27) | 1'b0, 1'b0, |
-| 0x85e | gpio_ios_o(0)(28) | 1'b0, 1'b0, |
-| 0x85f | gpio_ios_o(1)(28) | 1'b0, 1'b0, |
-| 0x860 | gpio_ios_o(2)(28) | 1'b0, 1'b0, |
-| 0x861 | gpio_ios_o(0)(29) | 1'b0, 1'b0, |
-| 0x862 | gpio_ios_o(1)(29) | 1'b0, 1'b0, |
-| 0x863 | gpio_ios_o(2)(29) | 1'b0, 1'b0, |
-| 0x864 | gpio_ios_o(0)(30) | 1'b0, 1'b0, |
-| 0x865 | gpio_ios_o(1)(30) | 1'b0, 1'b0, |
-| 0x866 | gpio_ios_o(2)(30) | 1'b0, 1'b0, |
-| 0x867 | gpio_ios_o(0)(31) | 1'b0, 1'b0, |
-| 0x868 | gpio_ios_o(1)(31) | 1'b0, 1'b0, |
-| 0x869 | gpio_ios_o(2)(31) | 1'b0, 1'b0, |
+| 0x85c | gpio_ios_o(1)(27) | 1'b0, |
+| 0x85d | gpio_ios_o(2)(27) | 1'b0, |
+| 0x85e | gpio_ios_o(0)(28) | 1'b0, |
+| 0x85f | gpio_ios_o(1)(28) | 1'b0, |
+| 0x860 | gpio_ios_o(2)(28) | 1'b0, |
+| 0x861 | gpio_ios_o(0)(29) | 1'b0, |
+| 0x862 | gpio_ios_o(1)(29) | 1'b0, |
+| 0x863 | gpio_ios_o(2)(29) | 1'b0, |
+| 0x864 | gpio_ios_o(0)(30) | 1'b0, |
+| 0x865 | gpio_ios_o(1)(30) | 1'b0, |
+| 0x866 | gpio_ios_o(2)(30) | 1'b0, |
+| 0x867 | gpio_ios_o(0)(31) | 1'b0, |
+| 0x868 | gpio_ios_o(1)(31) | 1'b0, |
+| 0x869 | gpio_ios_o(2)(31) | 1'b0, |
 
 ## Regeneration
 

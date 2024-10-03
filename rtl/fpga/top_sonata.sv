@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 // Sonata system top level for the Sonata PCB
-module top_sonata (
+module top_sonata
+  import sonata_pkg::sonata_pins_t;
+(
   input  logic mainClk,
   input  logic nrst,
 
@@ -245,9 +247,23 @@ module top_sonata (
   logic [31:0] gpio_out_en[GPIO_NUM];
   logic [31:0] gpio_in[GPIO_NUM];
 
+
+  wire sonata_pins_t pins;
+  sonata_pins_t from_pins, from_pins_en, to_pins, to_pins_en;
+
+
+  padring u_padring (
+    .pins_io        (pins       ),
+    .from_pins_o    (from_pins   ),
+    .from_pins_en_i (from_pins_en),
+    .to_pins_i      (to_pins     ),
+    .to_pins_en_i   (to_pins_en  )
+  );
+
   pinmux u_pinmux (
     .clk_i(clk_sys),
     .rst_ni(rst_sys_n),
+
     .uart_tx_i(uart_tx),
     .uart_rx_o(uart_rx),
     .i2c_scl_i(i2c_scl_h2d),
@@ -262,83 +278,91 @@ module top_sonata (
     .gpio_ios_i(gpio_out),
     .gpio_ios_en_i(gpio_out_en),
     .gpio_ios_o(gpio_in),
-    .ser0_tx,
-    .ser0_rx,
-    .ser1_tx,
-    .ser1_rx,
-    .rs232_tx,
-    .rs232_rx,
-    .scl0,
-    .sda0,
-    .scl1,
-    .sda1,
-    .lcd_copi,
-    .lcd_clk,
-    .appspi_d0,
-    .appspi_d1,
-    .appspi_clk,
-    .ethmac_copi,
-    .ethmac_cipo,
-    .ethmac_sclk,
-    .rph_g0,
-    .rph_g1,
-    .rph_g2_sda,
-    .rph_g3_scl,
-    .rph_g4,
-    .rph_g5,
-    .rph_g6,
-    .rph_g7_ce1(), // Already connected in manual GPIO.
-    .rph_g8_ce0(), // Already connected in manual GPIO.
-    .rph_g9_cipo,
-    .rph_g10_copi,
-    .rph_g11_sclk,
-    .rph_g12,
-    .rph_g13,
-    .rph_txd0,
-    .rph_rxd0,
-    .rph_g16_ce2(), // Already connected in manual GPIO.
-    .rph_g17(), // Already connected in manual GPIO.
-    .rph_g18(), // Already connected in manual GPIO.
-    .rph_g19_cipo,
-    .rph_g20_copi,
-    .rph_g21_sclk,
-    .rph_g22,
-    .rph_g23,
-    .rph_g24,
-    .rph_g25,
-    .rph_g26,
-    .rph_g27,
-    .ah_tmpio0,
-    .ah_tmpio1,
-    .ah_tmpio2,
-    .ah_tmpio3,
-    .ah_tmpio4,
-    .ah_tmpio5,
-    .ah_tmpio6,
-    .ah_tmpio7,
-    .ah_tmpio8,
-    .ah_tmpio9,
-    .ah_tmpio10(), // Already connected in manual GPIO.
-    .ah_tmpio11,
-    .ah_tmpio12,
-    .ah_tmpio13,
-    // TODO connect 14, 15 and 17 through XDC
-    .ah_tmpio14(),
-    .ah_tmpio15(),
-    .ah_tmpio16,
-    .ah_tmpio17(),
-    .mb2,
-    .mb3,
-    .mb4,
-    .mb5,
-    .mb6,
-    .mb7,
-    .mb8,
-    .pmod0,
-    .pmod1,
+
+    .from_pins_i    (from_pins   ),
+    .from_pins_en_o (from_pins_en),
+    .to_pins_o      (to_pins     ),
+    .to_pins_en_o   (to_pins_en  ),
+
     .tl_i(tl_pinmux_h2d),
     .tl_o(tl_pinmux_d2h)
   );
+
+  assign pins.names.ser0_tx = ser0_tx;
+  assign pins.names.ser0_rx = ser0_rx;
+  assign pins.names.ser1_tx = ser1_tx;
+  assign pins.names.ser1_rx = ser1_rx;
+  assign pins.names.rs232_tx = rs232_tx;
+  assign pins.names.rs232_rx = rs232_rx;
+  assign pins.names.scl0 = scl0;
+  assign pins.names.sda0 = sda0;
+  assign pins.names.scl1 = scl1;
+  assign pins.names.sda1 = sda1;
+  assign pins.names.lcd_copi = lcd_copi;
+  assign pins.names.lcd_clk = lcd_clk;
+  assign pins.names.appspi_d0 = appspi_d0;
+  assign pins.names.appspi_d1 = appspi_d1;
+  assign pins.names.appspi_clk = appspi_clk;
+  assign pins.names.ethmac_copi = ethmac_copi;
+  assign pins.names.ethmac_cipo = ethmac_cipo;
+  assign pins.names.ethmac_sclk = ethmac_sclk;
+  assign pins.names.rph_g0 = rph_g0;
+  assign pins.names.rph_g1 = rph_g1;
+  assign pins.names.rph_g2_sda = rph_g2_sda;
+  assign pins.names.rph_g3_scl = rph_g3_scl;
+  assign pins.names.rph_g4 = rph_g4;
+  assign pins.names.rph_g5 = rph_g5;
+  assign pins.names.rph_g6 = rph_g6;
+  assign pins.names.rph_g7_ce1 = 'bz; // Already connected in manual GPIO.
+  assign pins.names.rph_g8_ce0 = 'bz; // Already connected in manual GPIO.
+  assign pins.names.rph_g9_cipo = rph_g9_cipo;
+  assign pins.names.rph_g10_copi = rph_g10_copi;
+  assign pins.names.rph_g11_sclk = rph_g11_sclk;
+  assign pins.names.rph_g12 = rph_g12;
+  assign pins.names.rph_g13 = rph_g13;
+  assign pins.names.rph_txd0 = rph_txd0;
+  assign pins.names.rph_rxd0 = rph_rxd0;
+  assign pins.names.rph_g16_ce2 = 'bz; // Already connected in manual GPIO.
+  assign pins.names.rph_g17 = 'bz; // Already connected in manual GPIO.
+  assign pins.names.rph_g18 = 'bz; // Already connected in manual GPIO.
+  assign pins.names.rph_g19_cipo = rph_g19_cipo;
+  assign pins.names.rph_g20_copi = rph_g20_copi;
+  assign pins.names.rph_g21_sclk = rph_g21_sclk;
+  assign pins.names.rph_g22 = rph_g22;
+  assign pins.names.rph_g23 = rph_g23;
+  assign pins.names.rph_g24 = rph_g24;
+  assign pins.names.rph_g25 = rph_g25;
+  assign pins.names.rph_g26 = rph_g26;
+  assign pins.names.rph_g27 = rph_g27;
+  assign pins.names.ah_tmpio0 = ah_tmpio0;
+  assign pins.names.ah_tmpio1 = ah_tmpio1;
+  assign pins.names.ah_tmpio2 = ah_tmpio2;
+  assign pins.names.ah_tmpio3 = ah_tmpio3;
+  assign pins.names.ah_tmpio4 = ah_tmpio4;
+  assign pins.names.ah_tmpio5 = ah_tmpio5;
+  assign pins.names.ah_tmpio6 = ah_tmpio6;
+  assign pins.names.ah_tmpio7 = ah_tmpio7;
+  assign pins.names.ah_tmpio8 = ah_tmpio8;
+  assign pins.names.ah_tmpio9 = ah_tmpio9;
+  assign pins.names.ah_tmpio10 = 'bz; // Already connected in manual GPIO.
+  assign pins.names.ah_tmpio11 = ah_tmpio11;
+  assign pins.names.ah_tmpio12 = ah_tmpio12;
+  assign pins.names.ah_tmpio13 = ah_tmpio13;
+  assign pins.names.ah_tmpio14 = 'bz;
+  assign pins.names.ah_tmpio15 = 'bz;
+  assign pins.names.ah_tmpio16 = ah_tmpio16;
+  assign pins.names.ah_tmpio17 = 'bz;
+  assign pins.names.mb2 = mb2;
+  assign pins.names.mb3 = mb3;
+  assign pins.names.mb4 = mb4;
+  assign pins.names.mb5 = mb5;
+  assign pins.names.mb6 = mb6;
+  assign pins.names.mb7 = mb7;
+  assign pins.names.mb8 = mb8;
+  assign pins.names.pmod0 = pmod0;
+  assign pins.names.pmod1 = pmod1;
+
+
 
   // Enable CHERI by default.
   logic enable_cheri;
@@ -388,6 +412,7 @@ module top_sonata (
                       usrLed, // User LEDs (8 bits)
                       lcd_backlight, lcd_dc, lcd_rst, lcd_cs // LCD screen
                     }),
+    .gp_o_en        (),
 
     // Arduino Shield Analog(ue)
     .ard_an_di_i    (ard_an_di),

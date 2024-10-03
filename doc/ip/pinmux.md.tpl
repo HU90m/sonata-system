@@ -20,8 +20,8 @@ Besides the output pin selectors, there are also selectors for which pin should 
 
 | Address | Block input | Possible pin inputs |
 |---------|-------------|---------------------|
-% for input_idx, (block_input, inst, bit_idx, bit_str, possible_pins) in enumerate(input_list):
-| ${f"{(0x800+input_idx):#0{5}x}"} | ${block_input}_o(${inst})${'' if bit_str == '' else '('+str(bit_idx)+')'} | ${"".join([pin + ", " for pin in possible_pins])}|
+% for input_idx, (block_input, inst, bit_idx, bit_str, default_value, num_options, possible_pins) in enumerate(input_list):
+| ${f"{(0x800+input_idx):#0{5}x}"} | ${block_input}_o(${inst})${'' if bit_str == '' else '('+str(bit_idx)+')'} | 1'b${default_value}, ${"".join([pin + ", " for pin in possible_pins])}|
 % endfor
 
 ${"##"} Regeneration

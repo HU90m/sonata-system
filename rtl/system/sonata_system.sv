@@ -941,14 +941,12 @@ module sonata_system #(
 
   logic [CheriErrWidth-1:0] cheri_err;
 
-  for (genvar i = 0; i < CheriErrWidth; ++i) begin : gen_pwm_fade
-    pwm_fade u_pwm_fade (
-      .clk_i       (clk_sys_i      ),
-      .rst_ni      (rst_core_n     ),
-      .impulse_i   (cheri_err[i]   ),
-      .modulated_o (cheri_err_o[i] )
-    );
-  end
+  pwm_fade u_pwm_fade[CheriErrWidth-1:0] (
+    .clk_i       (clk_sys_i  ),
+    .rst_ni      (rst_core_n ),
+    .impulse_i   (cheri_err  ),
+    .modulated_o (cheri_err_o)
+  );
 
   ibexc_top_tracing #(
     .DmHaltAddr      ( DebugStart + dm::HaltAddress[31:0]      ),
