@@ -123,7 +123,7 @@ module pinmux
     .in_i({
       1'b0,
       % for idx, (block, io, inst, bit_str, is_inout) in enumerate(possible_blocks):
-      ${block + '_' + io + '_en_i[' + str(inst) + ']' + bit_str if is_inout else "'1"}${',' if idx < len(possible_blocks)-1 else ''}
+      ${block + '_' + io + '_en_i[' + str(inst) + ']' + bit_str if is_inout else "1'b1"}${',' if idx < len(possible_blocks)-1 else ''}
       % endfor
     }),
     .sel_i(${pin_output}${idx_str}_sel),
@@ -132,11 +132,7 @@ module pinmux
   % endfor
 
   // Inputs - Physical pin inputs are muxed to particular block IO
-  for (genvar idx = 0; idx < NUM_PINS; ++idx) begin
-    assign from_pins_en_o.array[idx] = 1'b1;
-  end
-
-  //assign from_pins_en_o.array[0:NUM_PINS-1] = '{NUM_PINS{1'b1}};
+  assign from_pins_en_o.names = '{default: 'b1};
 
   % for input_idx, (block_input, inst, bit_idx, bit_str, default_value, num_options, possible_pins) in enumerate(input_list):
 

@@ -130,7 +130,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(ser0_tx_sel),
     .out_o(to_pins_en_o.names.ser0_tx)
@@ -178,7 +178,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(ser1_tx_sel),
     .out_o(to_pins_en_o.names.ser1_tx)
@@ -226,7 +226,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(rs232_tx_sel),
     .out_o(to_pins_en_o.names.rs232_tx)
@@ -466,7 +466,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(appspi_d0_sel),
     .out_o(to_pins_en_o.names.appspi_d0)
@@ -514,7 +514,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(appspi_clk_sel),
     .out_o(to_pins_en_o.names.appspi_clk)
@@ -562,7 +562,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(lcd_copi_sel),
     .out_o(to_pins_en_o.names.lcd_copi)
@@ -610,7 +610,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(lcd_clk_sel),
     .out_o(to_pins_en_o.names.lcd_clk)
@@ -658,7 +658,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(ethmac_copi_sel),
     .out_o(to_pins_en_o.names.ethmac_copi)
@@ -706,7 +706,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(ethmac_sclk_sel),
     .out_o(to_pins_en_o.names.ethmac_sclk)
@@ -1243,7 +1243,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1,
+      1'b1,
       gpio_ios_en_i[0][10]
     }),
     .sel_i(rph_g10_copi_sel),
@@ -1293,7 +1293,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1,
+      1'b1,
       gpio_ios_en_i[0][11]
     }),
     .sel_i(rph_g11_sclk_sel),
@@ -1439,7 +1439,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1,
+      1'b1,
       gpio_ios_en_i[0][14]
     }),
     .sel_i(rph_txd0_sel),
@@ -1729,7 +1729,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1,
+      1'b1,
       gpio_ios_en_i[0][20]
     }),
     .sel_i(rph_g20_copi_sel),
@@ -1779,7 +1779,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1,
+      1'b1,
       gpio_ios_en_i[0][21]
     }),
     .sel_i(rph_g21_sclk_sel),
@@ -2645,7 +2645,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1,
+      1'b1,
       gpio_ios_en_i[1][11]
     }),
     .sel_i(ah_tmpio11_sel),
@@ -2743,7 +2743,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1,
+      1'b1,
       gpio_ios_en_i[1][13]
     }),
     .sel_i(ah_tmpio13_sel),
@@ -2984,7 +2984,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(mb2_sel),
     .out_o(to_pins_en_o.names.mb2)
@@ -3032,7 +3032,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(mb4_sel),
     .out_o(to_pins_en_o.names.mb4)
@@ -3176,7 +3176,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      '1
+      1'b1
     }),
     .sel_i(mb7_sel),
     .out_o(to_pins_en_o.names.mb7)
@@ -3951,11 +3951,7 @@ module pinmux
   );
 
   // Inputs - Physical pin inputs are muxed to particular block IO
-  for (genvar idx = 0; idx < NUM_PINS; ++idx) begin
-    assign from_pins_en_o.array[idx] = 1'b1;
-  end
-
-  //assign from_pins_en_o.array[0:NUM_PINS-1] = '{NUM_PINS{1'b1}};
+  assign from_pins_en_o.names = '{default: 'b1};
 
 
   logic [1:0] uart_rx_0_sel;
