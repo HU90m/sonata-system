@@ -4,7 +4,7 @@
 
 // Sonata system top level for the Sonata PCB
 module top_sonata
-  import sonata_pkg::sonata_pins_t;
+  import sonata_pkg::*;
 (
   input  logic mainClk,
   input  logic nrst,
@@ -232,25 +232,9 @@ module top_sonata
   tlul_pkg::tl_h2d_t tl_pinmux_h2d;
   tlul_pkg::tl_d2h_t tl_pinmux_d2h;
 
-  logic uart_tx[UART_NUM];
-  logic uart_rx[UART_NUM];
-  logic i2c_scl_h2d[I2C_NUM];
-  logic i2c_scl_en_h2d[I2C_NUM];
-  logic i2c_scl_d2h[I2C_NUM];
-  logic i2c_sda_h2d[I2C_NUM];
-  logic i2c_sda_en_h2d[I2C_NUM];
-  logic i2c_sda_d2h[I2C_NUM];
-  logic spi_sck[SPI_NUM];
-  logic spi_tx[SPI_NUM];
-  logic spi_rx[SPI_NUM];
-  logic [31:0] gpio_out[GPIO_NUM];
-  logic [31:0] gpio_out_en[GPIO_NUM];
-  logic [31:0] gpio_in[GPIO_NUM];
-
 
   wire sonata_pins_t pins;
   sonata_pins_t from_pins, from_pins_en, to_pins, to_pins_en;
-
 
   padring u_padring (
     .pins_io        (pins       ),
@@ -258,34 +242,6 @@ module top_sonata
     .from_pins_en_i (from_pins_en),
     .to_pins_i      (to_pins     ),
     .to_pins_en_i   (to_pins_en  )
-  );
-
-  pinmux u_pinmux (
-    .clk_i(clk_sys),
-    .rst_ni(rst_sys_n),
-
-    .uart_tx_i(uart_tx),
-    .uart_rx_o(uart_rx),
-    .i2c_scl_i(i2c_scl_h2d),
-    .i2c_scl_en_i(i2c_scl_en_h2d),
-    .i2c_scl_o(i2c_scl_d2h),
-    .i2c_sda_i(i2c_sda_h2d),
-    .i2c_sda_en_i(i2c_sda_en_h2d),
-    .i2c_sda_o(i2c_sda_d2h),
-    .spi_sck_i(spi_sck),
-    .spi_tx_i(spi_tx),
-    .spi_rx_o(spi_rx),
-    .gpio_ios_i(gpio_out),
-    .gpio_ios_en_i(gpio_out_en),
-    .gpio_ios_o(gpio_in),
-
-    .from_pins_i    (from_pins   ),
-    .from_pins_en_o (from_pins_en),
-    .to_pins_o      (to_pins     ),
-    .to_pins_en_o   (to_pins_en  ),
-
-    .tl_i(tl_pinmux_h2d),
-    .tl_o(tl_pinmux_d2h)
   );
 
   assign pins.names = '{
@@ -414,33 +370,6 @@ module top_sonata
     // PWM
     .pwm_o({mb10}),
 
-    // GPIO headers
-    .gp_headers_i   (gpio_in),
-    .gp_headers_o   (gpio_out),
-    .gp_headers_o_en(gpio_out_en),
-
-    // UARTs
-    .uart_rx_i     (uart_rx),
-    .uart_tx_o     (uart_tx),
-
-    // I2C hosts
-    .i2c_scl_i     (i2c_scl_d2h),
-    .i2c_scl_o     (i2c_scl_h2d),
-    .i2c_scl_en_o  (i2c_scl_en_h2d),
-    .i2c_sda_i     (i2c_sda_d2h),
-    .i2c_sda_o     (i2c_sda_h2d),
-    .i2c_sda_en_o  (i2c_sda_en_h2d),
-
-    // SPI connections for
-    // - LCD screen
-    // - Flash memory
-    // - Ethernet
-    // - 2x Raspberry Pi HAT
-    // - Arduino Shield
-    // - mikroBUS Click
-    .spi_rx_i  (spi_rx),
-    .spi_tx_o  (spi_tx),
-    .spi_sck_o (spi_sck),
     // Interrupt for Ethernet is out of band
     .spi_eth_irq_ni (ethmac_intr),
 
@@ -448,7 +377,6 @@ module top_sonata
     .cheri_en_i     (enable_cheri),
     .cheri_err_o    (cheriErr),
     .cheri_en_o     (cheri_en),
-
 
     // Reception from USB host via transceiver
     .usb_dp_i         (usrusb_v_p),
@@ -483,8 +411,10 @@ module top_sonata
     .hyperram_nrst,
     .hyperram_cs,
 
-    .tl_pinmux_o(tl_pinmux_h2d),
-    .tl_pinmux_i(tl_pinmux_d2h)
+    .from_pins_i    (from_pins   ),
+    .from_pins_en_o (from_pins_en),
+    .to_pins_o      (to_pins     ),
+    .to_pins_en_o   (to_pins_en  )
   );
 
   assign rgbled0 = ~rgbled_dout;

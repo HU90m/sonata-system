@@ -19,10 +19,7 @@ module top_verilator (input logic clk_i, rst_ni);
   // (described in IEEE 1800-2012).
   localparam int unsigned STDERR = 32'h8000_0002;
 
-  logic unused_uart[3];
-
   logic uart_sys_rx, uart_sys_tx;
-
   logic uart_aux_rx, uart_aux_tx;
   assign uart_aux_rx = 1'b1;
 
@@ -155,44 +152,30 @@ module top_verilator (input logic clk_i, rst_ni);
     end
   end
 
-  logic spi_rx[SPI_NUM];
-  logic spi_tx[SPI_NUM];
-  logic spi_sck[SPI_NUM];
+  sonata_pins_t from_pins, from_pins_en, to_pins, to_pins_en;
 
-  assign spi_rx[0] = appspi_d1;
-  assign appspi_d0 = spi_tx[0];
-  assign lcd_copi = spi_tx[1];
-  assign appspi_clk = spi_sck[0];
-  assign lcd_clk = spi_sck[1];
+  assign appspi_d0 = to_pins.names.appspi_d0;
+  assign lcd_copi = to_pins.names.lcd_copi;
+  assign appspi_clk = to_pins.names.appspi_clk;
+  assign lcd_clk = to_pins.names.lcd_clk;
+  assign uart_sys_tx = to_pins.names.ser0_tx;
+  assign uart_aux_tx = to_pins.names.ser1_tx;
 
-  // Stub of pinmux to make sure it keeps compiling.
-  pinmux u_pinmux (
-    .clk_i,
-    .rst_ni,
+  assign uart_aux_tx = to_pins.names.ser1_tx;
+  assign {scl0_o,  scl0_oe} = {to_pins.names.scl0, to_pins_en.names.scl0};
+  assign {scl1_o,  scl1_oe} = {to_pins.names.scl1, to_pins_en.names.scl1};
+  assign {sda0_o,  sda0_oe} = {to_pins.names.sda0, to_pins_en.names.sda0};
+  assign {sda1_o,  sda1_oe} = {to_pins.names.sda1, to_pins_en.names.sda1};
 
-    .uart_tx_i('{default: '0}),
-    .uart_rx_o(),
-    .i2c_scl_i('{default: '0}),
-    .i2c_scl_en_i('{default: '0}),
-    .i2c_scl_o(),
-    .i2c_sda_i('{default: '0}),
-    .i2c_sda_en_i('{default: '0}),
-    .i2c_sda_o(),
-    .spi_sck_i('{default: '0}),
-    .spi_tx_i('{default: '0}),
-    .spi_rx_o(),
-    .gpio_ios_i('{default: '0}),
-    .gpio_ios_en_i('{default: '0}),
-    .gpio_ios_o(),
-
-    .from_pins_i (),
-    .from_pins_en_o (),
-    .to_pins_o (),
-    .to_pins_en_o (),
-
-    .tl_i(tlul_pkg::TL_H2D_DEFAULT),
-    .tl_o()
-  );
+  assign from_pins.names = '{
+    default: 'b0,
+    appspi_d1: appspi_d1,
+    ser0_rx: uart_sys_rx,
+    scl0: scl0_in,
+    sda0: sda0_in,
+    scl1: scl1_in,
+    sda1: sda1_in
+  };
 
   // Instantiating the Sonata System.
   // TODO instantiate this with only two UARTs and no SPI when bus is
@@ -232,37 +215,19 @@ module top_verilator (input logic clk_i, rst_ni);
                   }),
     .gp_o_en      ( ),
     .pwm_o        ( ),
-    .gp_headers_i ('{default: '0}),
-    .gp_headers_o ( ),
-    .gp_headers_o_en ( ),
 
     // Arduino Shield Analog(ue)
     .ard_an_di_i    (0),
     .ard_an_p_i     (0),
     .ard_an_n_i     (0),
 
-    // UARTs
-    .uart_rx_i     ('{uart_sys_rx, uart_aux_rx, 0, 0, 0}),
-    .uart_tx_o     ('{uart_sys_tx, uart_aux_tx, unused_uart[0], unused_uart[1], unused_uart[2]}),
-
     // SPI hosts
-    .spi_rx_i (spi_rx),
-    .spi_tx_o (spi_tx),
-    .spi_sck_o(spi_sck),
     .spi_eth_irq_ni(1'b1),
 
     // CHERI signals
     .cheri_en_i     (cheri_en ),
     .cheri_err_o    (cheri_err),
     .cheri_en_o     (         ),
-
-    // I2C buses
-    .i2c_scl_i     ('{scl0_in, scl1_in}),
-    .i2c_scl_o     ('{scl0_o,  scl1_o}),
-    .i2c_scl_en_o  ('{scl0_oe, scl1_oe}),
-    .i2c_sda_i     ('{sda0_in, sda1_in}),
-    .i2c_sda_o     ('{sda0_o,  sda1_o}),
-    .i2c_sda_en_o  ('{sda0_oe, sda1_oe}),
 
     // Reception from USB host via transceiver
     .usb_dp_i         (usb_dp_p2d),
@@ -298,8 +263,10 @@ module top_verilator (input logic clk_i, rst_ni);
     .hyperram_nrst(),
     .hyperram_cs  (),
 
-    .tl_pinmux_o (),
-    .tl_pinmux_i (tlul_pkg::TL_D2H_DEFAULT)
+    .from_pins_i    (from_pins   ),
+    .from_pins_en_o (from_pins_en),
+    .to_pins_o      (to_pins     ),
+    .to_pins_en_o   (to_pins_en  )
   );
 
   // I2C 0 DPI
