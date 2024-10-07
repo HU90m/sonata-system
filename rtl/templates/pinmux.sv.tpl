@@ -79,8 +79,6 @@ module pinmux
   % for output_idx, (pin_output, idx_str, idx_alt, possible_blocks) in enumerate(output_list):
 
   logic [${len(possible_blocks)}:0] ${pin_output}${idx_str}_sel;
-  logic ${pin_output}${idx_str}_o;
-  logic ${pin_output}${idx_str}_en_o;
   logic ${pin_output}${idx_str}_sel_addressed;
 
   // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
@@ -113,7 +111,7 @@ module pinmux
       % endfor
     }),
     .sel_i(${pin_output}${idx_str}_sel),
-    .out_o(${pin_output}${idx_str}_o)
+    .out_o(to_pins_o.names.${pin_output}${idx_alt})
   );
 
   prim_onehot_mux #(
@@ -129,18 +127,9 @@ module pinmux
       % endfor
     }),
     .sel_i(${pin_output}${idx_str}_sel),
-    .out_o(${pin_output}${idx_str}_en_o)
+    .out_o(to_pins_en_o.names.${pin_output}${idx_alt})
   );
-
-  assign ${pin_output}${idx_alt} = ${pin_output}${idx_str}_en_o ? ${pin_output}${idx_str}_o : 1'bz;
   % endfor
-
-  assign to_pins_o.names = '{
-    % for (pin_output, idx_str, idx_alt, _) in output_list:
-    ${pin_output}${idx_alt}: ${pin_output}${idx_str}_o,
-    % endfor
-    default: 'b0
-  };
 
   // Inputs - Physical pin inputs are muxed to particular block IO
   assign from_pins_en_o.names = '{default: 'b1};
@@ -191,7 +180,7 @@ module pinmux
   % for block_input, inst, combine_pins, combine_pin_selectors, combine_type in combine_list:
   assign ${block_input}_o[${inst}] =
     % for idx, pin in enumerate(combine_pins):
-    (${pin}_sel == ${combine_pin_selectors[idx]} ? ${pin} : ${'1' if combine_type == 'and' else '0'})${';' if idx == len(combine_pins)-1 else ' &' if combine_type == 'and' else ' |'}
+    (${pin}_sel == ${combine_pin_selectors[idx]} ? from_pins_i.names.${pin} : ${'1' if combine_type == 'and' else '0'})${';' if idx == len(combine_pins)-1 else ' &' if combine_type == 'and' else ' |'}
     % endfor
   % endfor
 endmodule
