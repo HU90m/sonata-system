@@ -12,7 +12,7 @@ The default value for all of these selectors is `'b10`.
 
 | Address | Pin output | Possible block inputs |
 |---------|------------|-----------------------|
-% for output_idx, (pin_output, idx_str, idx_alt, possible_blocks) in enumerate(output_list):
+% for output_idx, (pin_output, _, idx_str, idx_alt, possible_blocks) in enumerate(output_list):
 | ${f"{output_idx:#0{5}x}"} | ${pin_output}${idx_alt} | 0${"".join([", " + block + "_" + io + "_i(" +str(inst) + ")" + bit_str.replace("[", "(").replace("]", ")") for block, io, inst, bit_str, _ in possible_blocks])} |
 % endfor
 

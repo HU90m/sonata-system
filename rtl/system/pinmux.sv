@@ -119,7 +119,7 @@ module pinmux
       uart_tx_i[0]
     }),
     .sel_i(ser0_tx_sel),
-    .out_o(to_pins_o.names.ser0_tx)
+    .out_o(to_pins_o.array[0]) // to_pins_o.names.ser0_tx
   );
 
   prim_onehot_mux #(
@@ -133,7 +133,7 @@ module pinmux
       1'b1
     }),
     .sel_i(ser0_tx_sel),
-    .out_o(to_pins_en_o.names.ser0_tx)
+    .out_o(to_pins_en_o.array[0]) // to_pins_en_o.names.ser0_tx
   );
 
   logic [1:0] ser1_tx_sel;
@@ -167,7 +167,7 @@ module pinmux
       uart_tx_i[1]
     }),
     .sel_i(ser1_tx_sel),
-    .out_o(to_pins_o.names.ser1_tx)
+    .out_o(to_pins_o.array[1]) // to_pins_o.names.ser1_tx
   );
 
   prim_onehot_mux #(
@@ -181,7 +181,7 @@ module pinmux
       1'b1
     }),
     .sel_i(ser1_tx_sel),
-    .out_o(to_pins_en_o.names.ser1_tx)
+    .out_o(to_pins_en_o.array[1]) // to_pins_en_o.names.ser1_tx
   );
 
   logic [1:0] rs232_tx_sel;
@@ -215,7 +215,7 @@ module pinmux
       uart_tx_i[4]
     }),
     .sel_i(rs232_tx_sel),
-    .out_o(to_pins_o.names.rs232_tx)
+    .out_o(to_pins_o.array[2]) // to_pins_o.names.rs232_tx
   );
 
   prim_onehot_mux #(
@@ -229,7 +229,7 @@ module pinmux
       1'b1
     }),
     .sel_i(rs232_tx_sel),
-    .out_o(to_pins_en_o.names.rs232_tx)
+    .out_o(to_pins_en_o.array[2]) // to_pins_en_o.names.rs232_tx
   );
 
   logic [1:0] scl0_sel;
@@ -263,7 +263,7 @@ module pinmux
       i2c_scl_i[0]
     }),
     .sel_i(scl0_sel),
-    .out_o(to_pins_o.names.scl0)
+    .out_o(to_pins_o.array[3]) // to_pins_o.names.scl0
   );
 
   prim_onehot_mux #(
@@ -277,7 +277,7 @@ module pinmux
       i2c_scl_en_i[0]
     }),
     .sel_i(scl0_sel),
-    .out_o(to_pins_en_o.names.scl0)
+    .out_o(to_pins_en_o.array[3]) // to_pins_en_o.names.scl0
   );
 
   logic [1:0] sda0_sel;
@@ -311,7 +311,7 @@ module pinmux
       i2c_sda_i[0]
     }),
     .sel_i(sda0_sel),
-    .out_o(to_pins_o.names.sda0)
+    .out_o(to_pins_o.array[4]) // to_pins_o.names.sda0
   );
 
   prim_onehot_mux #(
@@ -325,7 +325,7 @@ module pinmux
       i2c_sda_en_i[0]
     }),
     .sel_i(sda0_sel),
-    .out_o(to_pins_en_o.names.sda0)
+    .out_o(to_pins_en_o.array[4]) // to_pins_en_o.names.sda0
   );
 
   logic [1:0] scl1_sel;
@@ -359,7 +359,7 @@ module pinmux
       i2c_scl_i[1]
     }),
     .sel_i(scl1_sel),
-    .out_o(to_pins_o.names.scl1)
+    .out_o(to_pins_o.array[5]) // to_pins_o.names.scl1
   );
 
   prim_onehot_mux #(
@@ -373,7 +373,7 @@ module pinmux
       i2c_scl_en_i[1]
     }),
     .sel_i(scl1_sel),
-    .out_o(to_pins_en_o.names.scl1)
+    .out_o(to_pins_en_o.array[5]) // to_pins_en_o.names.scl1
   );
 
   logic [1:0] sda1_sel;
@@ -407,7 +407,7 @@ module pinmux
       i2c_sda_i[1]
     }),
     .sel_i(sda1_sel),
-    .out_o(to_pins_o.names.sda1)
+    .out_o(to_pins_o.array[6]) // to_pins_o.names.sda1
   );
 
   prim_onehot_mux #(
@@ -421,7 +421,7 @@ module pinmux
       i2c_sda_en_i[1]
     }),
     .sel_i(sda1_sel),
-    .out_o(to_pins_en_o.names.sda1)
+    .out_o(to_pins_en_o.array[6]) // to_pins_en_o.names.sda1
   );
 
   logic [1:0] appspi_d0_sel;
@@ -455,7 +455,7 @@ module pinmux
       spi_tx_i[0]
     }),
     .sel_i(appspi_d0_sel),
-    .out_o(to_pins_o.names.appspi_d0)
+    .out_o(to_pins_o.array[7]) // to_pins_o.names.appspi_d0
   );
 
   prim_onehot_mux #(
@@ -469,7 +469,7 @@ module pinmux
       1'b1
     }),
     .sel_i(appspi_d0_sel),
-    .out_o(to_pins_en_o.names.appspi_d0)
+    .out_o(to_pins_en_o.array[7]) // to_pins_en_o.names.appspi_d0
   );
 
   logic [1:0] appspi_clk_sel;
@@ -503,7 +503,7 @@ module pinmux
       spi_sck_i[0]
     }),
     .sel_i(appspi_clk_sel),
-    .out_o(to_pins_o.names.appspi_clk)
+    .out_o(to_pins_o.array[8]) // to_pins_o.names.appspi_clk
   );
 
   prim_onehot_mux #(
@@ -517,7 +517,7 @@ module pinmux
       1'b1
     }),
     .sel_i(appspi_clk_sel),
-    .out_o(to_pins_en_o.names.appspi_clk)
+    .out_o(to_pins_en_o.array[8]) // to_pins_en_o.names.appspi_clk
   );
 
   logic [1:0] lcd_copi_sel;
@@ -551,7 +551,7 @@ module pinmux
       spi_tx_i[1]
     }),
     .sel_i(lcd_copi_sel),
-    .out_o(to_pins_o.names.lcd_copi)
+    .out_o(to_pins_o.array[9]) // to_pins_o.names.lcd_copi
   );
 
   prim_onehot_mux #(
@@ -565,7 +565,7 @@ module pinmux
       1'b1
     }),
     .sel_i(lcd_copi_sel),
-    .out_o(to_pins_en_o.names.lcd_copi)
+    .out_o(to_pins_en_o.array[9]) // to_pins_en_o.names.lcd_copi
   );
 
   logic [1:0] lcd_clk_sel;
@@ -599,7 +599,7 @@ module pinmux
       spi_sck_i[1]
     }),
     .sel_i(lcd_clk_sel),
-    .out_o(to_pins_o.names.lcd_clk)
+    .out_o(to_pins_o.array[10]) // to_pins_o.names.lcd_clk
   );
 
   prim_onehot_mux #(
@@ -613,7 +613,7 @@ module pinmux
       1'b1
     }),
     .sel_i(lcd_clk_sel),
-    .out_o(to_pins_en_o.names.lcd_clk)
+    .out_o(to_pins_en_o.array[10]) // to_pins_en_o.names.lcd_clk
   );
 
   logic [1:0] ethmac_copi_sel;
@@ -647,7 +647,7 @@ module pinmux
       spi_tx_i[2]
     }),
     .sel_i(ethmac_copi_sel),
-    .out_o(to_pins_o.names.ethmac_copi)
+    .out_o(to_pins_o.array[11]) // to_pins_o.names.ethmac_copi
   );
 
   prim_onehot_mux #(
@@ -661,7 +661,7 @@ module pinmux
       1'b1
     }),
     .sel_i(ethmac_copi_sel),
-    .out_o(to_pins_en_o.names.ethmac_copi)
+    .out_o(to_pins_en_o.array[11]) // to_pins_en_o.names.ethmac_copi
   );
 
   logic [1:0] ethmac_sclk_sel;
@@ -695,7 +695,7 @@ module pinmux
       spi_sck_i[2]
     }),
     .sel_i(ethmac_sclk_sel),
-    .out_o(to_pins_o.names.ethmac_sclk)
+    .out_o(to_pins_o.array[12]) // to_pins_o.names.ethmac_sclk
   );
 
   prim_onehot_mux #(
@@ -709,7 +709,7 @@ module pinmux
       1'b1
     }),
     .sel_i(ethmac_sclk_sel),
-    .out_o(to_pins_en_o.names.ethmac_sclk)
+    .out_o(to_pins_en_o.array[12]) // to_pins_en_o.names.ethmac_sclk
   );
 
   logic [2:0] rph_g0_sel;
@@ -744,7 +744,7 @@ module pinmux
       gpio_ios_i[0][0]
     }),
     .sel_i(rph_g0_sel),
-    .out_o(to_pins_o.names.rph_g0)
+    .out_o(to_pins_o.array[13]) // to_pins_o.names.rph_g0
   );
 
   prim_onehot_mux #(
@@ -759,7 +759,7 @@ module pinmux
       gpio_ios_en_i[0][0]
     }),
     .sel_i(rph_g0_sel),
-    .out_o(to_pins_en_o.names.rph_g0)
+    .out_o(to_pins_en_o.array[13]) // to_pins_en_o.names.rph_g0
   );
 
   logic [2:0] rph_g1_sel;
@@ -794,7 +794,7 @@ module pinmux
       gpio_ios_i[0][1]
     }),
     .sel_i(rph_g1_sel),
-    .out_o(to_pins_o.names.rph_g1)
+    .out_o(to_pins_o.array[14]) // to_pins_o.names.rph_g1
   );
 
   prim_onehot_mux #(
@@ -809,7 +809,7 @@ module pinmux
       gpio_ios_en_i[0][1]
     }),
     .sel_i(rph_g1_sel),
-    .out_o(to_pins_en_o.names.rph_g1)
+    .out_o(to_pins_en_o.array[14]) // to_pins_en_o.names.rph_g1
   );
 
   logic [2:0] rph_g2_sda_sel;
@@ -844,7 +844,7 @@ module pinmux
       gpio_ios_i[0][2]
     }),
     .sel_i(rph_g2_sda_sel),
-    .out_o(to_pins_o.names.rph_g2_sda)
+    .out_o(to_pins_o.array[15]) // to_pins_o.names.rph_g2_sda
   );
 
   prim_onehot_mux #(
@@ -859,7 +859,7 @@ module pinmux
       gpio_ios_en_i[0][2]
     }),
     .sel_i(rph_g2_sda_sel),
-    .out_o(to_pins_en_o.names.rph_g2_sda)
+    .out_o(to_pins_en_o.array[15]) // to_pins_en_o.names.rph_g2_sda
   );
 
   logic [2:0] rph_g3_scl_sel;
@@ -894,7 +894,7 @@ module pinmux
       gpio_ios_i[0][3]
     }),
     .sel_i(rph_g3_scl_sel),
-    .out_o(to_pins_o.names.rph_g3_scl)
+    .out_o(to_pins_o.array[16]) // to_pins_o.names.rph_g3_scl
   );
 
   prim_onehot_mux #(
@@ -909,7 +909,7 @@ module pinmux
       gpio_ios_en_i[0][3]
     }),
     .sel_i(rph_g3_scl_sel),
-    .out_o(to_pins_en_o.names.rph_g3_scl)
+    .out_o(to_pins_en_o.array[16]) // to_pins_en_o.names.rph_g3_scl
   );
 
   logic [1:0] rph_g4_sel;
@@ -943,7 +943,7 @@ module pinmux
       gpio_ios_i[0][4]
     }),
     .sel_i(rph_g4_sel),
-    .out_o(to_pins_o.names.rph_g4)
+    .out_o(to_pins_o.array[17]) // to_pins_o.names.rph_g4
   );
 
   prim_onehot_mux #(
@@ -957,7 +957,7 @@ module pinmux
       gpio_ios_en_i[0][4]
     }),
     .sel_i(rph_g4_sel),
-    .out_o(to_pins_en_o.names.rph_g4)
+    .out_o(to_pins_en_o.array[17]) // to_pins_en_o.names.rph_g4
   );
 
   logic [1:0] rph_g5_sel;
@@ -991,7 +991,7 @@ module pinmux
       gpio_ios_i[0][5]
     }),
     .sel_i(rph_g5_sel),
-    .out_o(to_pins_o.names.rph_g5)
+    .out_o(to_pins_o.array[18]) // to_pins_o.names.rph_g5
   );
 
   prim_onehot_mux #(
@@ -1005,7 +1005,7 @@ module pinmux
       gpio_ios_en_i[0][5]
     }),
     .sel_i(rph_g5_sel),
-    .out_o(to_pins_en_o.names.rph_g5)
+    .out_o(to_pins_en_o.array[18]) // to_pins_en_o.names.rph_g5
   );
 
   logic [1:0] rph_g6_sel;
@@ -1039,7 +1039,7 @@ module pinmux
       gpio_ios_i[0][6]
     }),
     .sel_i(rph_g6_sel),
-    .out_o(to_pins_o.names.rph_g6)
+    .out_o(to_pins_o.array[19]) // to_pins_o.names.rph_g6
   );
 
   prim_onehot_mux #(
@@ -1053,7 +1053,7 @@ module pinmux
       gpio_ios_en_i[0][6]
     }),
     .sel_i(rph_g6_sel),
-    .out_o(to_pins_en_o.names.rph_g6)
+    .out_o(to_pins_en_o.array[19]) // to_pins_en_o.names.rph_g6
   );
 
   logic [1:0] rph_g7_ce1_sel;
@@ -1087,7 +1087,7 @@ module pinmux
       gpio_ios_i[0][7]
     }),
     .sel_i(rph_g7_ce1_sel),
-    .out_o(to_pins_o.names.rph_g7_ce1)
+    .out_o(to_pins_o.array[20]) // to_pins_o.names.rph_g7_ce1
   );
 
   prim_onehot_mux #(
@@ -1101,7 +1101,7 @@ module pinmux
       gpio_ios_en_i[0][7]
     }),
     .sel_i(rph_g7_ce1_sel),
-    .out_o(to_pins_en_o.names.rph_g7_ce1)
+    .out_o(to_pins_en_o.array[20]) // to_pins_en_o.names.rph_g7_ce1
   );
 
   logic [1:0] rph_g8_ce0_sel;
@@ -1135,7 +1135,7 @@ module pinmux
       gpio_ios_i[0][8]
     }),
     .sel_i(rph_g8_ce0_sel),
-    .out_o(to_pins_o.names.rph_g8_ce0)
+    .out_o(to_pins_o.array[21]) // to_pins_o.names.rph_g8_ce0
   );
 
   prim_onehot_mux #(
@@ -1149,7 +1149,7 @@ module pinmux
       gpio_ios_en_i[0][8]
     }),
     .sel_i(rph_g8_ce0_sel),
-    .out_o(to_pins_en_o.names.rph_g8_ce0)
+    .out_o(to_pins_en_o.array[21]) // to_pins_en_o.names.rph_g8_ce0
   );
 
   logic [1:0] rph_g9_cipo_sel;
@@ -1183,7 +1183,7 @@ module pinmux
       gpio_ios_i[0][9]
     }),
     .sel_i(rph_g9_cipo_sel),
-    .out_o(to_pins_o.names.rph_g9_cipo)
+    .out_o(to_pins_o.array[22]) // to_pins_o.names.rph_g9_cipo
   );
 
   prim_onehot_mux #(
@@ -1197,7 +1197,7 @@ module pinmux
       gpio_ios_en_i[0][9]
     }),
     .sel_i(rph_g9_cipo_sel),
-    .out_o(to_pins_en_o.names.rph_g9_cipo)
+    .out_o(to_pins_en_o.array[22]) // to_pins_en_o.names.rph_g9_cipo
   );
 
   logic [2:0] rph_g10_copi_sel;
@@ -1232,7 +1232,7 @@ module pinmux
       gpio_ios_i[0][10]
     }),
     .sel_i(rph_g10_copi_sel),
-    .out_o(to_pins_o.names.rph_g10_copi)
+    .out_o(to_pins_o.array[23]) // to_pins_o.names.rph_g10_copi
   );
 
   prim_onehot_mux #(
@@ -1247,7 +1247,7 @@ module pinmux
       gpio_ios_en_i[0][10]
     }),
     .sel_i(rph_g10_copi_sel),
-    .out_o(to_pins_en_o.names.rph_g10_copi)
+    .out_o(to_pins_en_o.array[23]) // to_pins_en_o.names.rph_g10_copi
   );
 
   logic [2:0] rph_g11_sclk_sel;
@@ -1282,7 +1282,7 @@ module pinmux
       gpio_ios_i[0][11]
     }),
     .sel_i(rph_g11_sclk_sel),
-    .out_o(to_pins_o.names.rph_g11_sclk)
+    .out_o(to_pins_o.array[24]) // to_pins_o.names.rph_g11_sclk
   );
 
   prim_onehot_mux #(
@@ -1297,7 +1297,7 @@ module pinmux
       gpio_ios_en_i[0][11]
     }),
     .sel_i(rph_g11_sclk_sel),
-    .out_o(to_pins_en_o.names.rph_g11_sclk)
+    .out_o(to_pins_en_o.array[24]) // to_pins_en_o.names.rph_g11_sclk
   );
 
   logic [1:0] rph_g12_sel;
@@ -1331,7 +1331,7 @@ module pinmux
       gpio_ios_i[0][12]
     }),
     .sel_i(rph_g12_sel),
-    .out_o(to_pins_o.names.rph_g12)
+    .out_o(to_pins_o.array[25]) // to_pins_o.names.rph_g12
   );
 
   prim_onehot_mux #(
@@ -1345,7 +1345,7 @@ module pinmux
       gpio_ios_en_i[0][12]
     }),
     .sel_i(rph_g12_sel),
-    .out_o(to_pins_en_o.names.rph_g12)
+    .out_o(to_pins_en_o.array[25]) // to_pins_en_o.names.rph_g12
   );
 
   logic [1:0] rph_g13_sel;
@@ -1379,7 +1379,7 @@ module pinmux
       gpio_ios_i[0][13]
     }),
     .sel_i(rph_g13_sel),
-    .out_o(to_pins_o.names.rph_g13)
+    .out_o(to_pins_o.array[26]) // to_pins_o.names.rph_g13
   );
 
   prim_onehot_mux #(
@@ -1393,7 +1393,7 @@ module pinmux
       gpio_ios_en_i[0][13]
     }),
     .sel_i(rph_g13_sel),
-    .out_o(to_pins_en_o.names.rph_g13)
+    .out_o(to_pins_en_o.array[26]) // to_pins_en_o.names.rph_g13
   );
 
   logic [2:0] rph_txd0_sel;
@@ -1428,7 +1428,7 @@ module pinmux
       gpio_ios_i[0][14]
     }),
     .sel_i(rph_txd0_sel),
-    .out_o(to_pins_o.names.rph_txd0)
+    .out_o(to_pins_o.array[27]) // to_pins_o.names.rph_txd0
   );
 
   prim_onehot_mux #(
@@ -1443,7 +1443,7 @@ module pinmux
       gpio_ios_en_i[0][14]
     }),
     .sel_i(rph_txd0_sel),
-    .out_o(to_pins_en_o.names.rph_txd0)
+    .out_o(to_pins_en_o.array[27]) // to_pins_en_o.names.rph_txd0
   );
 
   logic [1:0] rph_rxd0_sel;
@@ -1477,7 +1477,7 @@ module pinmux
       gpio_ios_i[0][15]
     }),
     .sel_i(rph_rxd0_sel),
-    .out_o(to_pins_o.names.rph_rxd0)
+    .out_o(to_pins_o.array[28]) // to_pins_o.names.rph_rxd0
   );
 
   prim_onehot_mux #(
@@ -1491,7 +1491,7 @@ module pinmux
       gpio_ios_en_i[0][15]
     }),
     .sel_i(rph_rxd0_sel),
-    .out_o(to_pins_en_o.names.rph_rxd0)
+    .out_o(to_pins_en_o.array[28]) // to_pins_en_o.names.rph_rxd0
   );
 
   logic [1:0] rph_g16_ce2_sel;
@@ -1525,7 +1525,7 @@ module pinmux
       gpio_ios_i[0][16]
     }),
     .sel_i(rph_g16_ce2_sel),
-    .out_o(to_pins_o.names.rph_g16_ce2)
+    .out_o(to_pins_o.array[29]) // to_pins_o.names.rph_g16_ce2
   );
 
   prim_onehot_mux #(
@@ -1539,7 +1539,7 @@ module pinmux
       gpio_ios_en_i[0][16]
     }),
     .sel_i(rph_g16_ce2_sel),
-    .out_o(to_pins_en_o.names.rph_g16_ce2)
+    .out_o(to_pins_en_o.array[29]) // to_pins_en_o.names.rph_g16_ce2
   );
 
   logic [1:0] rph_g17_sel;
@@ -1573,7 +1573,7 @@ module pinmux
       gpio_ios_i[0][17]
     }),
     .sel_i(rph_g17_sel),
-    .out_o(to_pins_o.names.rph_g17)
+    .out_o(to_pins_o.array[30]) // to_pins_o.names.rph_g17
   );
 
   prim_onehot_mux #(
@@ -1587,7 +1587,7 @@ module pinmux
       gpio_ios_en_i[0][17]
     }),
     .sel_i(rph_g17_sel),
-    .out_o(to_pins_en_o.names.rph_g17)
+    .out_o(to_pins_en_o.array[30]) // to_pins_en_o.names.rph_g17
   );
 
   logic [1:0] rph_g18_sel;
@@ -1621,7 +1621,7 @@ module pinmux
       gpio_ios_i[0][18]
     }),
     .sel_i(rph_g18_sel),
-    .out_o(to_pins_o.names.rph_g18)
+    .out_o(to_pins_o.array[31]) // to_pins_o.names.rph_g18
   );
 
   prim_onehot_mux #(
@@ -1635,7 +1635,7 @@ module pinmux
       gpio_ios_en_i[0][18]
     }),
     .sel_i(rph_g18_sel),
-    .out_o(to_pins_en_o.names.rph_g18)
+    .out_o(to_pins_en_o.array[31]) // to_pins_en_o.names.rph_g18
   );
 
   logic [1:0] rph_g19_cipo_sel;
@@ -1669,7 +1669,7 @@ module pinmux
       gpio_ios_i[0][19]
     }),
     .sel_i(rph_g19_cipo_sel),
-    .out_o(to_pins_o.names.rph_g19_cipo)
+    .out_o(to_pins_o.array[32]) // to_pins_o.names.rph_g19_cipo
   );
 
   prim_onehot_mux #(
@@ -1683,7 +1683,7 @@ module pinmux
       gpio_ios_en_i[0][19]
     }),
     .sel_i(rph_g19_cipo_sel),
-    .out_o(to_pins_en_o.names.rph_g19_cipo)
+    .out_o(to_pins_en_o.array[32]) // to_pins_en_o.names.rph_g19_cipo
   );
 
   logic [2:0] rph_g20_copi_sel;
@@ -1718,7 +1718,7 @@ module pinmux
       gpio_ios_i[0][20]
     }),
     .sel_i(rph_g20_copi_sel),
-    .out_o(to_pins_o.names.rph_g20_copi)
+    .out_o(to_pins_o.array[33]) // to_pins_o.names.rph_g20_copi
   );
 
   prim_onehot_mux #(
@@ -1733,7 +1733,7 @@ module pinmux
       gpio_ios_en_i[0][20]
     }),
     .sel_i(rph_g20_copi_sel),
-    .out_o(to_pins_en_o.names.rph_g20_copi)
+    .out_o(to_pins_en_o.array[33]) // to_pins_en_o.names.rph_g20_copi
   );
 
   logic [2:0] rph_g21_sclk_sel;
@@ -1768,7 +1768,7 @@ module pinmux
       gpio_ios_i[0][21]
     }),
     .sel_i(rph_g21_sclk_sel),
-    .out_o(to_pins_o.names.rph_g21_sclk)
+    .out_o(to_pins_o.array[34]) // to_pins_o.names.rph_g21_sclk
   );
 
   prim_onehot_mux #(
@@ -1783,7 +1783,7 @@ module pinmux
       gpio_ios_en_i[0][21]
     }),
     .sel_i(rph_g21_sclk_sel),
-    .out_o(to_pins_en_o.names.rph_g21_sclk)
+    .out_o(to_pins_en_o.array[34]) // to_pins_en_o.names.rph_g21_sclk
   );
 
   logic [1:0] rph_g22_sel;
@@ -1817,7 +1817,7 @@ module pinmux
       gpio_ios_i[0][22]
     }),
     .sel_i(rph_g22_sel),
-    .out_o(to_pins_o.names.rph_g22)
+    .out_o(to_pins_o.array[35]) // to_pins_o.names.rph_g22
   );
 
   prim_onehot_mux #(
@@ -1831,7 +1831,7 @@ module pinmux
       gpio_ios_en_i[0][22]
     }),
     .sel_i(rph_g22_sel),
-    .out_o(to_pins_en_o.names.rph_g22)
+    .out_o(to_pins_en_o.array[35]) // to_pins_en_o.names.rph_g22
   );
 
   logic [1:0] rph_g23_sel;
@@ -1865,7 +1865,7 @@ module pinmux
       gpio_ios_i[0][23]
     }),
     .sel_i(rph_g23_sel),
-    .out_o(to_pins_o.names.rph_g23)
+    .out_o(to_pins_o.array[36]) // to_pins_o.names.rph_g23
   );
 
   prim_onehot_mux #(
@@ -1879,7 +1879,7 @@ module pinmux
       gpio_ios_en_i[0][23]
     }),
     .sel_i(rph_g23_sel),
-    .out_o(to_pins_en_o.names.rph_g23)
+    .out_o(to_pins_en_o.array[36]) // to_pins_en_o.names.rph_g23
   );
 
   logic [1:0] rph_g24_sel;
@@ -1913,7 +1913,7 @@ module pinmux
       gpio_ios_i[0][24]
     }),
     .sel_i(rph_g24_sel),
-    .out_o(to_pins_o.names.rph_g24)
+    .out_o(to_pins_o.array[37]) // to_pins_o.names.rph_g24
   );
 
   prim_onehot_mux #(
@@ -1927,7 +1927,7 @@ module pinmux
       gpio_ios_en_i[0][24]
     }),
     .sel_i(rph_g24_sel),
-    .out_o(to_pins_en_o.names.rph_g24)
+    .out_o(to_pins_en_o.array[37]) // to_pins_en_o.names.rph_g24
   );
 
   logic [1:0] rph_g25_sel;
@@ -1961,7 +1961,7 @@ module pinmux
       gpio_ios_i[0][25]
     }),
     .sel_i(rph_g25_sel),
-    .out_o(to_pins_o.names.rph_g25)
+    .out_o(to_pins_o.array[38]) // to_pins_o.names.rph_g25
   );
 
   prim_onehot_mux #(
@@ -1975,7 +1975,7 @@ module pinmux
       gpio_ios_en_i[0][25]
     }),
     .sel_i(rph_g25_sel),
-    .out_o(to_pins_en_o.names.rph_g25)
+    .out_o(to_pins_en_o.array[38]) // to_pins_en_o.names.rph_g25
   );
 
   logic [1:0] rph_g26_sel;
@@ -2009,7 +2009,7 @@ module pinmux
       gpio_ios_i[0][26]
     }),
     .sel_i(rph_g26_sel),
-    .out_o(to_pins_o.names.rph_g26)
+    .out_o(to_pins_o.array[39]) // to_pins_o.names.rph_g26
   );
 
   prim_onehot_mux #(
@@ -2023,7 +2023,7 @@ module pinmux
       gpio_ios_en_i[0][26]
     }),
     .sel_i(rph_g26_sel),
-    .out_o(to_pins_en_o.names.rph_g26)
+    .out_o(to_pins_en_o.array[39]) // to_pins_en_o.names.rph_g26
   );
 
   logic [1:0] rph_g27_sel;
@@ -2057,7 +2057,7 @@ module pinmux
       gpio_ios_i[0][27]
     }),
     .sel_i(rph_g27_sel),
-    .out_o(to_pins_o.names.rph_g27)
+    .out_o(to_pins_o.array[40]) // to_pins_o.names.rph_g27
   );
 
   prim_onehot_mux #(
@@ -2071,7 +2071,7 @@ module pinmux
       gpio_ios_en_i[0][27]
     }),
     .sel_i(rph_g27_sel),
-    .out_o(to_pins_en_o.names.rph_g27)
+    .out_o(to_pins_en_o.array[40]) // to_pins_en_o.names.rph_g27
   );
 
   logic [1:0] ah_tmpio0_sel;
@@ -2105,7 +2105,7 @@ module pinmux
       gpio_ios_i[1][0]
     }),
     .sel_i(ah_tmpio0_sel),
-    .out_o(to_pins_o.names.ah_tmpio0)
+    .out_o(to_pins_o.array[41]) // to_pins_o.names.ah_tmpio0
   );
 
   prim_onehot_mux #(
@@ -2119,7 +2119,7 @@ module pinmux
       gpio_ios_en_i[1][0]
     }),
     .sel_i(ah_tmpio0_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio0)
+    .out_o(to_pins_en_o.array[41]) // to_pins_en_o.names.ah_tmpio0
   );
 
   logic [1:0] ah_tmpio1_sel;
@@ -2153,7 +2153,7 @@ module pinmux
       gpio_ios_i[1][1]
     }),
     .sel_i(ah_tmpio1_sel),
-    .out_o(to_pins_o.names.ah_tmpio1)
+    .out_o(to_pins_o.array[42]) // to_pins_o.names.ah_tmpio1
   );
 
   prim_onehot_mux #(
@@ -2167,7 +2167,7 @@ module pinmux
       gpio_ios_en_i[1][1]
     }),
     .sel_i(ah_tmpio1_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio1)
+    .out_o(to_pins_en_o.array[42]) // to_pins_en_o.names.ah_tmpio1
   );
 
   logic [1:0] ah_tmpio2_sel;
@@ -2201,7 +2201,7 @@ module pinmux
       gpio_ios_i[1][2]
     }),
     .sel_i(ah_tmpio2_sel),
-    .out_o(to_pins_o.names.ah_tmpio2)
+    .out_o(to_pins_o.array[43]) // to_pins_o.names.ah_tmpio2
   );
 
   prim_onehot_mux #(
@@ -2215,7 +2215,7 @@ module pinmux
       gpio_ios_en_i[1][2]
     }),
     .sel_i(ah_tmpio2_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio2)
+    .out_o(to_pins_en_o.array[43]) // to_pins_en_o.names.ah_tmpio2
   );
 
   logic [1:0] ah_tmpio3_sel;
@@ -2249,7 +2249,7 @@ module pinmux
       gpio_ios_i[1][3]
     }),
     .sel_i(ah_tmpio3_sel),
-    .out_o(to_pins_o.names.ah_tmpio3)
+    .out_o(to_pins_o.array[44]) // to_pins_o.names.ah_tmpio3
   );
 
   prim_onehot_mux #(
@@ -2263,7 +2263,7 @@ module pinmux
       gpio_ios_en_i[1][3]
     }),
     .sel_i(ah_tmpio3_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio3)
+    .out_o(to_pins_en_o.array[44]) // to_pins_en_o.names.ah_tmpio3
   );
 
   logic [1:0] ah_tmpio4_sel;
@@ -2297,7 +2297,7 @@ module pinmux
       gpio_ios_i[1][4]
     }),
     .sel_i(ah_tmpio4_sel),
-    .out_o(to_pins_o.names.ah_tmpio4)
+    .out_o(to_pins_o.array[45]) // to_pins_o.names.ah_tmpio4
   );
 
   prim_onehot_mux #(
@@ -2311,7 +2311,7 @@ module pinmux
       gpio_ios_en_i[1][4]
     }),
     .sel_i(ah_tmpio4_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio4)
+    .out_o(to_pins_en_o.array[45]) // to_pins_en_o.names.ah_tmpio4
   );
 
   logic [1:0] ah_tmpio5_sel;
@@ -2345,7 +2345,7 @@ module pinmux
       gpio_ios_i[1][5]
     }),
     .sel_i(ah_tmpio5_sel),
-    .out_o(to_pins_o.names.ah_tmpio5)
+    .out_o(to_pins_o.array[46]) // to_pins_o.names.ah_tmpio5
   );
 
   prim_onehot_mux #(
@@ -2359,7 +2359,7 @@ module pinmux
       gpio_ios_en_i[1][5]
     }),
     .sel_i(ah_tmpio5_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio5)
+    .out_o(to_pins_en_o.array[46]) // to_pins_en_o.names.ah_tmpio5
   );
 
   logic [1:0] ah_tmpio6_sel;
@@ -2393,7 +2393,7 @@ module pinmux
       gpio_ios_i[1][6]
     }),
     .sel_i(ah_tmpio6_sel),
-    .out_o(to_pins_o.names.ah_tmpio6)
+    .out_o(to_pins_o.array[47]) // to_pins_o.names.ah_tmpio6
   );
 
   prim_onehot_mux #(
@@ -2407,7 +2407,7 @@ module pinmux
       gpio_ios_en_i[1][6]
     }),
     .sel_i(ah_tmpio6_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio6)
+    .out_o(to_pins_en_o.array[47]) // to_pins_en_o.names.ah_tmpio6
   );
 
   logic [1:0] ah_tmpio7_sel;
@@ -2441,7 +2441,7 @@ module pinmux
       gpio_ios_i[1][7]
     }),
     .sel_i(ah_tmpio7_sel),
-    .out_o(to_pins_o.names.ah_tmpio7)
+    .out_o(to_pins_o.array[48]) // to_pins_o.names.ah_tmpio7
   );
 
   prim_onehot_mux #(
@@ -2455,7 +2455,7 @@ module pinmux
       gpio_ios_en_i[1][7]
     }),
     .sel_i(ah_tmpio7_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio7)
+    .out_o(to_pins_en_o.array[48]) // to_pins_en_o.names.ah_tmpio7
   );
 
   logic [1:0] ah_tmpio8_sel;
@@ -2489,7 +2489,7 @@ module pinmux
       gpio_ios_i[1][8]
     }),
     .sel_i(ah_tmpio8_sel),
-    .out_o(to_pins_o.names.ah_tmpio8)
+    .out_o(to_pins_o.array[49]) // to_pins_o.names.ah_tmpio8
   );
 
   prim_onehot_mux #(
@@ -2503,7 +2503,7 @@ module pinmux
       gpio_ios_en_i[1][8]
     }),
     .sel_i(ah_tmpio8_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio8)
+    .out_o(to_pins_en_o.array[49]) // to_pins_en_o.names.ah_tmpio8
   );
 
   logic [1:0] ah_tmpio9_sel;
@@ -2537,7 +2537,7 @@ module pinmux
       gpio_ios_i[1][9]
     }),
     .sel_i(ah_tmpio9_sel),
-    .out_o(to_pins_o.names.ah_tmpio9)
+    .out_o(to_pins_o.array[50]) // to_pins_o.names.ah_tmpio9
   );
 
   prim_onehot_mux #(
@@ -2551,7 +2551,7 @@ module pinmux
       gpio_ios_en_i[1][9]
     }),
     .sel_i(ah_tmpio9_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio9)
+    .out_o(to_pins_en_o.array[50]) // to_pins_en_o.names.ah_tmpio9
   );
 
   logic [1:0] ah_tmpio10_sel;
@@ -2585,7 +2585,7 @@ module pinmux
       gpio_ios_i[1][10]
     }),
     .sel_i(ah_tmpio10_sel),
-    .out_o(to_pins_o.names.ah_tmpio10)
+    .out_o(to_pins_o.array[51]) // to_pins_o.names.ah_tmpio10
   );
 
   prim_onehot_mux #(
@@ -2599,7 +2599,7 @@ module pinmux
       gpio_ios_en_i[1][10]
     }),
     .sel_i(ah_tmpio10_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio10)
+    .out_o(to_pins_en_o.array[51]) // to_pins_en_o.names.ah_tmpio10
   );
 
   logic [2:0] ah_tmpio11_sel;
@@ -2634,7 +2634,7 @@ module pinmux
       gpio_ios_i[1][11]
     }),
     .sel_i(ah_tmpio11_sel),
-    .out_o(to_pins_o.names.ah_tmpio11)
+    .out_o(to_pins_o.array[52]) // to_pins_o.names.ah_tmpio11
   );
 
   prim_onehot_mux #(
@@ -2649,7 +2649,7 @@ module pinmux
       gpio_ios_en_i[1][11]
     }),
     .sel_i(ah_tmpio11_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio11)
+    .out_o(to_pins_en_o.array[52]) // to_pins_en_o.names.ah_tmpio11
   );
 
   logic [1:0] ah_tmpio12_sel;
@@ -2683,7 +2683,7 @@ module pinmux
       gpio_ios_i[1][12]
     }),
     .sel_i(ah_tmpio12_sel),
-    .out_o(to_pins_o.names.ah_tmpio12)
+    .out_o(to_pins_o.array[53]) // to_pins_o.names.ah_tmpio12
   );
 
   prim_onehot_mux #(
@@ -2697,7 +2697,7 @@ module pinmux
       gpio_ios_en_i[1][12]
     }),
     .sel_i(ah_tmpio12_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio12)
+    .out_o(to_pins_en_o.array[53]) // to_pins_en_o.names.ah_tmpio12
   );
 
   logic [2:0] ah_tmpio13_sel;
@@ -2732,7 +2732,7 @@ module pinmux
       gpio_ios_i[1][13]
     }),
     .sel_i(ah_tmpio13_sel),
-    .out_o(to_pins_o.names.ah_tmpio13)
+    .out_o(to_pins_o.array[54]) // to_pins_o.names.ah_tmpio13
   );
 
   prim_onehot_mux #(
@@ -2747,7 +2747,7 @@ module pinmux
       gpio_ios_en_i[1][13]
     }),
     .sel_i(ah_tmpio13_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio13)
+    .out_o(to_pins_en_o.array[54]) // to_pins_en_o.names.ah_tmpio13
   );
 
   logic [1:0] ah_tmpio14_sel;
@@ -2781,7 +2781,7 @@ module pinmux
       gpio_ios_i[1][14]
     }),
     .sel_i(ah_tmpio14_sel),
-    .out_o(to_pins_o.names.ah_tmpio14)
+    .out_o(to_pins_o.array[55]) // to_pins_o.names.ah_tmpio14
   );
 
   prim_onehot_mux #(
@@ -2795,7 +2795,7 @@ module pinmux
       gpio_ios_en_i[1][14]
     }),
     .sel_i(ah_tmpio14_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio14)
+    .out_o(to_pins_en_o.array[55]) // to_pins_en_o.names.ah_tmpio14
   );
 
   logic [1:0] ah_tmpio15_sel;
@@ -2829,7 +2829,7 @@ module pinmux
       gpio_ios_i[1][15]
     }),
     .sel_i(ah_tmpio15_sel),
-    .out_o(to_pins_o.names.ah_tmpio15)
+    .out_o(to_pins_o.array[56]) // to_pins_o.names.ah_tmpio15
   );
 
   prim_onehot_mux #(
@@ -2843,7 +2843,7 @@ module pinmux
       gpio_ios_en_i[1][15]
     }),
     .sel_i(ah_tmpio15_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio15)
+    .out_o(to_pins_en_o.array[56]) // to_pins_en_o.names.ah_tmpio15
   );
 
   logic [1:0] ah_tmpio16_sel;
@@ -2877,7 +2877,7 @@ module pinmux
       gpio_ios_i[1][16]
     }),
     .sel_i(ah_tmpio16_sel),
-    .out_o(to_pins_o.names.ah_tmpio16)
+    .out_o(to_pins_o.array[57]) // to_pins_o.names.ah_tmpio16
   );
 
   prim_onehot_mux #(
@@ -2891,7 +2891,7 @@ module pinmux
       gpio_ios_en_i[1][16]
     }),
     .sel_i(ah_tmpio16_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio16)
+    .out_o(to_pins_en_o.array[57]) // to_pins_en_o.names.ah_tmpio16
   );
 
   logic [1:0] ah_tmpio17_sel;
@@ -2925,7 +2925,7 @@ module pinmux
       gpio_ios_i[1][17]
     }),
     .sel_i(ah_tmpio17_sel),
-    .out_o(to_pins_o.names.ah_tmpio17)
+    .out_o(to_pins_o.array[58]) // to_pins_o.names.ah_tmpio17
   );
 
   prim_onehot_mux #(
@@ -2939,7 +2939,7 @@ module pinmux
       gpio_ios_en_i[1][17]
     }),
     .sel_i(ah_tmpio17_sel),
-    .out_o(to_pins_en_o.names.ah_tmpio17)
+    .out_o(to_pins_en_o.array[58]) // to_pins_en_o.names.ah_tmpio17
   );
 
   logic [1:0] mb2_sel;
@@ -2973,7 +2973,7 @@ module pinmux
       spi_sck_i[4]
     }),
     .sel_i(mb2_sel),
-    .out_o(to_pins_o.names.mb2)
+    .out_o(to_pins_o.array[59]) // to_pins_o.names.mb2
   );
 
   prim_onehot_mux #(
@@ -2987,7 +2987,7 @@ module pinmux
       1'b1
     }),
     .sel_i(mb2_sel),
-    .out_o(to_pins_en_o.names.mb2)
+    .out_o(to_pins_en_o.array[59]) // to_pins_en_o.names.mb2
   );
 
   logic [1:0] mb4_sel;
@@ -3021,7 +3021,7 @@ module pinmux
       spi_tx_i[4]
     }),
     .sel_i(mb4_sel),
-    .out_o(to_pins_o.names.mb4)
+    .out_o(to_pins_o.array[60]) // to_pins_o.names.mb4
   );
 
   prim_onehot_mux #(
@@ -3035,7 +3035,7 @@ module pinmux
       1'b1
     }),
     .sel_i(mb4_sel),
-    .out_o(to_pins_en_o.names.mb4)
+    .out_o(to_pins_en_o.array[60]) // to_pins_en_o.names.mb4
   );
 
   logic [1:0] mb5_sel;
@@ -3069,7 +3069,7 @@ module pinmux
       i2c_sda_i[1]
     }),
     .sel_i(mb5_sel),
-    .out_o(to_pins_o.names.mb5)
+    .out_o(to_pins_o.array[61]) // to_pins_o.names.mb5
   );
 
   prim_onehot_mux #(
@@ -3083,7 +3083,7 @@ module pinmux
       i2c_sda_en_i[1]
     }),
     .sel_i(mb5_sel),
-    .out_o(to_pins_en_o.names.mb5)
+    .out_o(to_pins_en_o.array[61]) // to_pins_en_o.names.mb5
   );
 
   logic [1:0] mb6_sel;
@@ -3117,7 +3117,7 @@ module pinmux
       i2c_scl_i[1]
     }),
     .sel_i(mb6_sel),
-    .out_o(to_pins_o.names.mb6)
+    .out_o(to_pins_o.array[62]) // to_pins_o.names.mb6
   );
 
   prim_onehot_mux #(
@@ -3131,7 +3131,7 @@ module pinmux
       i2c_scl_en_i[1]
     }),
     .sel_i(mb6_sel),
-    .out_o(to_pins_en_o.names.mb6)
+    .out_o(to_pins_en_o.array[62]) // to_pins_en_o.names.mb6
   );
 
   logic [1:0] mb7_sel;
@@ -3165,7 +3165,7 @@ module pinmux
       uart_tx_i[3]
     }),
     .sel_i(mb7_sel),
-    .out_o(to_pins_o.names.mb7)
+    .out_o(to_pins_o.array[63]) // to_pins_o.names.mb7
   );
 
   prim_onehot_mux #(
@@ -3179,7 +3179,7 @@ module pinmux
       1'b1
     }),
     .sel_i(mb7_sel),
-    .out_o(to_pins_en_o.names.mb7)
+    .out_o(to_pins_en_o.array[63]) // to_pins_en_o.names.mb7
   );
 
   logic [1:0] pmod0_0_sel;
@@ -3213,7 +3213,7 @@ module pinmux
       gpio_ios_i[2][0]
     }),
     .sel_i(pmod0_0_sel),
-    .out_o(to_pins_o.names.pmod0[0])
+    .out_o(to_pins_o.array[64]) // to_pins_o.names.pmod0[0]
   );
 
   prim_onehot_mux #(
@@ -3227,7 +3227,7 @@ module pinmux
       gpio_ios_en_i[2][0]
     }),
     .sel_i(pmod0_0_sel),
-    .out_o(to_pins_en_o.names.pmod0[0])
+    .out_o(to_pins_en_o.array[64]) // to_pins_en_o.names.pmod0[0]
   );
 
   logic [1:0] pmod0_1_sel;
@@ -3261,7 +3261,7 @@ module pinmux
       gpio_ios_i[2][1]
     }),
     .sel_i(pmod0_1_sel),
-    .out_o(to_pins_o.names.pmod0[1])
+    .out_o(to_pins_o.array[65]) // to_pins_o.names.pmod0[1]
   );
 
   prim_onehot_mux #(
@@ -3275,7 +3275,7 @@ module pinmux
       gpio_ios_en_i[2][1]
     }),
     .sel_i(pmod0_1_sel),
-    .out_o(to_pins_en_o.names.pmod0[1])
+    .out_o(to_pins_en_o.array[65]) // to_pins_en_o.names.pmod0[1]
   );
 
   logic [1:0] pmod0_2_sel;
@@ -3309,7 +3309,7 @@ module pinmux
       gpio_ios_i[2][2]
     }),
     .sel_i(pmod0_2_sel),
-    .out_o(to_pins_o.names.pmod0[2])
+    .out_o(to_pins_o.array[66]) // to_pins_o.names.pmod0[2]
   );
 
   prim_onehot_mux #(
@@ -3323,7 +3323,7 @@ module pinmux
       gpio_ios_en_i[2][2]
     }),
     .sel_i(pmod0_2_sel),
-    .out_o(to_pins_en_o.names.pmod0[2])
+    .out_o(to_pins_en_o.array[66]) // to_pins_en_o.names.pmod0[2]
   );
 
   logic [1:0] pmod0_3_sel;
@@ -3357,7 +3357,7 @@ module pinmux
       gpio_ios_i[2][3]
     }),
     .sel_i(pmod0_3_sel),
-    .out_o(to_pins_o.names.pmod0[3])
+    .out_o(to_pins_o.array[67]) // to_pins_o.names.pmod0[3]
   );
 
   prim_onehot_mux #(
@@ -3371,7 +3371,7 @@ module pinmux
       gpio_ios_en_i[2][3]
     }),
     .sel_i(pmod0_3_sel),
-    .out_o(to_pins_en_o.names.pmod0[3])
+    .out_o(to_pins_en_o.array[67]) // to_pins_en_o.names.pmod0[3]
   );
 
   logic [1:0] pmod0_4_sel;
@@ -3405,7 +3405,7 @@ module pinmux
       gpio_ios_i[2][4]
     }),
     .sel_i(pmod0_4_sel),
-    .out_o(to_pins_o.names.pmod0[4])
+    .out_o(to_pins_o.array[68]) // to_pins_o.names.pmod0[4]
   );
 
   prim_onehot_mux #(
@@ -3419,7 +3419,7 @@ module pinmux
       gpio_ios_en_i[2][4]
     }),
     .sel_i(pmod0_4_sel),
-    .out_o(to_pins_en_o.names.pmod0[4])
+    .out_o(to_pins_en_o.array[68]) // to_pins_en_o.names.pmod0[4]
   );
 
   logic [1:0] pmod0_5_sel;
@@ -3453,7 +3453,7 @@ module pinmux
       gpio_ios_i[2][5]
     }),
     .sel_i(pmod0_5_sel),
-    .out_o(to_pins_o.names.pmod0[5])
+    .out_o(to_pins_o.array[69]) // to_pins_o.names.pmod0[5]
   );
 
   prim_onehot_mux #(
@@ -3467,7 +3467,7 @@ module pinmux
       gpio_ios_en_i[2][5]
     }),
     .sel_i(pmod0_5_sel),
-    .out_o(to_pins_en_o.names.pmod0[5])
+    .out_o(to_pins_en_o.array[69]) // to_pins_en_o.names.pmod0[5]
   );
 
   logic [1:0] pmod0_6_sel;
@@ -3501,7 +3501,7 @@ module pinmux
       gpio_ios_i[2][6]
     }),
     .sel_i(pmod0_6_sel),
-    .out_o(to_pins_o.names.pmod0[6])
+    .out_o(to_pins_o.array[70]) // to_pins_o.names.pmod0[6]
   );
 
   prim_onehot_mux #(
@@ -3515,7 +3515,7 @@ module pinmux
       gpio_ios_en_i[2][6]
     }),
     .sel_i(pmod0_6_sel),
-    .out_o(to_pins_en_o.names.pmod0[6])
+    .out_o(to_pins_en_o.array[70]) // to_pins_en_o.names.pmod0[6]
   );
 
   logic [1:0] pmod0_7_sel;
@@ -3549,7 +3549,7 @@ module pinmux
       gpio_ios_i[2][7]
     }),
     .sel_i(pmod0_7_sel),
-    .out_o(to_pins_o.names.pmod0[7])
+    .out_o(to_pins_o.array[71]) // to_pins_o.names.pmod0[7]
   );
 
   prim_onehot_mux #(
@@ -3563,7 +3563,7 @@ module pinmux
       gpio_ios_en_i[2][7]
     }),
     .sel_i(pmod0_7_sel),
-    .out_o(to_pins_en_o.names.pmod0[7])
+    .out_o(to_pins_en_o.array[71]) // to_pins_en_o.names.pmod0[7]
   );
 
   logic [1:0] pmod1_0_sel;
@@ -3597,7 +3597,7 @@ module pinmux
       gpio_ios_i[2][8]
     }),
     .sel_i(pmod1_0_sel),
-    .out_o(to_pins_o.names.pmod1[0])
+    .out_o(to_pins_o.array[72]) // to_pins_o.names.pmod1[0]
   );
 
   prim_onehot_mux #(
@@ -3611,7 +3611,7 @@ module pinmux
       gpio_ios_en_i[2][8]
     }),
     .sel_i(pmod1_0_sel),
-    .out_o(to_pins_en_o.names.pmod1[0])
+    .out_o(to_pins_en_o.array[72]) // to_pins_en_o.names.pmod1[0]
   );
 
   logic [1:0] pmod1_1_sel;
@@ -3645,7 +3645,7 @@ module pinmux
       gpio_ios_i[2][9]
     }),
     .sel_i(pmod1_1_sel),
-    .out_o(to_pins_o.names.pmod1[1])
+    .out_o(to_pins_o.array[73]) // to_pins_o.names.pmod1[1]
   );
 
   prim_onehot_mux #(
@@ -3659,7 +3659,7 @@ module pinmux
       gpio_ios_en_i[2][9]
     }),
     .sel_i(pmod1_1_sel),
-    .out_o(to_pins_en_o.names.pmod1[1])
+    .out_o(to_pins_en_o.array[73]) // to_pins_en_o.names.pmod1[1]
   );
 
   logic [1:0] pmod1_2_sel;
@@ -3693,7 +3693,7 @@ module pinmux
       gpio_ios_i[2][10]
     }),
     .sel_i(pmod1_2_sel),
-    .out_o(to_pins_o.names.pmod1[2])
+    .out_o(to_pins_o.array[74]) // to_pins_o.names.pmod1[2]
   );
 
   prim_onehot_mux #(
@@ -3707,7 +3707,7 @@ module pinmux
       gpio_ios_en_i[2][10]
     }),
     .sel_i(pmod1_2_sel),
-    .out_o(to_pins_en_o.names.pmod1[2])
+    .out_o(to_pins_en_o.array[74]) // to_pins_en_o.names.pmod1[2]
   );
 
   logic [1:0] pmod1_3_sel;
@@ -3741,7 +3741,7 @@ module pinmux
       gpio_ios_i[2][11]
     }),
     .sel_i(pmod1_3_sel),
-    .out_o(to_pins_o.names.pmod1[3])
+    .out_o(to_pins_o.array[75]) // to_pins_o.names.pmod1[3]
   );
 
   prim_onehot_mux #(
@@ -3755,7 +3755,7 @@ module pinmux
       gpio_ios_en_i[2][11]
     }),
     .sel_i(pmod1_3_sel),
-    .out_o(to_pins_en_o.names.pmod1[3])
+    .out_o(to_pins_en_o.array[75]) // to_pins_en_o.names.pmod1[3]
   );
 
   logic [1:0] pmod1_4_sel;
@@ -3789,7 +3789,7 @@ module pinmux
       gpio_ios_i[2][12]
     }),
     .sel_i(pmod1_4_sel),
-    .out_o(to_pins_o.names.pmod1[4])
+    .out_o(to_pins_o.array[76]) // to_pins_o.names.pmod1[4]
   );
 
   prim_onehot_mux #(
@@ -3803,7 +3803,7 @@ module pinmux
       gpio_ios_en_i[2][12]
     }),
     .sel_i(pmod1_4_sel),
-    .out_o(to_pins_en_o.names.pmod1[4])
+    .out_o(to_pins_en_o.array[76]) // to_pins_en_o.names.pmod1[4]
   );
 
   logic [1:0] pmod1_5_sel;
@@ -3837,7 +3837,7 @@ module pinmux
       gpio_ios_i[2][13]
     }),
     .sel_i(pmod1_5_sel),
-    .out_o(to_pins_o.names.pmod1[5])
+    .out_o(to_pins_o.array[77]) // to_pins_o.names.pmod1[5]
   );
 
   prim_onehot_mux #(
@@ -3851,7 +3851,7 @@ module pinmux
       gpio_ios_en_i[2][13]
     }),
     .sel_i(pmod1_5_sel),
-    .out_o(to_pins_en_o.names.pmod1[5])
+    .out_o(to_pins_en_o.array[77]) // to_pins_en_o.names.pmod1[5]
   );
 
   logic [1:0] pmod1_6_sel;
@@ -3885,7 +3885,7 @@ module pinmux
       gpio_ios_i[2][14]
     }),
     .sel_i(pmod1_6_sel),
-    .out_o(to_pins_o.names.pmod1[6])
+    .out_o(to_pins_o.array[78]) // to_pins_o.names.pmod1[6]
   );
 
   prim_onehot_mux #(
@@ -3899,7 +3899,7 @@ module pinmux
       gpio_ios_en_i[2][14]
     }),
     .sel_i(pmod1_6_sel),
-    .out_o(to_pins_en_o.names.pmod1[6])
+    .out_o(to_pins_en_o.array[78]) // to_pins_en_o.names.pmod1[6]
   );
 
   logic [1:0] pmod1_7_sel;
@@ -3933,7 +3933,7 @@ module pinmux
       gpio_ios_i[2][15]
     }),
     .sel_i(pmod1_7_sel),
-    .out_o(to_pins_o.names.pmod1[7])
+    .out_o(to_pins_o.array[79]) // to_pins_o.names.pmod1[7]
   );
 
   prim_onehot_mux #(
@@ -3947,7 +3947,7 @@ module pinmux
       gpio_ios_en_i[2][15]
     }),
     .sel_i(pmod1_7_sel),
-    .out_o(to_pins_en_o.names.pmod1[7])
+    .out_o(to_pins_en_o.array[79]) // to_pins_en_o.names.pmod1[7]
   );
 
   // Inputs - Physical pin inputs are muxed to particular block IO
