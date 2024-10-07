@@ -30,10 +30,12 @@ module top_verilator (input logic clk_i, rst_ni);
   logic sda1_o, sda1_oe;
 
   // Output clocks and data to the I2C buses.
+  // verilator lint_off UNOPTFLAT
   wire scl0_out = scl0_oe ? scl0_o : 1'b1;
   wire scl1_out = scl1_oe ? scl1_o : 1'b1;
   wire sda0_out = sda0_oe ? sda0_o : 1'b1;
   wire sda1_out = sda1_oe ? sda1_o : 1'b1;
+  // verilator lint_on UNOPTFLAT
 
   // Input clocks and data from the I2C buses.
   wire scl0_in;
@@ -153,6 +155,7 @@ module top_verilator (input logic clk_i, rst_ni);
   end
 
   sonata_pins_t from_pins, from_pins_en, to_pins, to_pins_en;
+  sonata_pins_t unused_from_pins_en = from_pins_en;
 
   assign appspi_d0 = to_pins.names.appspi_d0;
   assign lcd_copi = to_pins.names.lcd_copi;
@@ -171,6 +174,7 @@ module top_verilator (input logic clk_i, rst_ni);
     default: 'b0,
     appspi_d1: appspi_d1,
     ser0_rx: uart_sys_rx,
+    ser1_rx: uart_aux_rx,
     scl0: scl0_in,
     sda0: sda0_in,
     scl1: scl1_in,

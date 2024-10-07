@@ -76,7 +76,7 @@ module pinmux
 
   // Outputs - Blocks IO is muxed to choose which drives the output and output
   // enable of a physical pin
-  % for output_idx, (pin_output, idx_str, idx_alt, possible_blocks) in enumerate(output_list):
+  % for output_idx, (pin_output, pin_index, idx_str, idx_alt, possible_blocks) in enumerate(output_list):
 
   logic [${len(possible_blocks)}:0] ${pin_output}${idx_str}_sel;
   logic ${pin_output}${idx_str}_sel_addressed;
@@ -111,7 +111,7 @@ module pinmux
       % endfor
     }),
     .sel_i(${pin_output}${idx_str}_sel),
-    .out_o(to_pins_o.names.${pin_output}${idx_alt})
+    .out_o(to_pins_o.array[${pin_index}]) // to_pins_o.names.${pin_output}${idx_alt}
   );
 
   prim_onehot_mux #(
@@ -127,7 +127,7 @@ module pinmux
       % endfor
     }),
     .sel_i(${pin_output}${idx_str}_sel),
-    .out_o(to_pins_en_o.names.${pin_output}${idx_alt})
+    .out_o(to_pins_en_o.array[${pin_index}]) // to_pins_en_o.names.${pin_output}${idx_alt}
   );
   % endfor
 

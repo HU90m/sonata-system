@@ -271,6 +271,7 @@ def inout_pins_iter(
 
 class OutputPin(NamedTuple):
     pin_name: str
+    pin_idx: int
     idx_str: str
     """If pin array, array index after underscore e.g. '_1'"""
     idx_alt: str
@@ -281,16 +282,19 @@ class OutputPin(NamedTuple):
 def output_pins_iter(
     config: TopConfig, pin_to_block_outputs: PinToBlockOutputMap
 ) -> Iterator[OutputPin]:
+    pin_index = 0
     for pin in config.pins:
         if outputs := pin_to_block_outputs.get(pin.name):
             if pin.length is None:
-                yield OutputPin(pin.name, "", "", outputs)
+                yield OutputPin(pin.name, pin_index, "", "", outputs)
+                pin_index += 1
             else:
                 assert pin.length == len(
                     outputs
                 ), f"Arrayed pin '{pin.name}' must have complete mapping"
                 for i in range(pin.length):
-                    yield OutputPin(pin.name, f"_{i}", f"[{i}]", [outputs[i]])
+                    yield OutputPin(pin.name, pin_index, f"_{i}", f"[{i}]", [outputs[i]])
+                    pin_index += 1
 
 
 def generate_top(config: TopConfig) -> None:
