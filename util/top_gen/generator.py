@@ -28,21 +28,18 @@ class BlockIoFlat(BaseModel, frozen=True):
     io_type: BlockIoType
     combine: BlockIoCombine | None = None
 
-    @staticmethod
-    def generate_name(block: BlockIoUid) -> str:
-        suffix = f"_{block.io_index}" if block.io_index is not None else ""
-        return f"{block.block}_{block.instance}_{block.io}{suffix}"
-
-    @property
-    def name(self) -> str:
-        return self.generate_name(self.id)
-
     @property
     def is_inout(self) -> bool:
         return self.io_type == BlockIoType.INOUT
 
     @property
-    def bit_index_str(self) -> str:
+    def name(self) -> str:
+        id = self.id
+        suffix = f"_{id.io_index}" if id.io_index is not None else ""
+        return f"{id.block}_{id.io}_{id.instance}{suffix}"
+
+    @property
+    def io_idx_str(self) -> str:
         return f"[{self.id.io_index}]" if self.id.io_index is not None else ""
 
 
@@ -59,6 +56,7 @@ def flatten_block_ios(blocks: list[Block]) -> Iterator[BlockIoFlat]:
                         ),
                         default_value=io.default,
                         io_type=io.type,
+                        combine=io.combine,
                     )
                 else:
                     for io_index in range(io.length):
@@ -134,6 +132,93 @@ def block_io_to_pin_map(
         for link in pin.block_io_links:
             mapping[link].append(pin)
     return mapping
+
+
+class OutputBlockIo(NamedTuple):
+    block_io: BlockIoFlat
+    possible_pins: list[PinFlattened]
+    num_options: int
+
+
+def output_block_ios_iter(
+    block_ios: list[BlockIoFlat], block_io_to_pins: BlockIoToPinsMap
+) -> Iterator[OutputBlockIo]:
+    for block_io in block_ios:
+        if block_io.io_type != BlockIoType.INPUT and (
+            block_io.io_type != BlockIoType.INOUT
+            or block_io.combine != BlockIoCombine.MUX
+        ):
+            continue
+
+        possible_pins = block_io_to_pins[block_io.id]
+
+        yield OutputBlockIo(
+            block_io,
+            possible_pins,
+            max(len(possible_pins) + 1, 2),
+        )
+
+
+class OutputPin(NamedTuple):
+    pin: PinFlattened
+    possible_block_outputs: list[BlockIoFlat]
+    num_options: int
+
+
+def output_pins_iter(
+    pins: list[PinFlattened], block_ios: list[BlockIoFlat]
+) -> Iterator[OutputPin]:
+    blocks_map: dict[BlockIoUid, BlockIoFlat] = {
+        bio.id: bio for bio in block_ios
+    }
+    for pin in pins:
+        block_outputs = [
+            blocks_map[block_io_uid]
+            for block_io_uid in pin.block_io_links
+            if blocks_map[block_io_uid].io_type != BlockIoType.INPUT
+        ]
+        if len(block_outputs) > 0:
+            yield OutputPin(pin, block_outputs, len(block_outputs) + 1)
+
+
+class CombineItem(NamedTuple):
+    block_io: BlockIoFlat
+    default_value: str
+    operator: str
+    pins_and_select_values: list[tuple[PinFlattened, int]]
+
+def combine_list(
+    block_ios: list[BlockIoFlat], block_io_to_pins: BlockIoToPinsMap
+) -> Iterator[CombineItem]:
+    for block_io in block_ios:
+        match (block_io.io_type, block_io.combine):
+            case (BlockIoType.INOUT, BlockIoCombine.AND):
+                default_value = "1'b1"
+                operator = " &"
+            case (BlockIoType.INOUT, BlockIoCombine.OR):
+                default_value = "1'b0"
+                operator = " |"
+            case _:
+                continue
+
+        pins = block_io_to_pins[block_io.id]
+        pins_and_select_values = [
+            (pin, 1 << (select_idx + 1))
+            for pin in pins
+            for select_idx, block_io_id in enumerate(pin.block_io_links)
+            if block_io.id == block_io_id
+        ]
+
+        assert len(pins) == len(pins_and_select_values), "Could not fill combine pin selectors properly."
+
+        yield CombineItem(
+            block_io,
+            default_value,
+            operator,
+            pins_and_select_values,
+        )
+
+#### THE NEW
 
 
 class PinmuxIoToBlocks(NamedTuple):
@@ -279,32 +364,6 @@ def pin_to_block_output_map(
     return pin_to_block_output
 
 
-class InputPin(NamedTuple):
-    block_io: BlockIoFlat
-    possible_pins: list[PinFlattened]
-    num_options: int
-
-
-def input_pins_iter(
-    block_ios: list[BlockIoFlat], block_io_to_pins: BlockIoToPinsMap
-) -> Iterator[InputPin]:
-    for block_io in block_ios:
-        if block_io.io_type != BlockIoType.INPUT and (
-            block_io.io_type != BlockIoType.INOUT
-            or block_io.combine != BlockIoCombine.MUX
-        ):
-            continue
-
-        possible_pins = block_io_to_pins[block_io.id]
-
-        yield InputPin(
-            block_io,
-            possible_pins,
-            max(len(possible_pins) + 1, 2),
-        )
-
-
-
 class InOutPin(NamedTuple):
     block_input: str
     instance: int
@@ -363,36 +422,6 @@ def inout_pins_iter(
                 )
 
 
-class OutputPin(NamedTuple):
-    pin_name: str
-    pin_idx: int
-    idx_str: str
-    """If pin array, array index after underscore e.g. '_1'"""
-    idx_alt: str
-    """If pin array, array index surrounded by square brackets e.g. '[1]'"""
-    connected_block_io: list[BlockIoInfo]
-
-
-def output_pins_iter(
-    config: TopConfig, pin_to_block_outputs: PinToBlockOutputMap
-) -> Iterator[OutputPin]:
-    pin_index = 0
-    for pin in config.pins:
-        if outputs := pin_to_block_outputs.get(pin.name):
-            if pin.length is None:
-                yield OutputPin(pin.name, pin_index, "", "", outputs)
-                pin_index += 1
-            else:
-                assert pin.length == len(
-                    outputs
-                ), f"Arrayed pin '{pin.name}' must have complete mapping"
-                for i in range(pin.length):
-                    yield OutputPin(
-                        pin.name, pin_index, f"_{i}", f"[{i}]", [outputs[i]]
-                    )
-                    pin_index += 1
-
-
 def generate_top(config: TopConfig) -> None:
     """Generate a top from a top configuration."""
 
@@ -401,26 +430,29 @@ def generate_top(config: TopConfig) -> None:
 
     block_io_to_pins = block_io_to_pin_map(block_ios, pins)
 
-    # pprint([b.name for b in block_ios])
-    #pprint(block_io_to_pins)
-
     pinmux_ios_to_blocks = list(pinmux_ios_to_blocks_iter(config))
-    pinmux_ios_to_pins: list[None] = [] # list(ios_to_pins_iter(config))
+    pinmux_ios_to_pins: list[None] = []  # list(ios_to_pins_iter(config))
 
-    #block_connections = block_connections_map(config)
-    #pin_to_block_outputs = pin_to_block_output_map(config, block_connections)
+    # block_connections = block_connections_map(config)
+    # pin_to_block_outputs = pin_to_block_output_map(config, block_connections)
 
-    input_pins = list(input_pins_iter(block_ios, block_io_to_pins))
-    output_pins: list[None] = [] #list(output_pins_iter(config, pin_to_block_outputs))
-    inout_pins: list[None] = []
+    output_pins = list(output_pins_iter(pins, block_ios))
+    output_block_ios = list(output_block_ios_iter(block_ios, block_io_to_pins))
 
-    from pprint import pprint
-    #pprint(pins)
-    pprint(input_pins)
+    def legacy_ordering(input_pin: OutputBlockIo) -> tuple[int, int, int]:
+        id = input_pin.block_io.id
+        io_index = 0 if id.io_index is None else id.io_index
 
-    #list(
-    #    inout_pins_iter(config, block_connections, pin_to_block_outputs)
-    #)
+        block_ordering = ("uart", "spi", "gpio", "i2c")
+        block_type_idx = next(
+            idx for idx, name in enumerate(block_ordering) if id.block == name
+        )
+
+        return (block_type_idx, io_index, id.instance)
+
+    output_block_ios.sort(key=legacy_ordering)
+
+    inout_pins = list(combine_list(block_ios, block_io_to_pins))
 
     # Then we use those parameters to generate our SystemVerilog using Mako
     template_variables = {
@@ -431,8 +463,8 @@ def generate_top(config: TopConfig) -> None:
         "block_ios": pinmux_ios_to_blocks,
         "pin_ios": pinmux_ios_to_pins,
         "pins": pins,
-        "input_list": input_pins,
         "output_list": output_pins,
+        "input_list": output_block_ios,
         "combine_list": inout_pins,
     }
     for template_file, output_file in (
@@ -443,7 +475,7 @@ def generate_top(config: TopConfig) -> None:
         ),
         ("rtl/templates/sonata_pkg.sv.tpl", "rtl/system/sonata_pkg.sv"),
         ("rtl/templates/pinmux.sv.tpl", "rtl/system/pinmux.sv"),
-        #("doc/ip/pinmux.md.tpl", "doc/ip/pinmux.md"),
+        # ("doc/ip/pinmux.md.tpl", "doc/ip/pinmux.md"),
     ):
         print("Generating from template: " + template_file)
         content = Template(filename=template_file).render(**template_variables)
