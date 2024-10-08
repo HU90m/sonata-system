@@ -7,7 +7,6 @@
 
 module pinmux
   import sonata_pkg::sonata_pins_t;
-  import sonata_pkg::NUM_PINS;
 (
   // Clock and reset.
   input logic clk_i,
@@ -132,15 +131,15 @@ module pinmux
   % endfor
 
   // Inputs - Physical pin inputs are muxed to particular block IO
-  assign from_pins_en_o.names = '{default: 'b1};
+  assign from_pins_en_o = '{default: 'b1};
 
-  % for input_idx, (block_input, inst, bit_idx, bit_str, default_value, num_options, possible_pins) in enumerate(input_list):
+  % for input_idx, (block_io, possible_pins, num_options) in enumerate(input_list):
 
-  logic [${num_options-1}:0] ${block_input}_${inst}${bit_str}_sel;
-  logic ${block_input}_${inst}${bit_str}_sel_addressed;
+  logic [${num_options-1}:0] ${block_io.name}_sel;
+  logic ${block_io.name}_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign ${block_input}_${inst}${bit_str}_sel_addressed =
+  assign ${block_io.name}_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
     reg_addr[RegAddrWidth-2:0] == ${input_idx - input_idx%4} &
     reg_be[${input_idx%4}] == 1'b1;
@@ -148,10 +147,10 @@ module pinmux
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      ${block_input}_${inst}${bit_str}_sel <= ${num_options}'b10;
+      ${block_io.name}_sel <= ${num_options}'b10;
     end else begin
-      if (reg_we & ${block_input}_${inst}${bit_str}_sel_addressed) begin
-        ${block_input}_${inst}${bit_str}_sel <= reg_wdata[${(input_idx%4)*8}+:${num_options}];
+      if (reg_we & ${block_io.name}_sel_addressed) begin
+        ${block_io.name}_sel <= reg_wdata[${(input_idx%4)*8}+:${num_options}];
       end
     end
   end
@@ -159,20 +158,20 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(${num_options})
-  ) ${block_input}_${inst}${bit_str}_mux (
+  ) ${block_io.name}_mux (
     .clk_i,
     .rst_ni,
     .in_i({
-      1'b${default_value},
+      1'b${block_io.default_value},
       % for idx, pin in enumerate(possible_pins):
-      from_pins_i.names.${pin}${',' if idx < len(possible_pins)-1 else ''}
+      from_pins_i[${pin.idx_param}]${',' if idx < len(possible_pins)-1 else ''}
       % endfor
       % if len(possible_pins) == 0:
-      1'b${default_value}
+      1'b${block_io.default_value}
       % endif
     }),
-    .sel_i(${block_input}_${inst}${bit_str}_sel),
-    .out_o(${block_input}_o[${inst}]${'' if bit_str == '' else '['+str(bit_idx)+']'})
+    .sel_i(${block_io.name}_sel),
+    .out_o(${block_io.id.block}_o[${block_io.id.instance}]${block_io.bit_index_str})
   );
   % endfor
 
