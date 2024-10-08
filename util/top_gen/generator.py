@@ -7,9 +7,122 @@ import subprocess
 from pathlib import Path
 from typing import Iterator, NamedTuple, TypeAlias
 
+from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
 from mako.template import Template
 
-from .parser import BlockIoCombine, BlockIoType, TopConfig
+from .parser import (
+    Block,
+    BlockIoCombine,
+    BlockIoType,
+    Pin,
+    TopConfig,
+    BlockIoUid,
+)
+
+
+class BlockIoFlattened(BaseModel, frozen=True):
+    id: BlockIoUid
+
+    io_type: BlockIoType
+    combine: BlockIoCombine | None = None
+
+    @staticmethod
+    def generate_name(block: BlockIoUid) -> str:
+        suffix = "" if block.io_index is None else f"_{block.io_index}"
+        return f"{block.block}_{block.instance}_{block.io}{suffix}"
+
+    @property
+    def name(self) -> str:
+        return self.generate_name(self.id)
+
+
+def flatten_block_ios(blocks: list[Block]) -> Iterator[BlockIoFlattened]:
+    for block in blocks:
+        for instance in range(block.instances):
+            for io in block.ios:
+                if io.length is None:
+                    yield BlockIoFlattened(
+                        id=BlockIoUid(
+                            block.name,
+                            instance,
+                            io.name,
+                        ),
+                        io_type=io.type,
+                    )
+                else:
+                    for io_index in range(io.length):
+                        yield BlockIoFlattened(
+                            id=BlockIoUid(
+                                block.name,
+                                instance,
+                                io.name,
+                                io_index,
+                            ),
+                            io_type=io.type,
+                            combine=io.combine,
+                        )
+
+
+def block_ios_map(blocks: list[Block]) -> dict[str, BlockIoFlattened]:
+    return {block_io.name: block_io for block_io in flatten_block_ios(blocks)}
+
+
+@dataclass(frozen=True)
+class PinFlattened:
+    """Describes an IO between the pinmux and the pins."""
+
+    index: int
+    group_name: str
+    block_io_links: list[BlockIoUid]
+
+    group_index: int | None = None
+
+    @property
+    def name(self) -> str:
+        if self.group_index is None:
+            return f"{self.group_name}"
+        else:
+            return f"{self.group_name}_{self.group_index}"
+
+
+def flatten_pins(pins: list[Pin]) -> Iterator[PinFlattened]:
+    pin_index = 0
+    for pin in pins:
+        if pin.length is None:
+            yield PinFlattened(pin_index, pin.name, pin.block_ios)
+            pin_index += 1
+        else:
+            for group_index in range(pin.length):
+                block_io_links = [
+                    BlockIoUid(
+                        block_io.block,
+                        block_io.instance,
+                        block_io.io,
+                        int(block_io.io_index) + group_index,
+                    )
+                    for block_io in pin.block_ios
+                    # This is checked at validation time
+                    if isinstance(block_io.io_index, int)
+                ]
+                yield PinFlattened(
+                    pin_index, pin.name, block_io_links, group_index
+                )
+                pin_index += 1
+
+
+BlockIoToPinMap: TypeAlias = dict[BlockIoUid, list[str]]
+"""Maps a block name to a list of pins it connects to."""
+
+
+def block_io_to_pin_map(
+    blocks: list[BlockIoFlattened], pins: list[PinFlattened]
+) -> BlockIoToPinMap:
+    mapping: BlockIoToPinMap = {block_io.id: [] for block_io in blocks}
+    for pin in pins:
+        for link in pin.block_io_links:
+            mapping[link].append(pin.name)
+    return mapping
 
 
 class PinmuxIoToBlocks(NamedTuple):
@@ -199,7 +312,9 @@ def input_pins_iter(
                             input_pins.append(
                                 f"{pin_name}[{bit_idx - pin.block_ios[0].io}]"
                             )
-                    num_options = len(input_pins) + 1 if len(input_pins) > 0 else 2
+                    num_options = (
+                        len(input_pins) + 1 if len(input_pins) > 0 else 2
+                    )
                     yield InputPin(
                         f"{block.name}_{io.name}",
                         inst_idx,
@@ -293,12 +408,24 @@ def output_pins_iter(
                     outputs
                 ), f"Arrayed pin '{pin.name}' must have complete mapping"
                 for i in range(pin.length):
-                    yield OutputPin(pin.name, pin_index, f"_{i}", f"[{i}]", [outputs[i]])
+                    yield OutputPin(
+                        pin.name, pin_index, f"_{i}", f"[{i}]", [outputs[i]]
+                    )
                     pin_index += 1
 
 
 def generate_top(config: TopConfig) -> None:
     """Generate a top from a top configuration."""
+
+    block_ios = list(flatten_block_ios(config.blocks))
+    pins = list(flatten_pins(config.pins))
+
+    block_io_to_pins = block_io_to_pin_map(block_ios, pins)
+
+    from pprint import pprint
+
+    # pprint([b.name for b in block_ios])
+    pprint(block_io_to_pins)
 
     pinmux_ios_to_blocks = list(ios_to_blocks_iter(config))
     pinmux_ios_to_pins = list(ios_to_pins_iter(config))
