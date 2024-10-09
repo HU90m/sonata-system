@@ -1015,10 +1015,6 @@ module sonata_system
     .tbre_intr_o     (hardware_revoker_irq)
   );
 
-  assign gpio_from_pins[0] = gp_i;
-  assign gp_o              = gpio_to_pins       [0];
-  assign gp_o_en           = gpio_to_pins_enable[0];
-
   // 0: General Purpose
   // 1: Raspberry Pi HAT g0-15
   // 2: Raspberry Pi HAT g16-27
@@ -1028,6 +1024,10 @@ module sonata_system
   logic [WordWidth-1:0] gpio_from_pins     [GPIO_NUM + 1];
   logic [WordWidth-1:0] gpio_to_pins       [GPIO_NUM + 1];
   logic [WordWidth-1:0] gpio_to_pins_enable[GPIO_NUM + 1];
+
+  assign gpio_from_pins[0] = gp_i;
+  assign gp_o              = gpio_to_pins       [0];
+  assign gp_o_en           = gpio_to_pins_enable[0];
 
   gpio_array #(
     .GpiWidth     ( WordWidth    ),

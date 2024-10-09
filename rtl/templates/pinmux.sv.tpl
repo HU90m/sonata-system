@@ -6,7 +6,7 @@
 // Please make any edits to the template file.
 
 module pinmux
-  import sonata_pkg::sonata_pins_t;
+  import sonata_pkg::*;
 (
   // Clock and reset.
   input logic clk_i,
@@ -122,7 +122,7 @@ module pinmux
     .in_i({
       1'b0,
       % for idx, bio in enumerate(possible_block_outputs):
-      ${f"{bio.id.block}_{bio.id.io}_en_i[{bio.id.instance}]{bio.io_idx_str}" if is_inout else "1'b1"}${',' if idx < (num_options - 2) else ''}
+      ${f"{bio.id.block}_{bio.id.io}_en_i[{bio.id.instance}]{bio.io_idx_str}" if bio.is_inout else "1'b1"}${',' if idx < (num_options - 2) else ''}
       % endfor
     }),
     .sel_i(${pin.name}_sel),
