@@ -4,12 +4,11 @@
 
 module padring
   import sonata_pkg::sonata_pins_t;
-  import sonata_pkg::NUM_PINS;
+  import sonata_pkg::PIN_NUM;
 (
   inout wire sonata_pins_t pins_io,
 
   output sonata_pins_t from_pins_o,
-  input sonata_pins_t from_pins_en_i,
   input sonata_pins_t to_pins_en_i,
   input sonata_pins_t to_pins_i
 );
@@ -18,19 +17,19 @@ module padring
     drive_strength: '1
   };
 
-  prim_pad_wrapper u_pad[NUM_PINS] (
-    .inout_io (pins_io.array),
-    .in_o (from_pins_o.array),
-    .ie_i (from_pins_en_i.array),
-    .out_i (to_pins_i.array),
-    .oe_i (to_pins_en_i.array),
-    .attr_i (pad_attr),
+  prim_pad_wrapper u_pad[PIN_NUM] (
+    .inout_io (pins_io     ),
+    .in_o     (from_pins_o ),
+    .ie_i     (1'b1        ),
+    .out_i    (to_pins_i   ),
+    .oe_i     (to_pins_en_i),
+    .attr_i   (pad_attr    ),
 
     // Don't care
-    .in_raw_o (),
-    // Unused in the generic wrapper
+    .in_raw_o   (),
+    // Unused in generic and Xilinx variant of the wrapper
     .clk_scan_i (),
     .scanmode_i (),
-    .pok_i ()
+    .pok_i      ()
   );
 endmodule : padring

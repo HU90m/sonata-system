@@ -85,7 +85,6 @@ module sonata_system
 
   // Pin Signals
   input  sonata_pins_t from_pins_i,
-  output sonata_pins_t from_pins_en_o,
   output sonata_pins_t to_pins_o,
   output sonata_pins_t to_pins_en_o
 );
@@ -1381,7 +1380,6 @@ module sonata_system
     .gpio_ios_o(gpio_from_pins[1:GPIO_NUM]),
 
     .from_pins_i,
-    .from_pins_en_o,
     .to_pins_o,
     .to_pins_en_o,
 
