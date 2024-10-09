@@ -63,7 +63,6 @@ class PinFlat:
     Flat meaning this describes individual Pins, splitting up grouped pins.
     """
 
-    index: int
     group_name: str
     block_io_links: list[BlockIoUid]
 
@@ -157,11 +156,9 @@ def flatten_block_ios(blocks: list[Block]) -> Iterator[BlockIoFlat]:
 
 
 def flatten_pins(pins: list[Pin]) -> Iterator[PinFlat]:
-    pin_index = 0
     for pin in pins:
         if pin.length is None:
-            yield PinFlat(pin_index, pin.name, pin.block_ios)
-            pin_index += 1
+            yield PinFlat(pin.name, pin.block_ios)
         else:
             for group_index in range(pin.length):
                 block_io_links = [
@@ -169,14 +166,13 @@ def flatten_pins(pins: list[Pin]) -> Iterator[PinFlat]:
                         block_io.block,
                         block_io.instance,
                         block_io.io,
-                        int(block_io.io_index) + group_index,
+                        block_io.io_index + group_index,
                     )
                     for block_io in pin.block_ios
                     # This is checked at validation time
                     if isinstance(block_io.io_index, int)
                 ]
-                yield PinFlat(pin_index, pin.name, block_io_links, group_index)
-                pin_index += 1
+                yield PinFlat(pin.name, block_io_links, group_index)
 
 
 def block_io_to_pin_map(
@@ -308,7 +304,6 @@ def generate_top(config: TopConfig) -> None:
 
     output_block_ios.sort(key=legacy_ordering)
 
-    # Then we use those parameters to generate our SystemVerilog using Mako
     template_variables = {
         "gpio_num": config.get_block("gpio").instances,
         "uart_num": config.get_block("uart").instances,

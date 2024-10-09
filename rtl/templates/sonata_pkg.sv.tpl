@@ -13,8 +13,8 @@ package sonata_pkg;
 
   localparam int unsigned PIN_NUM = ${len(pins)};
 
-  % for pin in pins:
-  localparam int unsigned ${pin.idx_param} = ${pin.index};
+  % for pin_index, pin in enumerate(pins):
+  localparam int unsigned ${pin.idx_param} = ${pin_index};
   % endfor
 
   typedef logic sonata_pins_t[PIN_NUM];
