@@ -384,8 +384,7 @@ module top_sonata
   end
 
   // Invert each bit because with `IOBUF` low is enable and high is disable.
-  sonata_inout_pins_t inout_to_pins_en_negated;
-  assign {<<{inout_to_pins_en_negated}} = ~{<<{inout_to_pins_en}};
+  sonata_inout_pins_t inout_to_pins_en_negated = ~{<<{inout_to_pins_en}};
 
   IOBUF u_inout_pad[INOUT_PIN_NUM] (
     .T  ( inout_to_pins_en_negated ),
