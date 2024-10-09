@@ -2,22 +2,20 @@
 // Licensed under the Apache License, Version 2.0, see LICENSE for details.
 // SPDX-License-Identifier: Apache-2.0
 
-module padring
-  import sonata_pkg::sonata_pins_t;
-  import sonata_pkg::PIN_NUM;
-(
-  inout wire sonata_pins_t pins_io,
-
-  output sonata_pins_t from_pins_o,
-  input sonata_pins_t to_pins_en_i,
-  input sonata_pins_t to_pins_i
+module padring #(
+  parameter int unsigned NumberOfPins = 1
+) (
+  inout  wire  pins_io     [NumberOfPins],
+  output logic from_pins_o [NumberOfPins],
+  input  logic to_pins_en_i[NumberOfPins],
+  input  logic to_pins_i   [NumberOfPins]
 );
   prim_pad_wrapper_pkg::pad_attr_t pad_attr = '{
     default:'0,
     drive_strength: '1
   };
 
-  prim_pad_wrapper u_pad[PIN_NUM] (
+  prim_pad_wrapper u_pad[NumberOfPins] (
     .inout_io (pins_io     ),
     .in_o     (from_pins_o ),
     .ie_i     (1'b1        ),
