@@ -85,8 +85,27 @@ class PinFlat:
             return f"{self.group_name}[{self.group_index}]"
 
     @property
+    def direction_prefix(self) -> str:
+        match self.direction:
+            case Direction.INPUT:
+                return "in_"
+            case Direction.OUTPUT:
+                return "out_"
+            case Direction.INOUT:
+                return "inout_"
+
+    @property
     def idx_param(self) -> str:
-        return f"PINIDX_{self.name}".upper()
+        return f"{self.direction_prefix}PIN_{self.name}".upper()
+
+    def is_input(self) -> bool:
+        return self.direction == Direction.INPUT
+
+    def is_output(self) -> bool:
+        return self.direction == Direction.OUTPUT
+
+    def is_inout(self) -> bool:
+        return self.direction == Direction.INOUT
 
 
 BlockIoToPinsMap: TypeAlias = dict[BlockIoUid, list[PinFlat]]
@@ -328,7 +347,9 @@ def generate_top(config: TopConfig) -> None:
         "uart_num": config.get_block("uart").instances,
         "i2c_num": config.get_block("i2c").instances,
         "spi_num": config.get_block("spi").instances,
-        "pins": pins,
+        "in_pins": list(filter(PinFlat.is_input, pins)),
+        "out_pins": list(filter(PinFlat.is_output, pins)),
+        "inout_pins": list(filter(PinFlat.is_inout, pins)),
         "block_ios": list(pinmux_ios_to_blocks_iter(config)),
         "output_pins": list(output_pins_iter(pins, block_ios)),
         "output_block_ios": output_block_ios,

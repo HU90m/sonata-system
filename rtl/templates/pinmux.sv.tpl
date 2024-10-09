@@ -18,9 +18,13 @@ module pinmux
   % endfor
 
   // Pin Signals
-  input  sonata_pins_t from_pins_i,
-  output sonata_pins_t to_pins_o,
-  output sonata_pins_t to_pins_en_o,
+  input  sonata_in_pins_t  in_from_pins_i,
+  output sonata_out_pins_t out_to_pins_o,
+  output sonata_out_pins_t out_to_pins_en_o,
+
+  input  sonata_inout_pins_t inout_from_pins_i,
+  output sonata_inout_pins_t inout_to_pins_o,
+  output sonata_inout_pins_t inout_to_pins_en_o,
 
   // TileLink interfaces.
   input  tlul_pkg::tl_h2d_t tl_i,
@@ -109,7 +113,7 @@ module pinmux
       % endfor
     }),
     .sel_i(${pin.name}_sel),
-    .out_o(to_pins_o[${pin.idx_param}])
+    .out_o(${pin.direction_prefix}to_pins_o[${pin.idx_param}])
   );
 
   prim_onehot_mux #(
@@ -125,7 +129,7 @@ module pinmux
       % endfor
     }),
     .sel_i(${pin.name}_sel),
-    .out_o(to_pins_en_o[${pin.idx_param}])
+    .out_o(${pin.direction_prefix}to_pins_en_o[${pin.idx_param}])
   );
   % endfor
 
@@ -161,7 +165,7 @@ module pinmux
     .in_i({
       1'b${block_io.default_value},
       % for idx, pin in enumerate(possible_pins):
-      from_pins_i[${pin.idx_param}]${',' if idx < len(possible_pins)-1 else ''}
+      ${pin.direction_prefix}from_pins_i[${pin.idx_param}]${',' if idx < len(possible_pins)-1 else ''}
       % endfor
       % if len(possible_pins) == 0:
       1'b${block_io.default_value}
@@ -176,7 +180,7 @@ module pinmux
   % for block_io, default_value, operator, pins_and_select_values in combined_input_block_ios:
   assign ${block_io.uid.block}_${block_io.uid.io}_o[${block_io.uid.instance}] =
     % for idx, (pin, select_value) in enumerate(pins_and_select_values):
-    (${pin.name}_sel == ${select_value} ? from_pins_i[${pin.idx_param}] : ${default_value})${operator if idx < len(pins_and_select_values) - 1 else ';'}
+    (${pin.name}_sel == ${select_value} ? ${pin.direction_prefix}from_pins_i[${pin.idx_param}] : ${default_value})${operator if idx < len(pins_and_select_values) - 1 else ';'}
     % endfor
   % endfor
 endmodule
