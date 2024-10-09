@@ -30,12 +30,10 @@ module top_verilator (input logic clk_i, rst_ni);
   logic sda1_o, sda1_oe;
 
   // Output clocks and data to the I2C buses.
-  // verilator lint_off UNOPTFLAT
   wire scl0_out = scl0_oe ? scl0_o : 1'b1;
   wire scl1_out = scl1_oe ? scl1_o : 1'b1;
   wire sda0_out = sda0_oe ? sda0_o : 1'b1;
   wire sda1_out = sda1_oe ? sda1_o : 1'b1;
-  // verilator lint_on UNOPTFLAT
 
   // Input clocks and data from the I2C buses.
   wire scl0_in;
@@ -154,32 +152,27 @@ module top_verilator (input logic clk_i, rst_ni);
     end
   end
 
-  sonata_pins_t from_pins, from_pins_en, to_pins, to_pins_en;
-  sonata_pins_t unused_from_pins_en = from_pins_en;
+  sonata_pins_t to_pins, to_pins_en, from_pins, unused_from_pins_en;
 
-  assign appspi_d0 = to_pins.names.appspi_d0;
-  assign lcd_copi = to_pins.names.lcd_copi;
-  assign appspi_clk = to_pins.names.appspi_clk;
-  assign lcd_clk = to_pins.names.lcd_clk;
-  assign uart_sys_tx = to_pins.names.ser0_tx;
-  assign uart_aux_tx = to_pins.names.ser1_tx;
+  assign appspi_d0   = to_pins[PINIDX_APPSPI_D0];
+  assign lcd_copi    = to_pins[PINIDX_LCD_COPI];
+  assign appspi_clk  = to_pins[PINIDX_APPSPI_CLK];
+  assign lcd_clk     = to_pins[PINIDX_LCD_CLK];
+  assign uart_sys_tx = to_pins[PINIDX_SER0_TX];
+  assign uart_aux_tx = to_pins[PINIDX_SER1_TX];
 
-  assign uart_aux_tx = to_pins.names.ser1_tx;
-  assign {scl0_o,  scl0_oe} = {to_pins.names.scl0, to_pins_en.names.scl0};
-  assign {scl1_o,  scl1_oe} = {to_pins.names.scl1, to_pins_en.names.scl1};
-  assign {sda0_o,  sda0_oe} = {to_pins.names.sda0, to_pins_en.names.sda0};
-  assign {sda1_o,  sda1_oe} = {to_pins.names.sda1, to_pins_en.names.sda1};
+  assign {scl0_o,  scl0_oe} = {to_pins[PINIDX_SCL0], to_pins_en[PINIDX_SCL0]};
+  assign {scl1_o,  scl1_oe} = {to_pins[PINIDX_SCL1], to_pins_en[PINIDX_SCL1]};
+  assign {sda0_o,  sda0_oe} = {to_pins[PINIDX_SDA0], to_pins_en[PINIDX_SDA0]};
+  assign {sda1_o,  sda1_oe} = {to_pins[PINIDX_SDA1], to_pins_en[PINIDX_SDA1]};
 
-  assign from_pins.names = '{
-    default: 'b0,
-    appspi_d1: appspi_d1,
-    ser0_rx: uart_sys_rx,
-    ser1_rx: uart_aux_rx,
-    scl0: scl0_in,
-    sda0: sda0_in,
-    scl1: scl1_in,
-    sda1: sda1_in
-  };
+  assign from_pins[PINIDX_APPSPI_D1] = appspi_d1;
+  assign from_pins[PINIDX_SER0_RX]   = uart_sys_rx;
+  assign from_pins[PINIDX_SER1_RX]   = uart_aux_rx;
+  assign from_pins[PINIDX_SCL0]      = scl0_in;
+  assign from_pins[PINIDX_SDA0]      = sda0_in;
+  assign from_pins[PINIDX_SCL1]      = scl1_in;
+  assign from_pins[PINIDX_SDA1]      = sda1_in;
 
   // Instantiating the Sonata System.
   // TODO instantiate this with only two UARTs and no SPI when bus is
@@ -267,10 +260,10 @@ module top_verilator (input logic clk_i, rst_ni);
     .hyperram_nrst(),
     .hyperram_cs  (),
 
-    .from_pins_i    (from_pins   ),
-    .from_pins_en_o (from_pins_en),
-    .to_pins_o      (to_pins     ),
-    .to_pins_en_o   (to_pins_en  )
+    .from_pins_i    (from_pins          ),
+    .from_pins_en_o (unused_from_pins_en),
+    .to_pins_o      (to_pins            ),
+    .to_pins_en_o   (to_pins_en         )
   );
 
   // I2C 0 DPI
