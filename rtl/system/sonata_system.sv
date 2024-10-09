@@ -84,9 +84,12 @@ module sonata_system
   output wire                      hyperram_cs,
 
   // Pin Signals
-  input  sonata_pins_t from_pins_i,
-  output sonata_pins_t to_pins_o,
-  output sonata_pins_t to_pins_en_o
+  input  sonata_in_pins_t    in_from_pins_i,
+  output sonata_out_pins_t   out_to_pins_o,
+  output sonata_out_pins_t   out_to_pins_en_o,
+  input  sonata_inout_pins_t inout_from_pins_i,
+  output sonata_inout_pins_t inout_to_pins_o,
+  output sonata_inout_pins_t inout_to_pins_en_o
 );
   ///////////////////////////////////////////////
   // Signals, types and parameters for system. //
@@ -1376,9 +1379,12 @@ module sonata_system
     .gpio_ios_en_i(gpio_to_pins_enable[1:GPIO_NUM]),
     .gpio_ios_o(gpio_from_pins[1:GPIO_NUM]),
 
-    .from_pins_i,
-    .to_pins_o,
-    .to_pins_en_o,
+    .in_from_pins_i,
+    .out_to_pins_o,
+    .out_to_pins_en_o,
+    .inout_from_pins_i,
+    .inout_to_pins_o,
+    .inout_to_pins_en_o,
 
     .tl_i(tl_pinmux_h2d),
     .tl_o(tl_pinmux_d2h)
