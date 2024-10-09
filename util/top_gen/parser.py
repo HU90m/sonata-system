@@ -73,8 +73,8 @@ class Pin(BaseModel, frozen=True):
             isinstance(block.io_index, int) for block in self.block_ios
         ):
             raise ValueError(
-                "A pin grouping can only link to a block io array, "
-                "i.e. when a length is specified all block_ios.io must be integers."
+                "A pin grouping can only link to a block io array, i.e. "
+                "when a length is specified all block_ios.io must be integers."
             )
         return self
 
