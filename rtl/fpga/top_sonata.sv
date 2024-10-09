@@ -383,11 +383,15 @@ module top_sonata
     assign output_pins[idx] = out_to_pins_en[idx] ? out_to_pins[idx] : 1'bz;
   end
 
+  // Invert each bit because with `IOBUF` low is enable and high is disable.
+  sonata_inout_pins_t inout_to_pins_en_negated;
+  assign {<<{inout_to_pins_en_negated}} = ~{<<{inout_to_pins_en}};
+
   IOBUF u_inout_pad[INOUT_PIN_NUM] (
-    .T  ( ~inout_to_pins_en ), // Invert because low is enable and high is disable.
-    .I  (  inout_to_pins    ),
-    .O  (  inout_from_pins  ),
-    .IO (  inout_pins       )
+    .T  ( inout_to_pins_en_negated ),
+    .I  ( inout_to_pins            ),
+    .O  ( inout_from_pins          ),
+    .IO ( inout_pins               )
   );
 
   // Breaking out pins
