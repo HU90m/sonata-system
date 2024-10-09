@@ -30,7 +30,6 @@ module pinmux
 
   // Pin Signals
   input  sonata_pins_t from_pins_i,
-  output sonata_pins_t from_pins_en_o,
   output sonata_pins_t to_pins_o,
   output sonata_pins_t to_pins_en_o,
 
@@ -3950,8 +3949,6 @@ module pinmux
   );
 
   // Inputs - Physical pin inputs are muxed to particular block IO
-  assign from_pins_en_o = '{default: 'b1};
-
 
   logic [1:0] uart_rx_0_sel;
   logic uart_rx_0_sel_addressed;

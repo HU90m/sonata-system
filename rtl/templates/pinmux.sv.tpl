@@ -19,7 +19,6 @@ module pinmux
 
   // Pin Signals
   input  sonata_pins_t from_pins_i,
-  output sonata_pins_t from_pins_en_o,
   output sonata_pins_t to_pins_o,
   output sonata_pins_t to_pins_en_o,
 
@@ -131,8 +130,6 @@ module pinmux
   % endfor
 
   // Inputs - Physical pin inputs are muxed to particular block IO
-  assign from_pins_en_o = '{default: 'b1};
-
   % for input_idx, (block_io, possible_pins, num_options) in enumerate(output_block_ios):
 
   logic [${num_options-1}:0] ${block_io.name}_sel;

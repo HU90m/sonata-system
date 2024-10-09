@@ -152,7 +152,7 @@ module top_verilator (input logic clk_i, rst_ni);
     end
   end
 
-  sonata_pins_t to_pins, to_pins_en, from_pins, unused_from_pins_en;
+  sonata_pins_t to_pins, to_pins_en, from_pins;
 
   assign appspi_d0   = to_pins[PINIDX_APPSPI_D0];
   assign lcd_copi    = to_pins[PINIDX_LCD_COPI];
@@ -261,7 +261,6 @@ module top_verilator (input logic clk_i, rst_ni);
     .hyperram_cs  (),
 
     .from_pins_i    (from_pins          ),
-    .from_pins_en_o (unused_from_pins_en),
     .to_pins_o      (to_pins            ),
     .to_pins_en_o   (to_pins_en         )
   );
