@@ -50,6 +50,11 @@ class BlockIoFlat(BaseModel, frozen=True):
             f"[{self.uid.io_index}]" if self.uid.io_index is not None else ""
         )
 
+    @property
+    def doc_name(self) -> str:
+        uid = self.uid
+        return f"{uid.block}[{uid.instance}].{uid.io}{self.io_idx_str}"
+
 
 @dataclass(frozen=True)
 class PinFlat:
@@ -70,6 +75,13 @@ class PinFlat:
             return f"{self.group_name}"
         else:
             return f"{self.group_name}_{self.group_index}"
+
+    @property
+    def doc_name(self) -> str:
+        if self.group_index is None:
+            return f"{self.group_name}"
+        else:
+            return f"{self.group_name}[{self.group_index}]"
 
     @property
     def idx_param(self) -> str:
@@ -318,7 +330,7 @@ def generate_top(config: TopConfig) -> None:
         ),
         ("rtl/templates/sonata_pkg.sv.tpl", "rtl/system/sonata_pkg.sv"),
         ("rtl/templates/pinmux.sv.tpl", "rtl/system/pinmux.sv"),
-        # ("doc/ip/pinmux.md.tpl", "doc/ip/pinmux.md"),
+        ("doc/ip/pinmux.md.tpl", "doc/ip/pinmux.md"),
     ):
         print("Generating from template: " + template_file)
         content = Template(filename=template_file).render(**template_variables)
