@@ -75,7 +75,7 @@ module pinmux
 
   // Outputs - Blocks IO is muxed to choose which drives the output and output
   // enable of a physical pin
-  % for output_idx, (pin, possible_block_outputs, num_options) in enumerate(output_list):
+  % for output_idx, (pin, possible_block_outputs, num_options) in enumerate(output_pins):
 
   logic [${num_options - 1}:0] ${pin.name}_sel;
   logic ${pin.name}_sel_addressed;
@@ -106,7 +106,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       % for idx, bio in enumerate(possible_block_outputs):
-      ${bio.id.block}_${bio.id.io}_i[${bio.id.instance}]${bio.io_idx_str}${',' if idx < (num_options - 2) else ''}
+      ${bio.uid.block}_${bio.uid.io}_i[${bio.uid.instance}]${bio.io_idx_str}${',' if idx < (num_options - 2) else ''}
       % endfor
     }),
     .sel_i(${pin.name}_sel),
@@ -122,7 +122,7 @@ module pinmux
     .in_i({
       1'b0,
       % for idx, bio in enumerate(possible_block_outputs):
-      ${f"{bio.id.block}_{bio.id.io}_en_i[{bio.id.instance}]{bio.io_idx_str}" if bio.is_inout else "1'b1"}${',' if idx < (num_options - 2) else ''}
+      ${f"{bio.uid.block}_{bio.uid.io}_en_i[{bio.uid.instance}]{bio.io_idx_str}" if bio.is_inout else "1'b1"}${',' if idx < (num_options - 2) else ''}
       % endfor
     }),
     .sel_i(${pin.name}_sel),
@@ -133,7 +133,7 @@ module pinmux
   // Inputs - Physical pin inputs are muxed to particular block IO
   assign from_pins_en_o = '{default: 'b1};
 
-  % for input_idx, (block_io, possible_pins, num_options) in enumerate(input_list):
+  % for input_idx, (block_io, possible_pins, num_options) in enumerate(output_block_ios):
 
   logic [${num_options-1}:0] ${block_io.name}_sel;
   logic ${block_io.name}_sel_addressed;
@@ -171,13 +171,13 @@ module pinmux
       % endif
     }),
     .sel_i(${block_io.name}_sel),
-    .out_o(${block_io.id.block}_${block_io.id.io}_o[${block_io.id.instance}]${block_io.io_idx_str})
+    .out_o(${block_io.uid.block}_${block_io.uid.io}_o[${block_io.uid.instance}]${block_io.io_idx_str})
   );
   % endfor
 
   // Combining inputs for combinable inouts
-  % for block_io, default_value, operator, pins_and_select_values in combine_list:
-  assign ${block_io.id.block}_${block_io.id.io}_o[${block_io.id.instance}] =
+  % for block_io, default_value, operator, pins_and_select_values in combined_input_block_ios:
+  assign ${block_io.uid.block}_${block_io.uid.io}_o[${block_io.uid.instance}] =
     % for idx, (pin, select_value) in enumerate(pins_and_select_values):
     (${pin.name}_sel == ${select_value} ? from_pins_i[${pin.idx_param}] : ${default_value})${operator if idx < len(pins_and_select_values) - 1 else ';'}
     % endfor
