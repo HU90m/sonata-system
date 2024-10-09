@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Top generation circuitry using a top configuration and templates."""
 
+import functools
 import subprocess
 from pathlib import Path
 from typing import Iterator, NamedTuple, TypeAlias
@@ -14,8 +15,8 @@ from pydantic.dataclasses import dataclass
 from .parser import (
     Block,
     BlockIoCombine,
-    BlockIoType,
     BlockIoUid,
+    Direction,
     Pin,
     TopConfig,
 )
@@ -31,12 +32,12 @@ class BlockIoFlat(BaseModel, frozen=True):
     uid: BlockIoUid
 
     default_value: int
-    io_type: BlockIoType
+    direction: Direction
     combine: BlockIoCombine | None = None
 
     @property
     def is_inout(self) -> bool:
-        return self.io_type == BlockIoType.INOUT
+        return self.direction == Direction.INOUT
 
     @property
     def name(self) -> str:
@@ -66,6 +67,7 @@ class PinFlat:
     group_name: str
     block_io_links: list[BlockIoUid]
 
+    direction: Direction
     group_index: int | None = None
 
     @property
@@ -137,7 +139,7 @@ def flatten_block_ios(blocks: list[Block]) -> Iterator[BlockIoFlat]:
                             io.name,
                         ),
                         default_value=io.default,
-                        io_type=io.type,
+                        direction=io.type,
                         combine=io.combine,
                     )
                 else:
@@ -149,16 +151,32 @@ def flatten_block_ios(blocks: list[Block]) -> Iterator[BlockIoFlat]:
                                 io.name,
                                 io_index,
                             ),
-                            io_type=io.type,
+                            direction=io.type,
                             default_value=io.default,
                             combine=io.combine,
                         )
 
 
-def flatten_pins(pins: list[Pin]) -> Iterator[PinFlat]:
+def flatten_pins(
+    pins: list[Pin], block_ios: list[BlockIoFlat]
+) -> Iterator[PinFlat]:
+    block_ios_direction: dict[BlockIoUid, Direction] = {
+        bio.uid: bio.direction for bio in block_ios
+    }
+
+    def pin_direction(pin: Pin) -> Direction:
+        return functools.reduce(
+            Direction.__and__,
+            (
+                block_ios_direction[block_io_uid]
+                for block_io_uid in pin.block_ios
+            ),
+        )
+
     for pin in pins:
+        direction = pin_direction(pin)
         if pin.length is None:
-            yield PinFlat(pin.name, pin.block_ios)
+            yield PinFlat(pin.name, pin.block_ios, direction)
         else:
             for group_index in range(pin.length):
                 block_io_links = [
@@ -172,7 +190,7 @@ def flatten_pins(pins: list[Pin]) -> Iterator[PinFlat]:
                     # This is checked at validation time
                     if isinstance(block_io.io_index, int)
                 ]
-                yield PinFlat(pin.name, block_io_links, group_index)
+                yield PinFlat(pin.name, block_io_links, direction, group_index)
 
 
 def block_io_to_pin_map(
@@ -189,8 +207,8 @@ def output_block_ios_iter(
     block_ios: list[BlockIoFlat], block_io_to_pins: BlockIoToPinsMap
 ) -> Iterator[OutputBlockIo]:
     for block_io in block_ios:
-        if block_io.io_type != BlockIoType.INPUT and (
-            block_io.io_type != BlockIoType.INOUT
+        if block_io.direction != Direction.INPUT and (
+            block_io.direction != Direction.INOUT
             or block_io.combine != BlockIoCombine.MUX
         ):
             continue
@@ -211,10 +229,11 @@ def output_pins_iter(
         bio.uid: bio for bio in block_ios
     }
     for pin in pins:
+        # Remove block inputs and convert to BlockIoUid to BlockIoFlat
         block_outputs = [
             blocks_map[block_io_uid]
             for block_io_uid in pin.block_io_links
-            if blocks_map[block_io_uid].io_type != BlockIoType.INPUT
+            if blocks_map[block_io_uid].direction != Direction.INPUT
         ]
         if len(block_outputs) > 0:
             yield OutputPin(pin, block_outputs, len(block_outputs) + 1)
@@ -224,11 +243,11 @@ def combined_input_block_ios_iter(
     block_ios: list[BlockIoFlat], block_io_to_pins: BlockIoToPinsMap
 ) -> Iterator[CombinedInputBlockIo]:
     for block_io in block_ios:
-        match (block_io.io_type, block_io.combine):
-            case (BlockIoType.INOUT, BlockIoCombine.AND):
+        match (block_io.direction, block_io.combine):
+            case (Direction.INOUT, BlockIoCombine.AND):
                 default_value = "1'b1"
                 operator = " &"
-            case (BlockIoType.INOUT, BlockIoCombine.OR):
+            case (Direction.INOUT, BlockIoCombine.OR):
                 default_value = "1'b0"
                 operator = " |"
             case _:
@@ -261,15 +280,15 @@ def pinmux_ios_to_blocks_iter(config: TopConfig) -> Iterator[PinmuxIoToBlock]:
             name = f"{block.name}_{io.name}"
             width = "" if io.length is None else f"[{io.length - 1}:0] "
             match io.type:
-                case BlockIoType.OUTPUT:
+                case Direction.OUTPUT:
                     yield PinmuxIoToBlock(
                         "input ", width, name + "_i", instances
                     )
-                case BlockIoType.INPUT:
+                case Direction.INPUT:
                     yield PinmuxIoToBlock(
                         "output", width, name + "_o", instances
                     )
-                case BlockIoType.INOUT:
+                case Direction.INOUT:
                     yield PinmuxIoToBlock(
                         "input ", width, name + "_i", instances
                     )
@@ -285,7 +304,7 @@ def generate_top(config: TopConfig) -> None:
     """Generate a top from a top configuration."""
 
     block_ios = list(flatten_block_ios(config.blocks))
-    pins = list(flatten_pins(config.pins))
+    pins = list(flatten_pins(config.pins, block_ios))
 
     block_io_to_pins = block_io_to_pin_map(block_ios, pins)
 

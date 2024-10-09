@@ -12,10 +12,19 @@ from pydantic.dataclasses import dataclass
 from typing_extensions import Self
 
 
-class BlockIoType(str, Enum):
+class Direction(str, Enum):
     INOUT = "inout"
     INPUT = "input"
     OUTPUT = "output"
+
+    def __and__(self, other: "Direction") -> "Direction":
+        match (self, other):
+            case (Direction.INPUT, Direction.INPUT):
+                return self
+            case (Direction.OUTPUT, Direction.OUTPUT):
+                return self
+            case _:
+                return Direction.INOUT
 
 
 class BlockIoCombine(str, Enum):
@@ -26,7 +35,7 @@ class BlockIoCombine(str, Enum):
 
 class BlockIo(BaseModel, frozen=True):
     name: str
-    type: BlockIoType
+    type: Direction
     combine: BlockIoCombine | None = None
     default: int = 0
     length: int | None = None
@@ -34,7 +43,7 @@ class BlockIo(BaseModel, frozen=True):
     @model_validator(mode="after")
     def verify_block(self) -> Self:
         assert (
-            self.type != BlockIoType.INOUT or self.default == 0
+            self.type != Direction.INOUT or self.default == 0
         ), "An inout block IO cannot have a default value other than 0."
         return self
 
