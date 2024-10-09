@@ -378,18 +378,15 @@ module top_sonata
     .rst_no      (rst_sys_n)
   );
 
-  // Pad Ring
+  // Pin Buffers
   for (genvar idx = 0; idx < OUT_PIN_NUM; ++idx) begin
     assign output_pins[idx] = out_to_pins_en[idx] ? out_to_pins[idx] : 1'bz;
   end
-
   for (genvar idx = 0; idx < INOUT_PIN_NUM; ++idx) begin
-    IOBUF u_inout_pad (
-      .T  ( !inout_to_pins_en[idx] ), // Invert enable, low is enable and high is disable.
-      .I  (  inout_to_pins   [idx] ),
-      .O  (  inout_from_pins [idx] ),
-      .IO (  inout_pins      [idx] )
-    );
+    // Would use IOBUF, Vivado seems to want me to add (* io_buffer_type = "none" *)
+    // to each of the inout leaving the module if I do.
+    assign inout_pins[idx]      = inout_to_pins_en[idx] ? inout_to_pins[idx] : 1'bz;
+    assign inout_from_pins[idx] = inout_pins[idx];
   end
 
   // Breaking out pins
