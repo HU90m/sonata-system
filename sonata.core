@@ -12,12 +12,10 @@ filesets:
   files_sonata:
     depend:
       - lowrisc:ibex:fpga_xilinx_shared
-      - lowrisc:prim:pad_wrapper
     files:
       - rtl/fpga/top_sonata.sv
       - rtl/fpga/clkgen_sonata.sv
       - rtl/fpga/rst_ctrl.sv
-      - rtl/fpga/padring.sv
     file_type: systemVerilogSource
 
   files_verilator:
