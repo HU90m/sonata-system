@@ -88,9 +88,6 @@ module sonata_system
   output sonata_pins_t to_pins_o,
   output sonata_pins_t to_pins_en_o
 );
-
-  import sonata_pkg::*;
-
   ///////////////////////////////////////////////
   // Signals, types and parameters for system. //
   ///////////////////////////////////////////////
