@@ -20,10 +20,10 @@ package sonata_pkg;
   // Width of block IO arrays
   localparam int unsigned GPIO_BOARD_GPO_WIDTH = 8;
   localparam int unsigned GPIO_BOARD_GPI_WIDTH = 17;
-  localparam int unsigned GPIO_RPH_IOS_WIDTH = 28;
-  localparam int unsigned GPIO_AH_IOS_WIDTH = 14;
-  localparam int unsigned GPIO_PMOD0_IOS_WIDTH = 8;
-  localparam int unsigned GPIO_PMOD1_IOS_WIDTH = 8;
+  localparam int unsigned GPIO_RPH_GPIO_WIDTH = 28;
+  localparam int unsigned GPIO_AH_GPIO_WIDTH = 14;
+  localparam int unsigned GPIO_PMOD0_GPIO_WIDTH = 8;
+  localparam int unsigned GPIO_PMOD1_GPIO_WIDTH = 8;
   localparam int unsigned PWM_IOS_WIDTH = 6;
   localparam int unsigned SPI_CS_WIDTH = 4;
 

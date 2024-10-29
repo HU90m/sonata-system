@@ -849,11 +849,11 @@ module sonata_system
     .gp_o_en()
   );
 
-  logic [GPIO_RPH_IOS_WIDTH-1:0] gpio_rph_from_pins;
-  logic [GPIO_RPH_IOS_WIDTH-1:0] gpio_rph_to_pins, gpio_rph_to_pins_enable;
+  logic [GPIO_RPH_GPIO_WIDTH-1:0] gpio_rph_from_pins;
+  logic [GPIO_RPH_GPIO_WIDTH-1:0] gpio_rph_to_pins, gpio_rph_to_pins_enable;
   gpio #(
-    .GpiWidth ( GPIO_RPH_IOS_WIDTH ),
-    .GpoWidth ( GPIO_RPH_IOS_WIDTH )
+    .GpiWidth ( GPIO_RPH_GPIO_WIDTH ),
+    .GpoWidth ( GPIO_RPH_GPIO_WIDTH )
   ) u_gpio_rph (
     .clk_i  (clk_sys_i),
     .rst_ni (rst_sys_ni),
@@ -866,11 +866,11 @@ module sonata_system
     .gp_o_en(gpio_rph_to_pins_enable)
   );
 
-  logic [GPIO_AH_IOS_WIDTH-1:0] gpio_ah_from_pins;
-  logic [GPIO_AH_IOS_WIDTH-1:0] gpio_ah_to_pins, gpio_ah_to_pins_enable;
+  logic [GPIO_AH_GPIO_WIDTH-1:0] gpio_ah_from_pins;
+  logic [GPIO_AH_GPIO_WIDTH-1:0] gpio_ah_to_pins, gpio_ah_to_pins_enable;
   gpio #(
-    .GpiWidth ( GPIO_AH_IOS_WIDTH ),
-    .GpoWidth ( GPIO_AH_IOS_WIDTH )
+    .GpiWidth ( GPIO_AH_GPIO_WIDTH ),
+    .GpoWidth ( GPIO_AH_GPIO_WIDTH )
   ) u_gpio_ah (
     .clk_i  (clk_sys_i),
     .rst_ni (rst_sys_ni),
@@ -883,11 +883,11 @@ module sonata_system
     .gp_o_en(gpio_ah_to_pins_enable)
   );
 
-  logic [GPIO_PMOD0_IOS_WIDTH-1:0] gpio_pmod0_from_pins;
-  logic [GPIO_PMOD0_IOS_WIDTH-1:0] gpio_pmod0_to_pins, gpio_pmod0_to_pins_enable;
+  logic [GPIO_PMOD0_GPIO_WIDTH-1:0] gpio_pmod0_from_pins;
+  logic [GPIO_PMOD0_GPIO_WIDTH-1:0] gpio_pmod0_to_pins, gpio_pmod0_to_pins_enable;
   gpio #(
-    .GpiWidth ( GPIO_PMOD0_IOS_WIDTH ),
-    .GpoWidth ( GPIO_PMOD0_IOS_WIDTH )
+    .GpiWidth ( GPIO_PMOD0_GPIO_WIDTH ),
+    .GpoWidth ( GPIO_PMOD0_GPIO_WIDTH )
   ) u_gpio_pmod0 (
     .clk_i  (clk_sys_i),
     .rst_ni (rst_sys_ni),
@@ -900,11 +900,11 @@ module sonata_system
     .gp_o_en(gpio_pmod0_to_pins_enable)
   );
 
-  logic [GPIO_PMOD1_IOS_WIDTH-1:0] gpio_pmod1_from_pins;
-  logic [GPIO_PMOD1_IOS_WIDTH-1:0] gpio_pmod1_to_pins, gpio_pmod1_to_pins_enable;
+  logic [GPIO_PMOD1_GPIO_WIDTH-1:0] gpio_pmod1_from_pins;
+  logic [GPIO_PMOD1_GPIO_WIDTH-1:0] gpio_pmod1_to_pins, gpio_pmod1_to_pins_enable;
   gpio #(
-    .GpiWidth ( GPIO_PMOD1_IOS_WIDTH ),
-    .GpoWidth ( GPIO_PMOD1_IOS_WIDTH )
+    .GpiWidth ( GPIO_PMOD1_GPIO_WIDTH ),
+    .GpoWidth ( GPIO_PMOD1_GPIO_WIDTH )
   ) u_gpio_pmod1 (
     .clk_i  (clk_sys_i),
     .rst_ni (rst_sys_ni),
@@ -1258,21 +1258,21 @@ module sonata_system
     .gpio_board_gpo_i('{gpio_board_to_pins}),
     .gpio_board_gpo_en_i('{'b1}),
 
-    .gpio_rph_ios_o('{gpio_rph_from_pins}),
-    .gpio_rph_ios_i('{gpio_rph_to_pins}),
-    .gpio_rph_ios_en_i('{gpio_rph_to_pins_enable}),
+    .gpio_rph_gpio_o('{gpio_rph_from_pins}),
+    .gpio_rph_gpio_i('{gpio_rph_to_pins}),
+    .gpio_rph_gpio_en_i('{gpio_rph_to_pins_enable}),
 
-    .gpio_ah_ios_o('{gpio_ah_from_pins}),
-    .gpio_ah_ios_i('{gpio_ah_to_pins}),
-    .gpio_ah_ios_en_i('{gpio_ah_to_pins_enable}),
+    .gpio_ah_gpio_o('{gpio_ah_from_pins}),
+    .gpio_ah_gpio_i('{gpio_ah_to_pins}),
+    .gpio_ah_gpio_en_i('{gpio_ah_to_pins_enable}),
 
-    .gpio_pmod0_ios_o('{gpio_pmod0_from_pins}),
-    .gpio_pmod0_ios_i('{gpio_pmod0_to_pins}),
-    .gpio_pmod0_ios_en_i('{gpio_pmod0_to_pins_enable}),
+    .gpio_pmod0_gpio_o('{gpio_pmod0_from_pins}),
+    .gpio_pmod0_gpio_i('{gpio_pmod0_to_pins}),
+    .gpio_pmod0_gpio_en_i('{gpio_pmod0_to_pins_enable}),
 
-    .gpio_pmod1_ios_o('{gpio_pmod1_from_pins}),
-    .gpio_pmod1_ios_i('{gpio_pmod1_to_pins}),
-    .gpio_pmod1_ios_en_i('{gpio_pmod1_to_pins_enable}),
+    .gpio_pmod1_gpio_o('{gpio_pmod1_from_pins}),
+    .gpio_pmod1_gpio_i('{gpio_pmod1_to_pins}),
+    .gpio_pmod1_gpio_en_i('{gpio_pmod1_to_pins_enable}),
 
     .pwm_ios_i('{pwm_modulated}),
     .pwm_ios_en_i('{'b1}),
