@@ -24,7 +24,7 @@ package sonata_pkg;
   localparam int unsigned GPIO_AH_GPIO_WIDTH = 14;
   localparam int unsigned GPIO_PMOD0_GPIO_WIDTH = 8;
   localparam int unsigned GPIO_PMOD1_GPIO_WIDTH = 8;
-  localparam int unsigned PWM_IOS_WIDTH = 6;
+  localparam int unsigned PWM_PWM_WIDTH = 6;
   localparam int unsigned SPI_CS_WIDTH = 4;
 
   // Number of input, output, and inout pins
