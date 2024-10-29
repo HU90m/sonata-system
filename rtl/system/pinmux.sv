@@ -12,10 +12,30 @@ module pinmux
   input logic clk_i,
   input logic rst_ni,
 
-  // GPIO IOs
-  output [31:0] gpio_ios_o   [GPIO_NUM],
-  input  [31:0] gpio_ios_i   [GPIO_NUM],
-  input  [31:0] gpio_ios_en_i[GPIO_NUM],
+  // GPIO_BOARD IOs
+  input  [7:0] gpio_board_gpo_i   [GPIO_BOARD_NUM],
+  input  [7:0] gpio_board_gpo_en_i[GPIO_BOARD_NUM],
+  output [16:0] gpio_board_gpi_o[GPIO_BOARD_NUM],
+
+  // GPIO_RPH IOs
+  output [27:0] gpio_rph_ios_o   [GPIO_RPH_NUM],
+  input  [27:0] gpio_rph_ios_i   [GPIO_RPH_NUM],
+  input  [27:0] gpio_rph_ios_en_i[GPIO_RPH_NUM],
+
+  // GPIO_AH IOs
+  output [13:0] gpio_ah_ios_o   [GPIO_AH_NUM],
+  input  [13:0] gpio_ah_ios_i   [GPIO_AH_NUM],
+  input  [13:0] gpio_ah_ios_en_i[GPIO_AH_NUM],
+
+  // GPIO_PMOD0 IOs
+  output [7:0] gpio_pmod0_ios_o   [GPIO_PMOD0_NUM],
+  input  [7:0] gpio_pmod0_ios_i   [GPIO_PMOD0_NUM],
+  input  [7:0] gpio_pmod0_ios_en_i[GPIO_PMOD0_NUM],
+
+  // GPIO_PMOD1 IOs
+  output [7:0] gpio_pmod1_ios_o   [GPIO_PMOD1_NUM],
+  input  [7:0] gpio_pmod1_ios_i   [GPIO_PMOD1_NUM],
+  input  [7:0] gpio_pmod1_ios_en_i[GPIO_PMOD1_NUM],
 
   // PWM IOs
   input  [5:0] pwm_ios_i   [PWM_NUM],
@@ -901,7 +921,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       i2c_sda_i[0],
-      gpio_ios_i[0][0]
+      gpio_rph_ios_i[0][0]
     }),
     .sel_i(rph_g0_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G0])
@@ -916,7 +936,7 @@ module pinmux
     .in_i({
       1'b0,
       i2c_sda_en_i[0],
-      gpio_ios_en_i[0][0]
+      gpio_rph_ios_en_i[0][0]
     }),
     .sel_i(rph_g0_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G0])
@@ -951,7 +971,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       i2c_scl_i[0],
-      gpio_ios_i[0][1]
+      gpio_rph_ios_i[0][1]
     }),
     .sel_i(rph_g1_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G1])
@@ -966,7 +986,7 @@ module pinmux
     .in_i({
       1'b0,
       i2c_scl_en_i[0],
-      gpio_ios_en_i[0][1]
+      gpio_rph_ios_en_i[0][1]
     }),
     .sel_i(rph_g1_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G1])
@@ -1001,7 +1021,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       i2c_sda_i[1],
-      gpio_ios_i[0][2]
+      gpio_rph_ios_i[0][2]
     }),
     .sel_i(rph_g2_sda_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G2_SDA])
@@ -1016,7 +1036,7 @@ module pinmux
     .in_i({
       1'b0,
       i2c_sda_en_i[1],
-      gpio_ios_en_i[0][2]
+      gpio_rph_ios_en_i[0][2]
     }),
     .sel_i(rph_g2_sda_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G2_SDA])
@@ -1051,7 +1071,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       i2c_scl_i[1],
-      gpio_ios_i[0][3]
+      gpio_rph_ios_i[0][3]
     }),
     .sel_i(rph_g3_scl_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G3_SCL])
@@ -1066,7 +1086,7 @@ module pinmux
     .in_i({
       1'b0,
       i2c_scl_en_i[1],
-      gpio_ios_en_i[0][3]
+      gpio_rph_ios_en_i[0][3]
     }),
     .sel_i(rph_g3_scl_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G3_SCL])
@@ -1100,7 +1120,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][4]
+      gpio_rph_ios_i[0][4]
     }),
     .sel_i(rph_g4_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G4])
@@ -1114,7 +1134,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][4]
+      gpio_rph_ios_en_i[0][4]
     }),
     .sel_i(rph_g4_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G4])
@@ -1148,7 +1168,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][5]
+      gpio_rph_ios_i[0][5]
     }),
     .sel_i(rph_g5_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G5])
@@ -1162,7 +1182,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][5]
+      gpio_rph_ios_en_i[0][5]
     }),
     .sel_i(rph_g5_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G5])
@@ -1196,7 +1216,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][6]
+      gpio_rph_ios_i[0][6]
     }),
     .sel_i(rph_g6_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G6])
@@ -1210,7 +1230,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][6]
+      gpio_rph_ios_en_i[0][6]
     }),
     .sel_i(rph_g6_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G6])
@@ -1245,7 +1265,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_cs_i[3][1],
-      gpio_ios_i[0][7]
+      gpio_rph_ios_i[0][7]
     }),
     .sel_i(rph_g7_ce1_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G7_CE1])
@@ -1260,7 +1280,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_cs_en_i[3][1],
-      gpio_ios_en_i[0][7]
+      gpio_rph_ios_en_i[0][7]
     }),
     .sel_i(rph_g7_ce1_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G7_CE1])
@@ -1295,7 +1315,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_cs_i[3][0],
-      gpio_ios_i[0][8]
+      gpio_rph_ios_i[0][8]
     }),
     .sel_i(rph_g8_ce0_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G8_CE0])
@@ -1310,7 +1330,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_cs_en_i[3][0],
-      gpio_ios_en_i[0][8]
+      gpio_rph_ios_en_i[0][8]
     }),
     .sel_i(rph_g8_ce0_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G8_CE0])
@@ -1344,7 +1364,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][9]
+      gpio_rph_ios_i[0][9]
     }),
     .sel_i(rph_g9_cipo_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G9_CIPO])
@@ -1358,7 +1378,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][9]
+      gpio_rph_ios_en_i[0][9]
     }),
     .sel_i(rph_g9_cipo_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G9_CIPO])
@@ -1393,7 +1413,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_tx_i[3],
-      gpio_ios_i[0][10]
+      gpio_rph_ios_i[0][10]
     }),
     .sel_i(rph_g10_copi_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G10_COPI])
@@ -1408,7 +1428,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_tx_en_i[3],
-      gpio_ios_en_i[0][10]
+      gpio_rph_ios_en_i[0][10]
     }),
     .sel_i(rph_g10_copi_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G10_COPI])
@@ -1443,7 +1463,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_sck_i[3],
-      gpio_ios_i[0][11]
+      gpio_rph_ios_i[0][11]
     }),
     .sel_i(rph_g11_sclk_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G11_SCLK])
@@ -1458,7 +1478,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_sck_en_i[3],
-      gpio_ios_en_i[0][11]
+      gpio_rph_ios_en_i[0][11]
     }),
     .sel_i(rph_g11_sclk_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G11_SCLK])
@@ -1492,7 +1512,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][12]
+      gpio_rph_ios_i[0][12]
     }),
     .sel_i(rph_g12_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G12])
@@ -1506,7 +1526,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][12]
+      gpio_rph_ios_en_i[0][12]
     }),
     .sel_i(rph_g12_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G12])
@@ -1540,7 +1560,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][13]
+      gpio_rph_ios_i[0][13]
     }),
     .sel_i(rph_g13_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G13])
@@ -1554,7 +1574,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][13]
+      gpio_rph_ios_en_i[0][13]
     }),
     .sel_i(rph_g13_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G13])
@@ -1589,7 +1609,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       uart_tx_i[2],
-      gpio_ios_i[0][14]
+      gpio_rph_ios_i[0][14]
     }),
     .sel_i(rph_txd0_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_TXD0])
@@ -1604,7 +1624,7 @@ module pinmux
     .in_i({
       1'b0,
       uart_tx_en_i[2],
-      gpio_ios_en_i[0][14]
+      gpio_rph_ios_en_i[0][14]
     }),
     .sel_i(rph_txd0_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_TXD0])
@@ -1638,7 +1658,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][15]
+      gpio_rph_ios_i[0][15]
     }),
     .sel_i(rph_rxd0_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_RXD0])
@@ -1652,7 +1672,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][15]
+      gpio_rph_ios_en_i[0][15]
     }),
     .sel_i(rph_rxd0_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_RXD0])
@@ -1687,7 +1707,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_cs_i[4][2],
-      gpio_ios_i[0][16]
+      gpio_rph_ios_i[0][16]
     }),
     .sel_i(rph_g16_ce2_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G16_CE2])
@@ -1702,7 +1722,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_cs_en_i[4][2],
-      gpio_ios_en_i[0][16]
+      gpio_rph_ios_en_i[0][16]
     }),
     .sel_i(rph_g16_ce2_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G16_CE2])
@@ -1737,7 +1757,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_cs_i[4][1],
-      gpio_ios_i[0][17]
+      gpio_rph_ios_i[0][17]
     }),
     .sel_i(rph_g17_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G17])
@@ -1752,7 +1772,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_cs_en_i[4][1],
-      gpio_ios_en_i[0][17]
+      gpio_rph_ios_en_i[0][17]
     }),
     .sel_i(rph_g17_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G17])
@@ -1787,7 +1807,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_cs_i[4][0],
-      gpio_ios_i[0][18]
+      gpio_rph_ios_i[0][18]
     }),
     .sel_i(rph_g18_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G18])
@@ -1802,7 +1822,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_cs_en_i[4][0],
-      gpio_ios_en_i[0][18]
+      gpio_rph_ios_en_i[0][18]
     }),
     .sel_i(rph_g18_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G18])
@@ -1836,7 +1856,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][19]
+      gpio_rph_ios_i[0][19]
     }),
     .sel_i(rph_g19_cipo_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G19_CIPO])
@@ -1850,7 +1870,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][19]
+      gpio_rph_ios_en_i[0][19]
     }),
     .sel_i(rph_g19_cipo_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G19_CIPO])
@@ -1885,7 +1905,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_tx_i[4],
-      gpio_ios_i[0][20]
+      gpio_rph_ios_i[0][20]
     }),
     .sel_i(rph_g20_copi_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G20_COPI])
@@ -1900,7 +1920,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_tx_en_i[4],
-      gpio_ios_en_i[0][20]
+      gpio_rph_ios_en_i[0][20]
     }),
     .sel_i(rph_g20_copi_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G20_COPI])
@@ -1935,7 +1955,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_sck_i[4],
-      gpio_ios_i[0][21]
+      gpio_rph_ios_i[0][21]
     }),
     .sel_i(rph_g21_sclk_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G21_SCLK])
@@ -1950,7 +1970,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_sck_en_i[4],
-      gpio_ios_en_i[0][21]
+      gpio_rph_ios_en_i[0][21]
     }),
     .sel_i(rph_g21_sclk_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G21_SCLK])
@@ -1984,7 +2004,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][22]
+      gpio_rph_ios_i[0][22]
     }),
     .sel_i(rph_g22_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G22])
@@ -1998,7 +2018,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][22]
+      gpio_rph_ios_en_i[0][22]
     }),
     .sel_i(rph_g22_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G22])
@@ -2032,7 +2052,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][23]
+      gpio_rph_ios_i[0][23]
     }),
     .sel_i(rph_g23_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G23])
@@ -2046,7 +2066,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][23]
+      gpio_rph_ios_en_i[0][23]
     }),
     .sel_i(rph_g23_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G23])
@@ -2080,7 +2100,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][24]
+      gpio_rph_ios_i[0][24]
     }),
     .sel_i(rph_g24_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G24])
@@ -2094,7 +2114,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][24]
+      gpio_rph_ios_en_i[0][24]
     }),
     .sel_i(rph_g24_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G24])
@@ -2128,7 +2148,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][25]
+      gpio_rph_ios_i[0][25]
     }),
     .sel_i(rph_g25_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G25])
@@ -2142,7 +2162,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][25]
+      gpio_rph_ios_en_i[0][25]
     }),
     .sel_i(rph_g25_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G25])
@@ -2176,7 +2196,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][26]
+      gpio_rph_ios_i[0][26]
     }),
     .sel_i(rph_g26_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G26])
@@ -2190,7 +2210,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][26]
+      gpio_rph_ios_en_i[0][26]
     }),
     .sel_i(rph_g26_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G26])
@@ -2224,7 +2244,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[0][27]
+      gpio_rph_ios_i[0][27]
     }),
     .sel_i(rph_g27_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_RPH_G27])
@@ -2238,7 +2258,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[0][27]
+      gpio_rph_ios_en_i[0][27]
     }),
     .sel_i(rph_g27_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_RPH_G27])
@@ -2272,7 +2292,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][0]
+      gpio_ah_ios_i[0][0]
     }),
     .sel_i(ah_tmpio0_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO0])
@@ -2286,7 +2306,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][0]
+      gpio_ah_ios_en_i[0][0]
     }),
     .sel_i(ah_tmpio0_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO0])
@@ -2320,7 +2340,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][1],
+      gpio_ah_ios_i[0][1],
       uart_tx_i[3]
     }),
     .sel_i(ah_tmpio1_sel),
@@ -2335,7 +2355,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][1],
+      gpio_ah_ios_en_i[0][1],
       uart_tx_en_i[3]
     }),
     .sel_i(ah_tmpio1_sel),
@@ -2370,7 +2390,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][2]
+      gpio_ah_ios_i[0][2]
     }),
     .sel_i(ah_tmpio2_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO2])
@@ -2384,7 +2404,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][2]
+      gpio_ah_ios_en_i[0][2]
     }),
     .sel_i(ah_tmpio2_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO2])
@@ -2418,7 +2438,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][3]
+      gpio_ah_ios_i[0][3]
     }),
     .sel_i(ah_tmpio3_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO3])
@@ -2432,7 +2452,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][3]
+      gpio_ah_ios_en_i[0][3]
     }),
     .sel_i(ah_tmpio3_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO3])
@@ -2466,7 +2486,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][4]
+      gpio_ah_ios_i[0][4]
     }),
     .sel_i(ah_tmpio4_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO4])
@@ -2480,7 +2500,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][4]
+      gpio_ah_ios_en_i[0][4]
     }),
     .sel_i(ah_tmpio4_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO4])
@@ -2514,7 +2534,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][5]
+      gpio_ah_ios_i[0][5]
     }),
     .sel_i(ah_tmpio5_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO5])
@@ -2528,7 +2548,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][5]
+      gpio_ah_ios_en_i[0][5]
     }),
     .sel_i(ah_tmpio5_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO5])
@@ -2562,7 +2582,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][6]
+      gpio_ah_ios_i[0][6]
     }),
     .sel_i(ah_tmpio6_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO6])
@@ -2576,7 +2596,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][6]
+      gpio_ah_ios_en_i[0][6]
     }),
     .sel_i(ah_tmpio6_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO6])
@@ -2610,7 +2630,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][7]
+      gpio_ah_ios_i[0][7]
     }),
     .sel_i(ah_tmpio7_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO7])
@@ -2624,7 +2644,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][7]
+      gpio_ah_ios_en_i[0][7]
     }),
     .sel_i(ah_tmpio7_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO7])
@@ -2658,7 +2678,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][8]
+      gpio_ah_ios_i[0][8]
     }),
     .sel_i(ah_tmpio8_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO8])
@@ -2672,7 +2692,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][8]
+      gpio_ah_ios_en_i[0][8]
     }),
     .sel_i(ah_tmpio8_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO8])
@@ -2706,7 +2726,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][9]
+      gpio_ah_ios_i[0][9]
     }),
     .sel_i(ah_tmpio9_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO9])
@@ -2720,7 +2740,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][9]
+      gpio_ah_ios_en_i[0][9]
     }),
     .sel_i(ah_tmpio9_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO9])
@@ -2755,7 +2775,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_cs_i[3][2],
-      gpio_ios_i[1][10]
+      gpio_ah_ios_i[0][10]
     }),
     .sel_i(ah_tmpio10_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO10])
@@ -2770,7 +2790,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_cs_en_i[3][2],
-      gpio_ios_en_i[1][10]
+      gpio_ah_ios_en_i[0][10]
     }),
     .sel_i(ah_tmpio10_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO10])
@@ -2805,7 +2825,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_tx_i[3],
-      gpio_ios_i[1][11]
+      gpio_ah_ios_i[0][11]
     }),
     .sel_i(ah_tmpio11_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO11])
@@ -2820,7 +2840,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_tx_en_i[3],
-      gpio_ios_en_i[1][11]
+      gpio_ah_ios_en_i[0][11]
     }),
     .sel_i(ah_tmpio11_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO11])
@@ -2854,7 +2874,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[1][12]
+      gpio_ah_ios_i[0][12]
     }),
     .sel_i(ah_tmpio12_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO12])
@@ -2868,7 +2888,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[1][12]
+      gpio_ah_ios_en_i[0][12]
     }),
     .sel_i(ah_tmpio12_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO12])
@@ -2903,7 +2923,7 @@ module pinmux
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
       spi_sck_i[3],
-      gpio_ios_i[1][13]
+      gpio_ah_ios_i[0][13]
     }),
     .sel_i(ah_tmpio13_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_AH_TMPIO13])
@@ -2918,7 +2938,7 @@ module pinmux
     .in_i({
       1'b0,
       spi_sck_en_i[3],
-      gpio_ios_en_i[1][13]
+      gpio_ah_ios_en_i[0][13]
     }),
     .sel_i(ah_tmpio13_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_AH_TMPIO13])
@@ -3288,7 +3308,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][0]
+      gpio_pmod0_ios_i[0][0]
     }),
     .sel_i(pmod0_0_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD0_0])
@@ -3302,7 +3322,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][0]
+      gpio_pmod0_ios_en_i[0][0]
     }),
     .sel_i(pmod0_0_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD0_0])
@@ -3336,7 +3356,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][1],
+      gpio_pmod0_ios_i[0][1],
       spi_tx_i[3],
       uart_tx_i[2]
     }),
@@ -3352,7 +3372,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][1],
+      gpio_pmod0_ios_en_i[0][1],
       spi_tx_en_i[3],
       uart_tx_en_i[2]
     }),
@@ -3388,7 +3408,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][2],
+      gpio_pmod0_ios_i[0][2],
       i2c_scl_i[0]
     }),
     .sel_i(pmod0_2_sel),
@@ -3403,7 +3423,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][2],
+      gpio_pmod0_ios_en_i[0][2],
       i2c_scl_en_i[0]
     }),
     .sel_i(pmod0_2_sel),
@@ -3438,7 +3458,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][3],
+      gpio_pmod0_ios_i[0][3],
       i2c_sda_i[0],
       spi_sck_i[3]
     }),
@@ -3454,7 +3474,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][3],
+      gpio_pmod0_ios_en_i[0][3],
       i2c_sda_en_i[0],
       spi_sck_en_i[3]
     }),
@@ -3490,7 +3510,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][4]
+      gpio_pmod0_ios_i[0][4]
     }),
     .sel_i(pmod0_4_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD0_4])
@@ -3504,7 +3524,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][4]
+      gpio_pmod0_ios_en_i[0][4]
     }),
     .sel_i(pmod0_4_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD0_4])
@@ -3538,7 +3558,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][5]
+      gpio_pmod0_ios_i[0][5]
     }),
     .sel_i(pmod0_5_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD0_5])
@@ -3552,7 +3572,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][5]
+      gpio_pmod0_ios_en_i[0][5]
     }),
     .sel_i(pmod0_5_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD0_5])
@@ -3586,7 +3606,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][6]
+      gpio_pmod0_ios_i[0][6]
     }),
     .sel_i(pmod0_6_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD0_6])
@@ -3600,7 +3620,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][6]
+      gpio_pmod0_ios_en_i[0][6]
     }),
     .sel_i(pmod0_6_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD0_6])
@@ -3634,7 +3654,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][7]
+      gpio_pmod0_ios_i[0][7]
     }),
     .sel_i(pmod0_7_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD0_7])
@@ -3648,7 +3668,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][7]
+      gpio_pmod0_ios_en_i[0][7]
     }),
     .sel_i(pmod0_7_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD0_7])
@@ -3682,7 +3702,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][8]
+      gpio_pmod1_ios_i[0][0]
     }),
     .sel_i(pmod1_0_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD1_0])
@@ -3696,7 +3716,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][8]
+      gpio_pmod1_ios_en_i[0][0]
     }),
     .sel_i(pmod1_0_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD1_0])
@@ -3730,7 +3750,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][9],
+      gpio_pmod1_ios_i[0][1],
       spi_tx_i[4],
       uart_tx_i[3]
     }),
@@ -3746,7 +3766,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][9],
+      gpio_pmod1_ios_en_i[0][1],
       spi_tx_en_i[4],
       uart_tx_en_i[3]
     }),
@@ -3782,7 +3802,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][10],
+      gpio_pmod1_ios_i[0][2],
       i2c_scl_i[1]
     }),
     .sel_i(pmod1_2_sel),
@@ -3797,7 +3817,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][10],
+      gpio_pmod1_ios_en_i[0][2],
       i2c_scl_en_i[1]
     }),
     .sel_i(pmod1_2_sel),
@@ -3832,7 +3852,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][11],
+      gpio_pmod1_ios_i[0][3],
       i2c_sda_i[1],
       spi_sck_i[4]
     }),
@@ -3848,7 +3868,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][11],
+      gpio_pmod1_ios_en_i[0][3],
       i2c_sda_en_i[1],
       spi_sck_en_i[4]
     }),
@@ -3884,7 +3904,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][12]
+      gpio_pmod1_ios_i[0][4]
     }),
     .sel_i(pmod1_4_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD1_4])
@@ -3898,7 +3918,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][12]
+      gpio_pmod1_ios_en_i[0][4]
     }),
     .sel_i(pmod1_4_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD1_4])
@@ -3932,7 +3952,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][13]
+      gpio_pmod1_ios_i[0][5]
     }),
     .sel_i(pmod1_5_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD1_5])
@@ -3946,7 +3966,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][13]
+      gpio_pmod1_ios_en_i[0][5]
     }),
     .sel_i(pmod1_5_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD1_5])
@@ -3980,7 +4000,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][14]
+      gpio_pmod1_ios_i[0][6]
     }),
     .sel_i(pmod1_6_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD1_6])
@@ -3994,7 +4014,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][14]
+      gpio_pmod1_ios_en_i[0][6]
     }),
     .sel_i(pmod1_6_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD1_6])
@@ -4028,7 +4048,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0, // This is set to Z later when output enable is low.
-      gpio_ios_i[2][15]
+      gpio_pmod1_ios_i[0][7]
     }),
     .sel_i(pmod1_7_sel),
     .out_o(inout_to_pins_o[INOUT_PIN_PMOD1_7])
@@ -4042,7 +4062,7 @@ module pinmux
     .rst_ni,
     .in_i({
       1'b0,
-      gpio_ios_en_i[2][15]
+      gpio_pmod1_ios_en_i[0][7]
     }),
     .sel_i(pmod1_7_sel),
     .out_o(inout_to_pins_en_o[INOUT_PIN_PMOD1_7])
@@ -4192,24 +4212,22 @@ module pinmux
     .out_o(out_to_pins_en_o[OUT_PIN_MICROSD_DAT3])
   );
 
-  // Inputs - Physical pin inputs are muxed to particular block IO
+  logic [1:0] usrled_0_sel;
+  logic usrled_0_sel_addressed;
 
-  logic [1:0] gpio_ios_0_0_sel;
-  logic gpio_ios_0_0_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_0_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 0 &
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_0_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 84 &
     reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_0_sel <= 2'b10;
+      usrled_0_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_0_sel_addressed) begin
-        gpio_ios_0_0_sel <= reg_wdata[0+:2];
+      if (reg_we & usrled_0_sel_addressed) begin
+        usrled_0_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -4217,33 +4235,997 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_0_mux (
+  ) usrled_0_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][0]
+    }),
+    .sel_i(usrled_0_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_0])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_0_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][0]
+    }),
+    .sel_i(usrled_0_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_0])
+  );
+
+  logic [1:0] usrled_1_sel;
+  logic usrled_1_sel_addressed;
+
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_1_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 84 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      usrled_1_sel <= 2'b10;
+    end else begin
+      if (reg_we & usrled_1_sel_addressed) begin
+        usrled_1_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_1_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][1]
+    }),
+    .sel_i(usrled_1_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_1])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_1_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][1]
+    }),
+    .sel_i(usrled_1_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_1])
+  );
+
+  logic [1:0] usrled_2_sel;
+  logic usrled_2_sel_addressed;
+
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_2_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 84 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      usrled_2_sel <= 2'b10;
+    end else begin
+      if (reg_we & usrled_2_sel_addressed) begin
+        usrled_2_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_2_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][2]
+    }),
+    .sel_i(usrled_2_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_2])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_2_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][2]
+    }),
+    .sel_i(usrled_2_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_2])
+  );
+
+  logic [1:0] usrled_3_sel;
+  logic usrled_3_sel_addressed;
+
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_3_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 84 &
+    reg_be[3] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      usrled_3_sel <= 2'b10;
+    end else begin
+      if (reg_we & usrled_3_sel_addressed) begin
+        usrled_3_sel <= reg_wdata[24+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_3_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][3]
+    }),
+    .sel_i(usrled_3_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_3])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_3_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][3]
+    }),
+    .sel_i(usrled_3_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_3])
+  );
+
+  logic [1:0] usrled_4_sel;
+  logic usrled_4_sel_addressed;
+
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_4_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 88 &
+    reg_be[0] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      usrled_4_sel <= 2'b10;
+    end else begin
+      if (reg_we & usrled_4_sel_addressed) begin
+        usrled_4_sel <= reg_wdata[0+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_4_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][4]
+    }),
+    .sel_i(usrled_4_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_4])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_4_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][4]
+    }),
+    .sel_i(usrled_4_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_4])
+  );
+
+  logic [1:0] usrled_5_sel;
+  logic usrled_5_sel_addressed;
+
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_5_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 88 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      usrled_5_sel <= 2'b10;
+    end else begin
+      if (reg_we & usrled_5_sel_addressed) begin
+        usrled_5_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_5_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][5]
+    }),
+    .sel_i(usrled_5_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_5])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_5_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][5]
+    }),
+    .sel_i(usrled_5_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_5])
+  );
+
+  logic [1:0] usrled_6_sel;
+  logic usrled_6_sel_addressed;
+
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_6_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 88 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      usrled_6_sel <= 2'b10;
+    end else begin
+      if (reg_we & usrled_6_sel_addressed) begin
+        usrled_6_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_6_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][6]
+    }),
+    .sel_i(usrled_6_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_6])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_6_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][6]
+    }),
+    .sel_i(usrled_6_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_6])
+  );
+
+  logic [1:0] usrled_7_sel;
+  logic usrled_7_sel_addressed;
+
+  // Register addresses of 0x000 to 0x7ff are pin selectors, which are packed with 4 per 32-bit word.
+  assign usrled_7_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b0 &
+    reg_addr[RegAddrWidth-2:0] == 88 &
+    reg_be[3] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      usrled_7_sel <= 2'b10;
+    end else begin
+      if (reg_we & usrled_7_sel_addressed) begin
+        usrled_7_sel <= reg_wdata[24+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_7_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0, // This is set to Z later when output enable is low.
+      gpio_board_gpo_i[0][7]
+    }),
+    .sel_i(usrled_7_sel),
+    .out_o(out_to_pins_o[OUT_PIN_USRLED_7])
+  );
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) usrled_7_enable_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      gpio_board_gpo_en_i[0][7]
+    }),
+    .sel_i(usrled_7_sel),
+    .out_o(out_to_pins_en_o[OUT_PIN_USRLED_7])
+  );
+
+  // Inputs - Physical pin inputs are muxed to particular block IO
+
+  logic [1:0] gpio_board_gpi_0_0_sel;
+  logic gpio_board_gpi_0_0_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_0_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 0 &
+    reg_be[0] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_0_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_0_sel_addressed) begin
+        gpio_board_gpi_0_0_sel <= reg_wdata[0+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_0_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_0]
+    }),
+    .sel_i(gpio_board_gpi_0_0_sel),
+    .out_o(gpio_board_gpi_o[0][0])
+  );
+
+  logic [1:0] gpio_board_gpi_0_1_sel;
+  logic gpio_board_gpi_0_1_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_1_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 0 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_1_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_1_sel_addressed) begin
+        gpio_board_gpi_0_1_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_1_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_1]
+    }),
+    .sel_i(gpio_board_gpi_0_1_sel),
+    .out_o(gpio_board_gpi_o[0][1])
+  );
+
+  logic [1:0] gpio_board_gpi_0_2_sel;
+  logic gpio_board_gpi_0_2_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_2_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 0 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_2_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_2_sel_addressed) begin
+        gpio_board_gpi_0_2_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_2_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_2]
+    }),
+    .sel_i(gpio_board_gpi_0_2_sel),
+    .out_o(gpio_board_gpi_o[0][2])
+  );
+
+  logic [1:0] gpio_board_gpi_0_3_sel;
+  logic gpio_board_gpi_0_3_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_3_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 0 &
+    reg_be[3] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_3_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_3_sel_addressed) begin
+        gpio_board_gpi_0_3_sel <= reg_wdata[24+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_3_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_3]
+    }),
+    .sel_i(gpio_board_gpi_0_3_sel),
+    .out_o(gpio_board_gpi_o[0][3])
+  );
+
+  logic [1:0] gpio_board_gpi_0_4_sel;
+  logic gpio_board_gpi_0_4_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_4_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 4 &
+    reg_be[0] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_4_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_4_sel_addressed) begin
+        gpio_board_gpi_0_4_sel <= reg_wdata[0+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_4_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_4]
+    }),
+    .sel_i(gpio_board_gpi_0_4_sel),
+    .out_o(gpio_board_gpi_o[0][4])
+  );
+
+  logic [1:0] gpio_board_gpi_0_5_sel;
+  logic gpio_board_gpi_0_5_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_5_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 4 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_5_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_5_sel_addressed) begin
+        gpio_board_gpi_0_5_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_5_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_5]
+    }),
+    .sel_i(gpio_board_gpi_0_5_sel),
+    .out_o(gpio_board_gpi_o[0][5])
+  );
+
+  logic [1:0] gpio_board_gpi_0_6_sel;
+  logic gpio_board_gpi_0_6_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_6_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 4 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_6_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_6_sel_addressed) begin
+        gpio_board_gpi_0_6_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_6_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_6]
+    }),
+    .sel_i(gpio_board_gpi_0_6_sel),
+    .out_o(gpio_board_gpi_o[0][6])
+  );
+
+  logic [1:0] gpio_board_gpi_0_7_sel;
+  logic gpio_board_gpi_0_7_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_7_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 4 &
+    reg_be[3] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_7_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_7_sel_addressed) begin
+        gpio_board_gpi_0_7_sel <= reg_wdata[24+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_7_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_USRSW_7]
+    }),
+    .sel_i(gpio_board_gpi_0_7_sel),
+    .out_o(gpio_board_gpi_o[0][7])
+  );
+
+  logic [1:0] gpio_board_gpi_0_8_sel;
+  logic gpio_board_gpi_0_8_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_8_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 8 &
+    reg_be[0] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_8_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_8_sel_addressed) begin
+        gpio_board_gpi_0_8_sel <= reg_wdata[0+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_8_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_NAVSW_0]
+    }),
+    .sel_i(gpio_board_gpi_0_8_sel),
+    .out_o(gpio_board_gpi_o[0][8])
+  );
+
+  logic [1:0] gpio_board_gpi_0_9_sel;
+  logic gpio_board_gpi_0_9_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_9_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 8 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_9_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_9_sel_addressed) begin
+        gpio_board_gpi_0_9_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_9_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_NAVSW_1]
+    }),
+    .sel_i(gpio_board_gpi_0_9_sel),
+    .out_o(gpio_board_gpi_o[0][9])
+  );
+
+  logic [1:0] gpio_board_gpi_0_10_sel;
+  logic gpio_board_gpi_0_10_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_10_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 8 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_10_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_10_sel_addressed) begin
+        gpio_board_gpi_0_10_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_10_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_NAVSW_2]
+    }),
+    .sel_i(gpio_board_gpi_0_10_sel),
+    .out_o(gpio_board_gpi_o[0][10])
+  );
+
+  logic [1:0] gpio_board_gpi_0_11_sel;
+  logic gpio_board_gpi_0_11_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_11_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 8 &
+    reg_be[3] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_11_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_11_sel_addressed) begin
+        gpio_board_gpi_0_11_sel <= reg_wdata[24+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_11_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_NAVSW_3]
+    }),
+    .sel_i(gpio_board_gpi_0_11_sel),
+    .out_o(gpio_board_gpi_o[0][11])
+  );
+
+  logic [1:0] gpio_board_gpi_0_12_sel;
+  logic gpio_board_gpi_0_12_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_12_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 12 &
+    reg_be[0] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_12_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_12_sel_addressed) begin
+        gpio_board_gpi_0_12_sel <= reg_wdata[0+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_12_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_NAVSW_4]
+    }),
+    .sel_i(gpio_board_gpi_0_12_sel),
+    .out_o(gpio_board_gpi_o[0][12])
+  );
+
+  logic [1:0] gpio_board_gpi_0_13_sel;
+  logic gpio_board_gpi_0_13_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_13_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 12 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_13_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_13_sel_addressed) begin
+        gpio_board_gpi_0_13_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_13_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_MICROSD_DET]
+    }),
+    .sel_i(gpio_board_gpi_0_13_sel),
+    .out_o(gpio_board_gpi_o[0][13])
+  );
+
+  logic [1:0] gpio_board_gpi_0_14_sel;
+  logic gpio_board_gpi_0_14_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_14_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 12 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_14_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_14_sel_addressed) begin
+        gpio_board_gpi_0_14_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_14_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_SELSW_0]
+    }),
+    .sel_i(gpio_board_gpi_0_14_sel),
+    .out_o(gpio_board_gpi_o[0][14])
+  );
+
+  logic [1:0] gpio_board_gpi_0_15_sel;
+  logic gpio_board_gpi_0_15_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_15_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 12 &
+    reg_be[3] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_15_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_15_sel_addressed) begin
+        gpio_board_gpi_0_15_sel <= reg_wdata[24+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_15_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_SELSW_1]
+    }),
+    .sel_i(gpio_board_gpi_0_15_sel),
+    .out_o(gpio_board_gpi_o[0][15])
+  );
+
+  logic [1:0] gpio_board_gpi_0_16_sel;
+  logic gpio_board_gpi_0_16_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_board_gpi_0_16_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 16 &
+    reg_be[0] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_board_gpi_0_16_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_board_gpi_0_16_sel_addressed) begin
+        gpio_board_gpi_0_16_sel <= reg_wdata[0+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_board_gpi_0_16_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      in_from_pins_i[IN_PIN_SELSW_2]
+    }),
+    .sel_i(gpio_board_gpi_0_16_sel),
+    .out_o(gpio_board_gpi_o[0][16])
+  );
+
+  logic [1:0] gpio_rph_ios_0_0_sel;
+  logic gpio_rph_ios_0_0_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_rph_ios_0_0_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 16 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_rph_ios_0_0_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_rph_ios_0_0_sel_addressed) begin
+        gpio_rph_ios_0_0_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_rph_ios_0_0_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G0]
     }),
-    .sel_i(gpio_ios_0_0_sel),
-    .out_o(gpio_ios_o[0][0])
+    .sel_i(gpio_rph_ios_0_0_sel),
+    .out_o(gpio_rph_ios_o[0][0])
   );
 
-  logic [1:0] gpio_ios_0_1_sel;
-  logic gpio_ios_0_1_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_1_sel;
+  logic gpio_rph_ios_0_1_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_1_sel_addressed =
+  assign gpio_rph_ios_0_1_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 0 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 16 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_1_sel <= 2'b10;
+      gpio_rph_ios_0_1_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_1_sel_addressed) begin
-        gpio_ios_0_1_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_rph_ios_0_1_sel_addressed) begin
+        gpio_rph_ios_0_1_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -4251,33 +5233,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_1_mux (
+  ) gpio_rph_ios_0_1_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G1]
     }),
-    .sel_i(gpio_ios_0_1_sel),
-    .out_o(gpio_ios_o[0][1])
+    .sel_i(gpio_rph_ios_0_1_sel),
+    .out_o(gpio_rph_ios_o[0][1])
   );
 
-  logic [1:0] gpio_ios_0_2_sel;
-  logic gpio_ios_0_2_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_2_sel;
+  logic gpio_rph_ios_0_2_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_2_sel_addressed =
+  assign gpio_rph_ios_0_2_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 0 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 16 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_2_sel <= 2'b10;
+      gpio_rph_ios_0_2_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_2_sel_addressed) begin
-        gpio_ios_0_2_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_rph_ios_0_2_sel_addressed) begin
+        gpio_rph_ios_0_2_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -4285,33 +5267,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_2_mux (
+  ) gpio_rph_ios_0_2_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G2_SDA]
     }),
-    .sel_i(gpio_ios_0_2_sel),
-    .out_o(gpio_ios_o[0][2])
+    .sel_i(gpio_rph_ios_0_2_sel),
+    .out_o(gpio_rph_ios_o[0][2])
   );
 
-  logic [1:0] gpio_ios_0_3_sel;
-  logic gpio_ios_0_3_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_3_sel;
+  logic gpio_rph_ios_0_3_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_3_sel_addressed =
+  assign gpio_rph_ios_0_3_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 0 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 20 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_3_sel <= 2'b10;
+      gpio_rph_ios_0_3_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_3_sel_addressed) begin
-        gpio_ios_0_3_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_rph_ios_0_3_sel_addressed) begin
+        gpio_rph_ios_0_3_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -4319,33 +5301,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_3_mux (
+  ) gpio_rph_ios_0_3_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G3_SCL]
     }),
-    .sel_i(gpio_ios_0_3_sel),
-    .out_o(gpio_ios_o[0][3])
+    .sel_i(gpio_rph_ios_0_3_sel),
+    .out_o(gpio_rph_ios_o[0][3])
   );
 
-  logic [1:0] gpio_ios_0_4_sel;
-  logic gpio_ios_0_4_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_4_sel;
+  logic gpio_rph_ios_0_4_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_4_sel_addressed =
+  assign gpio_rph_ios_0_4_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 4 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 20 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_4_sel <= 2'b10;
+      gpio_rph_ios_0_4_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_4_sel_addressed) begin
-        gpio_ios_0_4_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_rph_ios_0_4_sel_addressed) begin
+        gpio_rph_ios_0_4_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -4353,33 +5335,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_4_mux (
+  ) gpio_rph_ios_0_4_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G4]
     }),
-    .sel_i(gpio_ios_0_4_sel),
-    .out_o(gpio_ios_o[0][4])
+    .sel_i(gpio_rph_ios_0_4_sel),
+    .out_o(gpio_rph_ios_o[0][4])
   );
 
-  logic [1:0] gpio_ios_0_5_sel;
-  logic gpio_ios_0_5_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_5_sel;
+  logic gpio_rph_ios_0_5_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_5_sel_addressed =
+  assign gpio_rph_ios_0_5_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 4 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 20 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_5_sel <= 2'b10;
+      gpio_rph_ios_0_5_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_5_sel_addressed) begin
-        gpio_ios_0_5_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_rph_ios_0_5_sel_addressed) begin
+        gpio_rph_ios_0_5_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -4387,33 +5369,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_5_mux (
+  ) gpio_rph_ios_0_5_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G5]
     }),
-    .sel_i(gpio_ios_0_5_sel),
-    .out_o(gpio_ios_o[0][5])
+    .sel_i(gpio_rph_ios_0_5_sel),
+    .out_o(gpio_rph_ios_o[0][5])
   );
 
-  logic [1:0] gpio_ios_0_6_sel;
-  logic gpio_ios_0_6_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_6_sel;
+  logic gpio_rph_ios_0_6_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_6_sel_addressed =
+  assign gpio_rph_ios_0_6_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 4 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 20 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_6_sel <= 2'b10;
+      gpio_rph_ios_0_6_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_6_sel_addressed) begin
-        gpio_ios_0_6_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_rph_ios_0_6_sel_addressed) begin
+        gpio_rph_ios_0_6_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -4421,33 +5403,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_6_mux (
+  ) gpio_rph_ios_0_6_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G6]
     }),
-    .sel_i(gpio_ios_0_6_sel),
-    .out_o(gpio_ios_o[0][6])
+    .sel_i(gpio_rph_ios_0_6_sel),
+    .out_o(gpio_rph_ios_o[0][6])
   );
 
-  logic [1:0] gpio_ios_0_7_sel;
-  logic gpio_ios_0_7_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_7_sel;
+  logic gpio_rph_ios_0_7_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_7_sel_addressed =
+  assign gpio_rph_ios_0_7_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 4 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 24 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_7_sel <= 2'b10;
+      gpio_rph_ios_0_7_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_7_sel_addressed) begin
-        gpio_ios_0_7_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_rph_ios_0_7_sel_addressed) begin
+        gpio_rph_ios_0_7_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -4455,33 +5437,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_7_mux (
+  ) gpio_rph_ios_0_7_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G7_CE1]
     }),
-    .sel_i(gpio_ios_0_7_sel),
-    .out_o(gpio_ios_o[0][7])
+    .sel_i(gpio_rph_ios_0_7_sel),
+    .out_o(gpio_rph_ios_o[0][7])
   );
 
-  logic [1:0] gpio_ios_0_8_sel;
-  logic gpio_ios_0_8_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_8_sel;
+  logic gpio_rph_ios_0_8_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_8_sel_addressed =
+  assign gpio_rph_ios_0_8_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 8 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 24 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_8_sel <= 2'b10;
+      gpio_rph_ios_0_8_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_8_sel_addressed) begin
-        gpio_ios_0_8_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_rph_ios_0_8_sel_addressed) begin
+        gpio_rph_ios_0_8_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -4489,33 +5471,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_8_mux (
+  ) gpio_rph_ios_0_8_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G8_CE0]
     }),
-    .sel_i(gpio_ios_0_8_sel),
-    .out_o(gpio_ios_o[0][8])
+    .sel_i(gpio_rph_ios_0_8_sel),
+    .out_o(gpio_rph_ios_o[0][8])
   );
 
-  logic [1:0] gpio_ios_0_9_sel;
-  logic gpio_ios_0_9_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_9_sel;
+  logic gpio_rph_ios_0_9_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_9_sel_addressed =
+  assign gpio_rph_ios_0_9_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 8 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 24 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_9_sel <= 2'b10;
+      gpio_rph_ios_0_9_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_9_sel_addressed) begin
-        gpio_ios_0_9_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_rph_ios_0_9_sel_addressed) begin
+        gpio_rph_ios_0_9_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -4523,33 +5505,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_9_mux (
+  ) gpio_rph_ios_0_9_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G9_CIPO]
     }),
-    .sel_i(gpio_ios_0_9_sel),
-    .out_o(gpio_ios_o[0][9])
+    .sel_i(gpio_rph_ios_0_9_sel),
+    .out_o(gpio_rph_ios_o[0][9])
   );
 
-  logic [1:0] gpio_ios_0_10_sel;
-  logic gpio_ios_0_10_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_10_sel;
+  logic gpio_rph_ios_0_10_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_10_sel_addressed =
+  assign gpio_rph_ios_0_10_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 8 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 24 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_10_sel <= 2'b10;
+      gpio_rph_ios_0_10_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_10_sel_addressed) begin
-        gpio_ios_0_10_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_rph_ios_0_10_sel_addressed) begin
+        gpio_rph_ios_0_10_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -4557,33 +5539,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_10_mux (
+  ) gpio_rph_ios_0_10_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G10_COPI]
     }),
-    .sel_i(gpio_ios_0_10_sel),
-    .out_o(gpio_ios_o[0][10])
+    .sel_i(gpio_rph_ios_0_10_sel),
+    .out_o(gpio_rph_ios_o[0][10])
   );
 
-  logic [1:0] gpio_ios_0_11_sel;
-  logic gpio_ios_0_11_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_11_sel;
+  logic gpio_rph_ios_0_11_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_11_sel_addressed =
+  assign gpio_rph_ios_0_11_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 8 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 28 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_11_sel <= 2'b10;
+      gpio_rph_ios_0_11_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_11_sel_addressed) begin
-        gpio_ios_0_11_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_rph_ios_0_11_sel_addressed) begin
+        gpio_rph_ios_0_11_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -4591,33 +5573,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_11_mux (
+  ) gpio_rph_ios_0_11_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G11_SCLK]
     }),
-    .sel_i(gpio_ios_0_11_sel),
-    .out_o(gpio_ios_o[0][11])
+    .sel_i(gpio_rph_ios_0_11_sel),
+    .out_o(gpio_rph_ios_o[0][11])
   );
 
-  logic [1:0] gpio_ios_0_12_sel;
-  logic gpio_ios_0_12_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_12_sel;
+  logic gpio_rph_ios_0_12_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_12_sel_addressed =
+  assign gpio_rph_ios_0_12_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 12 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 28 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_12_sel <= 2'b10;
+      gpio_rph_ios_0_12_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_12_sel_addressed) begin
-        gpio_ios_0_12_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_rph_ios_0_12_sel_addressed) begin
+        gpio_rph_ios_0_12_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -4625,33 +5607,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_12_mux (
+  ) gpio_rph_ios_0_12_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G12]
     }),
-    .sel_i(gpio_ios_0_12_sel),
-    .out_o(gpio_ios_o[0][12])
+    .sel_i(gpio_rph_ios_0_12_sel),
+    .out_o(gpio_rph_ios_o[0][12])
   );
 
-  logic [1:0] gpio_ios_0_13_sel;
-  logic gpio_ios_0_13_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_13_sel;
+  logic gpio_rph_ios_0_13_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_13_sel_addressed =
+  assign gpio_rph_ios_0_13_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 12 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 28 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_13_sel <= 2'b10;
+      gpio_rph_ios_0_13_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_13_sel_addressed) begin
-        gpio_ios_0_13_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_rph_ios_0_13_sel_addressed) begin
+        gpio_rph_ios_0_13_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -4659,33 +5641,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_13_mux (
+  ) gpio_rph_ios_0_13_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G13]
     }),
-    .sel_i(gpio_ios_0_13_sel),
-    .out_o(gpio_ios_o[0][13])
+    .sel_i(gpio_rph_ios_0_13_sel),
+    .out_o(gpio_rph_ios_o[0][13])
   );
 
-  logic [1:0] gpio_ios_0_14_sel;
-  logic gpio_ios_0_14_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_14_sel;
+  logic gpio_rph_ios_0_14_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_14_sel_addressed =
+  assign gpio_rph_ios_0_14_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 12 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 28 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_14_sel <= 2'b10;
+      gpio_rph_ios_0_14_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_14_sel_addressed) begin
-        gpio_ios_0_14_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_rph_ios_0_14_sel_addressed) begin
+        gpio_rph_ios_0_14_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -4693,33 +5675,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_14_mux (
+  ) gpio_rph_ios_0_14_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_TXD0]
     }),
-    .sel_i(gpio_ios_0_14_sel),
-    .out_o(gpio_ios_o[0][14])
+    .sel_i(gpio_rph_ios_0_14_sel),
+    .out_o(gpio_rph_ios_o[0][14])
   );
 
-  logic [1:0] gpio_ios_0_15_sel;
-  logic gpio_ios_0_15_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_15_sel;
+  logic gpio_rph_ios_0_15_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_15_sel_addressed =
+  assign gpio_rph_ios_0_15_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 12 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 32 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_15_sel <= 2'b10;
+      gpio_rph_ios_0_15_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_15_sel_addressed) begin
-        gpio_ios_0_15_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_rph_ios_0_15_sel_addressed) begin
+        gpio_rph_ios_0_15_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -4727,33 +5709,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_15_mux (
+  ) gpio_rph_ios_0_15_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_RXD0]
     }),
-    .sel_i(gpio_ios_0_15_sel),
-    .out_o(gpio_ios_o[0][15])
+    .sel_i(gpio_rph_ios_0_15_sel),
+    .out_o(gpio_rph_ios_o[0][15])
   );
 
-  logic [1:0] gpio_ios_0_16_sel;
-  logic gpio_ios_0_16_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_16_sel;
+  logic gpio_rph_ios_0_16_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_16_sel_addressed =
+  assign gpio_rph_ios_0_16_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 16 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 32 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_16_sel <= 2'b10;
+      gpio_rph_ios_0_16_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_16_sel_addressed) begin
-        gpio_ios_0_16_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_rph_ios_0_16_sel_addressed) begin
+        gpio_rph_ios_0_16_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -4761,33 +5743,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_16_mux (
+  ) gpio_rph_ios_0_16_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G16_CE2]
     }),
-    .sel_i(gpio_ios_0_16_sel),
-    .out_o(gpio_ios_o[0][16])
+    .sel_i(gpio_rph_ios_0_16_sel),
+    .out_o(gpio_rph_ios_o[0][16])
   );
 
-  logic [1:0] gpio_ios_0_17_sel;
-  logic gpio_ios_0_17_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_17_sel;
+  logic gpio_rph_ios_0_17_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_17_sel_addressed =
+  assign gpio_rph_ios_0_17_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 16 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 32 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_17_sel <= 2'b10;
+      gpio_rph_ios_0_17_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_17_sel_addressed) begin
-        gpio_ios_0_17_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_rph_ios_0_17_sel_addressed) begin
+        gpio_rph_ios_0_17_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -4795,33 +5777,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_17_mux (
+  ) gpio_rph_ios_0_17_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G17]
     }),
-    .sel_i(gpio_ios_0_17_sel),
-    .out_o(gpio_ios_o[0][17])
+    .sel_i(gpio_rph_ios_0_17_sel),
+    .out_o(gpio_rph_ios_o[0][17])
   );
 
-  logic [1:0] gpio_ios_0_18_sel;
-  logic gpio_ios_0_18_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_18_sel;
+  logic gpio_rph_ios_0_18_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_18_sel_addressed =
+  assign gpio_rph_ios_0_18_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 16 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 32 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_18_sel <= 2'b10;
+      gpio_rph_ios_0_18_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_18_sel_addressed) begin
-        gpio_ios_0_18_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_rph_ios_0_18_sel_addressed) begin
+        gpio_rph_ios_0_18_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -4829,33 +5811,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_18_mux (
+  ) gpio_rph_ios_0_18_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G18]
     }),
-    .sel_i(gpio_ios_0_18_sel),
-    .out_o(gpio_ios_o[0][18])
+    .sel_i(gpio_rph_ios_0_18_sel),
+    .out_o(gpio_rph_ios_o[0][18])
   );
 
-  logic [1:0] gpio_ios_0_19_sel;
-  logic gpio_ios_0_19_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_19_sel;
+  logic gpio_rph_ios_0_19_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_19_sel_addressed =
+  assign gpio_rph_ios_0_19_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 16 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 36 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_19_sel <= 2'b10;
+      gpio_rph_ios_0_19_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_19_sel_addressed) begin
-        gpio_ios_0_19_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_rph_ios_0_19_sel_addressed) begin
+        gpio_rph_ios_0_19_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -4863,33 +5845,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_19_mux (
+  ) gpio_rph_ios_0_19_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G19_CIPO]
     }),
-    .sel_i(gpio_ios_0_19_sel),
-    .out_o(gpio_ios_o[0][19])
+    .sel_i(gpio_rph_ios_0_19_sel),
+    .out_o(gpio_rph_ios_o[0][19])
   );
 
-  logic [1:0] gpio_ios_0_20_sel;
-  logic gpio_ios_0_20_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_20_sel;
+  logic gpio_rph_ios_0_20_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_20_sel_addressed =
+  assign gpio_rph_ios_0_20_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 20 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 36 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_20_sel <= 2'b10;
+      gpio_rph_ios_0_20_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_20_sel_addressed) begin
-        gpio_ios_0_20_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_rph_ios_0_20_sel_addressed) begin
+        gpio_rph_ios_0_20_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -4897,33 +5879,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_20_mux (
+  ) gpio_rph_ios_0_20_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G20_COPI]
     }),
-    .sel_i(gpio_ios_0_20_sel),
-    .out_o(gpio_ios_o[0][20])
+    .sel_i(gpio_rph_ios_0_20_sel),
+    .out_o(gpio_rph_ios_o[0][20])
   );
 
-  logic [1:0] gpio_ios_0_21_sel;
-  logic gpio_ios_0_21_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_21_sel;
+  logic gpio_rph_ios_0_21_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_21_sel_addressed =
+  assign gpio_rph_ios_0_21_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 20 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 36 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_21_sel <= 2'b10;
+      gpio_rph_ios_0_21_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_21_sel_addressed) begin
-        gpio_ios_0_21_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_rph_ios_0_21_sel_addressed) begin
+        gpio_rph_ios_0_21_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -4931,33 +5913,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_21_mux (
+  ) gpio_rph_ios_0_21_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G21_SCLK]
     }),
-    .sel_i(gpio_ios_0_21_sel),
-    .out_o(gpio_ios_o[0][21])
+    .sel_i(gpio_rph_ios_0_21_sel),
+    .out_o(gpio_rph_ios_o[0][21])
   );
 
-  logic [1:0] gpio_ios_0_22_sel;
-  logic gpio_ios_0_22_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_22_sel;
+  logic gpio_rph_ios_0_22_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_22_sel_addressed =
+  assign gpio_rph_ios_0_22_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 20 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 36 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_22_sel <= 2'b10;
+      gpio_rph_ios_0_22_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_22_sel_addressed) begin
-        gpio_ios_0_22_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_rph_ios_0_22_sel_addressed) begin
+        gpio_rph_ios_0_22_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -4965,33 +5947,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_22_mux (
+  ) gpio_rph_ios_0_22_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G22]
     }),
-    .sel_i(gpio_ios_0_22_sel),
-    .out_o(gpio_ios_o[0][22])
+    .sel_i(gpio_rph_ios_0_22_sel),
+    .out_o(gpio_rph_ios_o[0][22])
   );
 
-  logic [1:0] gpio_ios_0_23_sel;
-  logic gpio_ios_0_23_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_23_sel;
+  logic gpio_rph_ios_0_23_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_23_sel_addressed =
+  assign gpio_rph_ios_0_23_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 20 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 40 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_23_sel <= 2'b10;
+      gpio_rph_ios_0_23_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_23_sel_addressed) begin
-        gpio_ios_0_23_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_rph_ios_0_23_sel_addressed) begin
+        gpio_rph_ios_0_23_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -4999,33 +5981,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_23_mux (
+  ) gpio_rph_ios_0_23_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G23]
     }),
-    .sel_i(gpio_ios_0_23_sel),
-    .out_o(gpio_ios_o[0][23])
+    .sel_i(gpio_rph_ios_0_23_sel),
+    .out_o(gpio_rph_ios_o[0][23])
   );
 
-  logic [1:0] gpio_ios_0_24_sel;
-  logic gpio_ios_0_24_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_24_sel;
+  logic gpio_rph_ios_0_24_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_24_sel_addressed =
+  assign gpio_rph_ios_0_24_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 24 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 40 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_24_sel <= 2'b10;
+      gpio_rph_ios_0_24_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_24_sel_addressed) begin
-        gpio_ios_0_24_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_rph_ios_0_24_sel_addressed) begin
+        gpio_rph_ios_0_24_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -5033,33 +6015,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_24_mux (
+  ) gpio_rph_ios_0_24_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G24]
     }),
-    .sel_i(gpio_ios_0_24_sel),
-    .out_o(gpio_ios_o[0][24])
+    .sel_i(gpio_rph_ios_0_24_sel),
+    .out_o(gpio_rph_ios_o[0][24])
   );
 
-  logic [1:0] gpio_ios_0_25_sel;
-  logic gpio_ios_0_25_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_25_sel;
+  logic gpio_rph_ios_0_25_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_25_sel_addressed =
+  assign gpio_rph_ios_0_25_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 24 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 40 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_25_sel <= 2'b10;
+      gpio_rph_ios_0_25_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_25_sel_addressed) begin
-        gpio_ios_0_25_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_rph_ios_0_25_sel_addressed) begin
+        gpio_rph_ios_0_25_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -5067,33 +6049,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_25_mux (
+  ) gpio_rph_ios_0_25_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G25]
     }),
-    .sel_i(gpio_ios_0_25_sel),
-    .out_o(gpio_ios_o[0][25])
+    .sel_i(gpio_rph_ios_0_25_sel),
+    .out_o(gpio_rph_ios_o[0][25])
   );
 
-  logic [1:0] gpio_ios_0_26_sel;
-  logic gpio_ios_0_26_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_26_sel;
+  logic gpio_rph_ios_0_26_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_26_sel_addressed =
+  assign gpio_rph_ios_0_26_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 24 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 40 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_26_sel <= 2'b10;
+      gpio_rph_ios_0_26_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_26_sel_addressed) begin
-        gpio_ios_0_26_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_rph_ios_0_26_sel_addressed) begin
+        gpio_rph_ios_0_26_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -5101,33 +6083,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_26_mux (
+  ) gpio_rph_ios_0_26_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G26]
     }),
-    .sel_i(gpio_ios_0_26_sel),
-    .out_o(gpio_ios_o[0][26])
+    .sel_i(gpio_rph_ios_0_26_sel),
+    .out_o(gpio_rph_ios_o[0][26])
   );
 
-  logic [1:0] gpio_ios_0_27_sel;
-  logic gpio_ios_0_27_sel_addressed;
+  logic [1:0] gpio_rph_ios_0_27_sel;
+  logic gpio_rph_ios_0_27_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_27_sel_addressed =
+  assign gpio_rph_ios_0_27_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 24 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 44 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_27_sel <= 2'b10;
+      gpio_rph_ios_0_27_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_27_sel_addressed) begin
-        gpio_ios_0_27_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_rph_ios_0_27_sel_addressed) begin
+        gpio_rph_ios_0_27_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -5135,67 +6117,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_27_mux (
+  ) gpio_rph_ios_0_27_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_RPH_G27]
     }),
-    .sel_i(gpio_ios_0_27_sel),
-    .out_o(gpio_ios_o[0][27])
+    .sel_i(gpio_rph_ios_0_27_sel),
+    .out_o(gpio_rph_ios_o[0][27])
   );
 
-  logic [1:0] gpio_ios_0_28_sel;
-  logic gpio_ios_0_28_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_0_sel;
+  logic gpio_ah_ios_0_0_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_28_sel_addressed =
+  assign gpio_ah_ios_0_0_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 28 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_28_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_0_28_sel_addressed) begin
-        gpio_ios_0_28_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_0_28_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_0_28_sel),
-    .out_o(gpio_ios_o[0][28])
-  );
-
-  logic [1:0] gpio_ios_0_29_sel;
-  logic gpio_ios_0_29_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_29_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 28 &
+    reg_addr[RegAddrWidth-2:0] == 44 &
     reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_29_sel <= 2'b10;
+      gpio_ah_ios_0_0_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_0_29_sel_addressed) begin
-        gpio_ios_0_29_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_ah_ios_0_0_sel_addressed) begin
+        gpio_ah_ios_0_0_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -5203,135 +6151,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_0_29_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_0_29_sel),
-    .out_o(gpio_ios_o[0][29])
-  );
-
-  logic [1:0] gpio_ios_0_30_sel;
-  logic gpio_ios_0_30_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_30_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 28 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_30_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_0_30_sel_addressed) begin
-        gpio_ios_0_30_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_0_30_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_0_30_sel),
-    .out_o(gpio_ios_o[0][30])
-  );
-
-  logic [1:0] gpio_ios_0_31_sel;
-  logic gpio_ios_0_31_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_0_31_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 28 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_0_31_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_0_31_sel_addressed) begin
-        gpio_ios_0_31_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_0_31_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_0_31_sel),
-    .out_o(gpio_ios_o[0][31])
-  );
-
-  logic [1:0] gpio_ios_1_0_sel;
-  logic gpio_ios_1_0_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_0_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 32 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_0_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_0_sel_addressed) begin
-        gpio_ios_1_0_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_0_mux (
+  ) gpio_ah_ios_0_0_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO0]
     }),
-    .sel_i(gpio_ios_1_0_sel),
-    .out_o(gpio_ios_o[1][0])
+    .sel_i(gpio_ah_ios_0_0_sel),
+    .out_o(gpio_ah_ios_o[0][0])
   );
 
-  logic [1:0] gpio_ios_1_1_sel;
-  logic gpio_ios_1_1_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_1_sel;
+  logic gpio_ah_ios_0_1_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_1_sel_addressed =
+  assign gpio_ah_ios_0_1_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 32 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 44 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_1_sel <= 2'b10;
+      gpio_ah_ios_0_1_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_1_sel_addressed) begin
-        gpio_ios_1_1_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_ah_ios_0_1_sel_addressed) begin
+        gpio_ah_ios_0_1_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -5339,33 +6185,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_1_mux (
+  ) gpio_ah_ios_0_1_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO1]
     }),
-    .sel_i(gpio_ios_1_1_sel),
-    .out_o(gpio_ios_o[1][1])
+    .sel_i(gpio_ah_ios_0_1_sel),
+    .out_o(gpio_ah_ios_o[0][1])
   );
 
-  logic [1:0] gpio_ios_1_2_sel;
-  logic gpio_ios_1_2_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_2_sel;
+  logic gpio_ah_ios_0_2_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_2_sel_addressed =
+  assign gpio_ah_ios_0_2_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 32 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 44 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_2_sel <= 2'b10;
+      gpio_ah_ios_0_2_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_2_sel_addressed) begin
-        gpio_ios_1_2_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_ah_ios_0_2_sel_addressed) begin
+        gpio_ah_ios_0_2_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -5373,33 +6219,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_2_mux (
+  ) gpio_ah_ios_0_2_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO2]
     }),
-    .sel_i(gpio_ios_1_2_sel),
-    .out_o(gpio_ios_o[1][2])
+    .sel_i(gpio_ah_ios_0_2_sel),
+    .out_o(gpio_ah_ios_o[0][2])
   );
 
-  logic [1:0] gpio_ios_1_3_sel;
-  logic gpio_ios_1_3_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_3_sel;
+  logic gpio_ah_ios_0_3_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_3_sel_addressed =
+  assign gpio_ah_ios_0_3_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 32 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 48 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_3_sel <= 2'b10;
+      gpio_ah_ios_0_3_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_3_sel_addressed) begin
-        gpio_ios_1_3_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_ah_ios_0_3_sel_addressed) begin
+        gpio_ah_ios_0_3_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -5407,33 +6253,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_3_mux (
+  ) gpio_ah_ios_0_3_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO3]
     }),
-    .sel_i(gpio_ios_1_3_sel),
-    .out_o(gpio_ios_o[1][3])
+    .sel_i(gpio_ah_ios_0_3_sel),
+    .out_o(gpio_ah_ios_o[0][3])
   );
 
-  logic [1:0] gpio_ios_1_4_sel;
-  logic gpio_ios_1_4_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_4_sel;
+  logic gpio_ah_ios_0_4_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_4_sel_addressed =
+  assign gpio_ah_ios_0_4_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 36 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 48 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_4_sel <= 2'b10;
+      gpio_ah_ios_0_4_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_4_sel_addressed) begin
-        gpio_ios_1_4_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_ah_ios_0_4_sel_addressed) begin
+        gpio_ah_ios_0_4_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -5441,33 +6287,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_4_mux (
+  ) gpio_ah_ios_0_4_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO4]
     }),
-    .sel_i(gpio_ios_1_4_sel),
-    .out_o(gpio_ios_o[1][4])
+    .sel_i(gpio_ah_ios_0_4_sel),
+    .out_o(gpio_ah_ios_o[0][4])
   );
 
-  logic [1:0] gpio_ios_1_5_sel;
-  logic gpio_ios_1_5_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_5_sel;
+  logic gpio_ah_ios_0_5_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_5_sel_addressed =
+  assign gpio_ah_ios_0_5_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 36 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 48 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_5_sel <= 2'b10;
+      gpio_ah_ios_0_5_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_5_sel_addressed) begin
-        gpio_ios_1_5_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_ah_ios_0_5_sel_addressed) begin
+        gpio_ah_ios_0_5_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -5475,33 +6321,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_5_mux (
+  ) gpio_ah_ios_0_5_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO5]
     }),
-    .sel_i(gpio_ios_1_5_sel),
-    .out_o(gpio_ios_o[1][5])
+    .sel_i(gpio_ah_ios_0_5_sel),
+    .out_o(gpio_ah_ios_o[0][5])
   );
 
-  logic [1:0] gpio_ios_1_6_sel;
-  logic gpio_ios_1_6_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_6_sel;
+  logic gpio_ah_ios_0_6_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_6_sel_addressed =
+  assign gpio_ah_ios_0_6_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 36 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 48 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_6_sel <= 2'b10;
+      gpio_ah_ios_0_6_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_6_sel_addressed) begin
-        gpio_ios_1_6_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_ah_ios_0_6_sel_addressed) begin
+        gpio_ah_ios_0_6_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -5509,33 +6355,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_6_mux (
+  ) gpio_ah_ios_0_6_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO6]
     }),
-    .sel_i(gpio_ios_1_6_sel),
-    .out_o(gpio_ios_o[1][6])
+    .sel_i(gpio_ah_ios_0_6_sel),
+    .out_o(gpio_ah_ios_o[0][6])
   );
 
-  logic [1:0] gpio_ios_1_7_sel;
-  logic gpio_ios_1_7_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_7_sel;
+  logic gpio_ah_ios_0_7_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_7_sel_addressed =
+  assign gpio_ah_ios_0_7_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 36 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 52 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_7_sel <= 2'b10;
+      gpio_ah_ios_0_7_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_7_sel_addressed) begin
-        gpio_ios_1_7_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_ah_ios_0_7_sel_addressed) begin
+        gpio_ah_ios_0_7_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -5543,33 +6389,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_7_mux (
+  ) gpio_ah_ios_0_7_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO7]
     }),
-    .sel_i(gpio_ios_1_7_sel),
-    .out_o(gpio_ios_o[1][7])
+    .sel_i(gpio_ah_ios_0_7_sel),
+    .out_o(gpio_ah_ios_o[0][7])
   );
 
-  logic [1:0] gpio_ios_1_8_sel;
-  logic gpio_ios_1_8_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_8_sel;
+  logic gpio_ah_ios_0_8_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_8_sel_addressed =
+  assign gpio_ah_ios_0_8_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 40 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 52 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_8_sel <= 2'b10;
+      gpio_ah_ios_0_8_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_8_sel_addressed) begin
-        gpio_ios_1_8_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_ah_ios_0_8_sel_addressed) begin
+        gpio_ah_ios_0_8_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -5577,33 +6423,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_8_mux (
+  ) gpio_ah_ios_0_8_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO8]
     }),
-    .sel_i(gpio_ios_1_8_sel),
-    .out_o(gpio_ios_o[1][8])
+    .sel_i(gpio_ah_ios_0_8_sel),
+    .out_o(gpio_ah_ios_o[0][8])
   );
 
-  logic [1:0] gpio_ios_1_9_sel;
-  logic gpio_ios_1_9_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_9_sel;
+  logic gpio_ah_ios_0_9_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_9_sel_addressed =
+  assign gpio_ah_ios_0_9_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 40 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 52 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_9_sel <= 2'b10;
+      gpio_ah_ios_0_9_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_9_sel_addressed) begin
-        gpio_ios_1_9_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_ah_ios_0_9_sel_addressed) begin
+        gpio_ah_ios_0_9_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -5611,33 +6457,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_9_mux (
+  ) gpio_ah_ios_0_9_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO9]
     }),
-    .sel_i(gpio_ios_1_9_sel),
-    .out_o(gpio_ios_o[1][9])
+    .sel_i(gpio_ah_ios_0_9_sel),
+    .out_o(gpio_ah_ios_o[0][9])
   );
 
-  logic [1:0] gpio_ios_1_10_sel;
-  logic gpio_ios_1_10_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_10_sel;
+  logic gpio_ah_ios_0_10_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_10_sel_addressed =
+  assign gpio_ah_ios_0_10_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 40 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 52 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_10_sel <= 2'b10;
+      gpio_ah_ios_0_10_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_10_sel_addressed) begin
-        gpio_ios_1_10_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_ah_ios_0_10_sel_addressed) begin
+        gpio_ah_ios_0_10_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -5645,33 +6491,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_10_mux (
+  ) gpio_ah_ios_0_10_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO10]
     }),
-    .sel_i(gpio_ios_1_10_sel),
-    .out_o(gpio_ios_o[1][10])
+    .sel_i(gpio_ah_ios_0_10_sel),
+    .out_o(gpio_ah_ios_o[0][10])
   );
 
-  logic [1:0] gpio_ios_1_11_sel;
-  logic gpio_ios_1_11_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_11_sel;
+  logic gpio_ah_ios_0_11_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_11_sel_addressed =
+  assign gpio_ah_ios_0_11_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 40 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 56 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_11_sel <= 2'b10;
+      gpio_ah_ios_0_11_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_11_sel_addressed) begin
-        gpio_ios_1_11_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_ah_ios_0_11_sel_addressed) begin
+        gpio_ah_ios_0_11_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -5679,33 +6525,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_11_mux (
+  ) gpio_ah_ios_0_11_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO11]
     }),
-    .sel_i(gpio_ios_1_11_sel),
-    .out_o(gpio_ios_o[1][11])
+    .sel_i(gpio_ah_ios_0_11_sel),
+    .out_o(gpio_ah_ios_o[0][11])
   );
 
-  logic [1:0] gpio_ios_1_12_sel;
-  logic gpio_ios_1_12_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_12_sel;
+  logic gpio_ah_ios_0_12_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_12_sel_addressed =
+  assign gpio_ah_ios_0_12_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 44 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 56 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_12_sel <= 2'b10;
+      gpio_ah_ios_0_12_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_12_sel_addressed) begin
-        gpio_ios_1_12_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_ah_ios_0_12_sel_addressed) begin
+        gpio_ah_ios_0_12_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -5713,33 +6559,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_12_mux (
+  ) gpio_ah_ios_0_12_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO12]
     }),
-    .sel_i(gpio_ios_1_12_sel),
-    .out_o(gpio_ios_o[1][12])
+    .sel_i(gpio_ah_ios_0_12_sel),
+    .out_o(gpio_ah_ios_o[0][12])
   );
 
-  logic [1:0] gpio_ios_1_13_sel;
-  logic gpio_ios_1_13_sel_addressed;
+  logic [1:0] gpio_ah_ios_0_13_sel;
+  logic gpio_ah_ios_0_13_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_13_sel_addressed =
+  assign gpio_ah_ios_0_13_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 44 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 56 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_13_sel <= 2'b10;
+      gpio_ah_ios_0_13_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_13_sel_addressed) begin
-        gpio_ios_1_13_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_ah_ios_0_13_sel_addressed) begin
+        gpio_ah_ios_0_13_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -5747,464 +6593,22 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_13_mux (
+  ) gpio_ah_ios_0_13_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_AH_TMPIO13]
     }),
-    .sel_i(gpio_ios_1_13_sel),
-    .out_o(gpio_ios_o[1][13])
+    .sel_i(gpio_ah_ios_0_13_sel),
+    .out_o(gpio_ah_ios_o[0][13])
   );
 
-  logic [1:0] gpio_ios_1_14_sel;
-  logic gpio_ios_1_14_sel_addressed;
+  logic [1:0] gpio_pmod0_ios_0_0_sel;
+  logic gpio_pmod0_ios_0_0_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_14_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 44 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_14_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_14_sel_addressed) begin
-        gpio_ios_1_14_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_14_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_14_sel),
-    .out_o(gpio_ios_o[1][14])
-  );
-
-  logic [1:0] gpio_ios_1_15_sel;
-  logic gpio_ios_1_15_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_15_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 44 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_15_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_15_sel_addressed) begin
-        gpio_ios_1_15_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_15_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_15_sel),
-    .out_o(gpio_ios_o[1][15])
-  );
-
-  logic [1:0] gpio_ios_1_16_sel;
-  logic gpio_ios_1_16_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_16_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 48 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_16_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_16_sel_addressed) begin
-        gpio_ios_1_16_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_16_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_16_sel),
-    .out_o(gpio_ios_o[1][16])
-  );
-
-  logic [1:0] gpio_ios_1_17_sel;
-  logic gpio_ios_1_17_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_17_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 48 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_17_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_17_sel_addressed) begin
-        gpio_ios_1_17_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_17_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_17_sel),
-    .out_o(gpio_ios_o[1][17])
-  );
-
-  logic [1:0] gpio_ios_1_18_sel;
-  logic gpio_ios_1_18_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_18_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 48 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_18_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_18_sel_addressed) begin
-        gpio_ios_1_18_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_18_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_18_sel),
-    .out_o(gpio_ios_o[1][18])
-  );
-
-  logic [1:0] gpio_ios_1_19_sel;
-  logic gpio_ios_1_19_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_19_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 48 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_19_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_19_sel_addressed) begin
-        gpio_ios_1_19_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_19_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_19_sel),
-    .out_o(gpio_ios_o[1][19])
-  );
-
-  logic [1:0] gpio_ios_1_20_sel;
-  logic gpio_ios_1_20_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_20_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 52 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_20_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_20_sel_addressed) begin
-        gpio_ios_1_20_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_20_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_20_sel),
-    .out_o(gpio_ios_o[1][20])
-  );
-
-  logic [1:0] gpio_ios_1_21_sel;
-  logic gpio_ios_1_21_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_21_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 52 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_21_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_21_sel_addressed) begin
-        gpio_ios_1_21_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_21_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_21_sel),
-    .out_o(gpio_ios_o[1][21])
-  );
-
-  logic [1:0] gpio_ios_1_22_sel;
-  logic gpio_ios_1_22_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_22_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 52 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_22_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_22_sel_addressed) begin
-        gpio_ios_1_22_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_22_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_22_sel),
-    .out_o(gpio_ios_o[1][22])
-  );
-
-  logic [1:0] gpio_ios_1_23_sel;
-  logic gpio_ios_1_23_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_23_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 52 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_23_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_23_sel_addressed) begin
-        gpio_ios_1_23_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_23_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_23_sel),
-    .out_o(gpio_ios_o[1][23])
-  );
-
-  logic [1:0] gpio_ios_1_24_sel;
-  logic gpio_ios_1_24_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_24_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 56 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_24_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_24_sel_addressed) begin
-        gpio_ios_1_24_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_24_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_24_sel),
-    .out_o(gpio_ios_o[1][24])
-  );
-
-  logic [1:0] gpio_ios_1_25_sel;
-  logic gpio_ios_1_25_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_25_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 56 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_25_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_25_sel_addressed) begin
-        gpio_ios_1_25_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_25_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_25_sel),
-    .out_o(gpio_ios_o[1][25])
-  );
-
-  logic [1:0] gpio_ios_1_26_sel;
-  logic gpio_ios_1_26_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_26_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 56 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_26_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_26_sel_addressed) begin
-        gpio_ios_1_26_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_26_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_26_sel),
-    .out_o(gpio_ios_o[1][26])
-  );
-
-  logic [1:0] gpio_ios_1_27_sel;
-  logic gpio_ios_1_27_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_27_sel_addressed =
+  assign gpio_pmod0_ios_0_0_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
     reg_addr[RegAddrWidth-2:0] == 56 &
     reg_be[3] == 1'b1;
@@ -6212,10 +6616,10 @@ module pinmux
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_27_sel <= 2'b10;
+      gpio_pmod0_ios_0_0_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_1_27_sel_addressed) begin
-        gpio_ios_1_27_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_pmod0_ios_0_0_sel_addressed) begin
+        gpio_pmod0_ios_0_0_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -6223,203 +6627,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_1_27_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_27_sel),
-    .out_o(gpio_ios_o[1][27])
-  );
-
-  logic [1:0] gpio_ios_1_28_sel;
-  logic gpio_ios_1_28_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_28_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 60 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_28_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_28_sel_addressed) begin
-        gpio_ios_1_28_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_28_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_28_sel),
-    .out_o(gpio_ios_o[1][28])
-  );
-
-  logic [1:0] gpio_ios_1_29_sel;
-  logic gpio_ios_1_29_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_29_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 60 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_29_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_29_sel_addressed) begin
-        gpio_ios_1_29_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_29_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_29_sel),
-    .out_o(gpio_ios_o[1][29])
-  );
-
-  logic [1:0] gpio_ios_1_30_sel;
-  logic gpio_ios_1_30_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_30_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 60 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_30_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_30_sel_addressed) begin
-        gpio_ios_1_30_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_30_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_30_sel),
-    .out_o(gpio_ios_o[1][30])
-  );
-
-  logic [1:0] gpio_ios_1_31_sel;
-  logic gpio_ios_1_31_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_1_31_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 60 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_1_31_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_1_31_sel_addressed) begin
-        gpio_ios_1_31_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_1_31_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_1_31_sel),
-    .out_o(gpio_ios_o[1][31])
-  );
-
-  logic [1:0] gpio_ios_2_0_sel;
-  logic gpio_ios_2_0_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_0_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 64 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_0_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_0_sel_addressed) begin
-        gpio_ios_2_0_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_0_mux (
+  ) gpio_pmod0_ios_0_0_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD0_0]
     }),
-    .sel_i(gpio_ios_2_0_sel),
-    .out_o(gpio_ios_o[2][0])
+    .sel_i(gpio_pmod0_ios_0_0_sel),
+    .out_o(gpio_pmod0_ios_o[0][0])
   );
 
-  logic [1:0] gpio_ios_2_1_sel;
-  logic gpio_ios_2_1_sel_addressed;
+  logic [1:0] gpio_pmod0_ios_0_1_sel;
+  logic gpio_pmod0_ios_0_1_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_1_sel_addressed =
+  assign gpio_pmod0_ios_0_1_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 64 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 60 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_1_sel <= 2'b10;
+      gpio_pmod0_ios_0_1_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_1_sel_addressed) begin
-        gpio_ios_2_1_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_pmod0_ios_0_1_sel_addressed) begin
+        gpio_pmod0_ios_0_1_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -6427,33 +6661,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_1_mux (
+  ) gpio_pmod0_ios_0_1_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD0_1]
     }),
-    .sel_i(gpio_ios_2_1_sel),
-    .out_o(gpio_ios_o[2][1])
+    .sel_i(gpio_pmod0_ios_0_1_sel),
+    .out_o(gpio_pmod0_ios_o[0][1])
   );
 
-  logic [1:0] gpio_ios_2_2_sel;
-  logic gpio_ios_2_2_sel_addressed;
+  logic [1:0] gpio_pmod0_ios_0_2_sel;
+  logic gpio_pmod0_ios_0_2_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_2_sel_addressed =
+  assign gpio_pmod0_ios_0_2_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 64 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 60 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_2_sel <= 2'b10;
+      gpio_pmod0_ios_0_2_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_2_sel_addressed) begin
-        gpio_ios_2_2_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_pmod0_ios_0_2_sel_addressed) begin
+        gpio_pmod0_ios_0_2_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -6461,22 +6695,192 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_2_mux (
+  ) gpio_pmod0_ios_0_2_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD0_2]
     }),
-    .sel_i(gpio_ios_2_2_sel),
-    .out_o(gpio_ios_o[2][2])
+    .sel_i(gpio_pmod0_ios_0_2_sel),
+    .out_o(gpio_pmod0_ios_o[0][2])
   );
 
-  logic [1:0] gpio_ios_2_3_sel;
-  logic gpio_ios_2_3_sel_addressed;
+  logic [1:0] gpio_pmod0_ios_0_3_sel;
+  logic gpio_pmod0_ios_0_3_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_3_sel_addressed =
+  assign gpio_pmod0_ios_0_3_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 60 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_pmod0_ios_0_3_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_pmod0_ios_0_3_sel_addressed) begin
+        gpio_pmod0_ios_0_3_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_pmod0_ios_0_3_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      inout_from_pins_i[INOUT_PIN_PMOD0_3]
+    }),
+    .sel_i(gpio_pmod0_ios_0_3_sel),
+    .out_o(gpio_pmod0_ios_o[0][3])
+  );
+
+  logic [1:0] gpio_pmod0_ios_0_4_sel;
+  logic gpio_pmod0_ios_0_4_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_pmod0_ios_0_4_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 60 &
+    reg_be[3] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_pmod0_ios_0_4_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_pmod0_ios_0_4_sel_addressed) begin
+        gpio_pmod0_ios_0_4_sel <= reg_wdata[24+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_pmod0_ios_0_4_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      inout_from_pins_i[INOUT_PIN_PMOD0_4]
+    }),
+    .sel_i(gpio_pmod0_ios_0_4_sel),
+    .out_o(gpio_pmod0_ios_o[0][4])
+  );
+
+  logic [1:0] gpio_pmod0_ios_0_5_sel;
+  logic gpio_pmod0_ios_0_5_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_pmod0_ios_0_5_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 64 &
+    reg_be[0] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_pmod0_ios_0_5_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_pmod0_ios_0_5_sel_addressed) begin
+        gpio_pmod0_ios_0_5_sel <= reg_wdata[0+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_pmod0_ios_0_5_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      inout_from_pins_i[INOUT_PIN_PMOD0_5]
+    }),
+    .sel_i(gpio_pmod0_ios_0_5_sel),
+    .out_o(gpio_pmod0_ios_o[0][5])
+  );
+
+  logic [1:0] gpio_pmod0_ios_0_6_sel;
+  logic gpio_pmod0_ios_0_6_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_pmod0_ios_0_6_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 64 &
+    reg_be[1] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_pmod0_ios_0_6_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_pmod0_ios_0_6_sel_addressed) begin
+        gpio_pmod0_ios_0_6_sel <= reg_wdata[8+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_pmod0_ios_0_6_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      inout_from_pins_i[INOUT_PIN_PMOD0_6]
+    }),
+    .sel_i(gpio_pmod0_ios_0_6_sel),
+    .out_o(gpio_pmod0_ios_o[0][6])
+  );
+
+  logic [1:0] gpio_pmod0_ios_0_7_sel;
+  logic gpio_pmod0_ios_0_7_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_pmod0_ios_0_7_sel_addressed =
+    reg_addr[RegAddrWidth-1] == 1'b1 &
+    reg_addr[RegAddrWidth-2:0] == 64 &
+    reg_be[2] == 1'b1;
+
+  always @(posedge clk_i or negedge rst_ni) begin
+    if (!rst_ni) begin
+      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
+      gpio_pmod0_ios_0_7_sel <= 2'b10;
+    end else begin
+      if (reg_we & gpio_pmod0_ios_0_7_sel_addressed) begin
+        gpio_pmod0_ios_0_7_sel <= reg_wdata[16+:2];
+      end
+    end
+  end
+
+  prim_onehot_mux #(
+    .Width(1),
+    .Inputs(2)
+  ) gpio_pmod0_ios_0_7_mux (
+    .clk_i,
+    .rst_ni,
+    .in_i({
+      1'b0,
+      inout_from_pins_i[INOUT_PIN_PMOD0_7]
+    }),
+    .sel_i(gpio_pmod0_ios_0_7_sel),
+    .out_o(gpio_pmod0_ios_o[0][7])
+  );
+
+  logic [1:0] gpio_pmod1_ios_0_0_sel;
+  logic gpio_pmod1_ios_0_0_sel_addressed;
+
+  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
+  assign gpio_pmod1_ios_0_0_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
     reg_addr[RegAddrWidth-2:0] == 64 &
     reg_be[3] == 1'b1;
@@ -6484,10 +6888,10 @@ module pinmux
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_3_sel <= 2'b10;
+      gpio_pmod1_ios_0_0_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_3_sel_addressed) begin
-        gpio_ios_2_3_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_pmod1_ios_0_0_sel_addressed) begin
+        gpio_pmod1_ios_0_0_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -6495,203 +6899,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_3_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      inout_from_pins_i[INOUT_PIN_PMOD0_3]
-    }),
-    .sel_i(gpio_ios_2_3_sel),
-    .out_o(gpio_ios_o[2][3])
-  );
-
-  logic [1:0] gpio_ios_2_4_sel;
-  logic gpio_ios_2_4_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_4_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 68 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_4_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_4_sel_addressed) begin
-        gpio_ios_2_4_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_4_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      inout_from_pins_i[INOUT_PIN_PMOD0_4]
-    }),
-    .sel_i(gpio_ios_2_4_sel),
-    .out_o(gpio_ios_o[2][4])
-  );
-
-  logic [1:0] gpio_ios_2_5_sel;
-  logic gpio_ios_2_5_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_5_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 68 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_5_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_5_sel_addressed) begin
-        gpio_ios_2_5_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_5_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      inout_from_pins_i[INOUT_PIN_PMOD0_5]
-    }),
-    .sel_i(gpio_ios_2_5_sel),
-    .out_o(gpio_ios_o[2][5])
-  );
-
-  logic [1:0] gpio_ios_2_6_sel;
-  logic gpio_ios_2_6_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_6_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 68 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_6_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_6_sel_addressed) begin
-        gpio_ios_2_6_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_6_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      inout_from_pins_i[INOUT_PIN_PMOD0_6]
-    }),
-    .sel_i(gpio_ios_2_6_sel),
-    .out_o(gpio_ios_o[2][6])
-  );
-
-  logic [1:0] gpio_ios_2_7_sel;
-  logic gpio_ios_2_7_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_7_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 68 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_7_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_7_sel_addressed) begin
-        gpio_ios_2_7_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_7_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      inout_from_pins_i[INOUT_PIN_PMOD0_7]
-    }),
-    .sel_i(gpio_ios_2_7_sel),
-    .out_o(gpio_ios_o[2][7])
-  );
-
-  logic [1:0] gpio_ios_2_8_sel;
-  logic gpio_ios_2_8_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_8_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 72 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_8_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_8_sel_addressed) begin
-        gpio_ios_2_8_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_8_mux (
+  ) gpio_pmod1_ios_0_0_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_0]
     }),
-    .sel_i(gpio_ios_2_8_sel),
-    .out_o(gpio_ios_o[2][8])
+    .sel_i(gpio_pmod1_ios_0_0_sel),
+    .out_o(gpio_pmod1_ios_o[0][0])
   );
 
-  logic [1:0] gpio_ios_2_9_sel;
-  logic gpio_ios_2_9_sel_addressed;
+  logic [1:0] gpio_pmod1_ios_0_1_sel;
+  logic gpio_pmod1_ios_0_1_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_9_sel_addressed =
+  assign gpio_pmod1_ios_0_1_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 72 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 68 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_9_sel <= 2'b10;
+      gpio_pmod1_ios_0_1_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_9_sel_addressed) begin
-        gpio_ios_2_9_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_pmod1_ios_0_1_sel_addressed) begin
+        gpio_pmod1_ios_0_1_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -6699,33 +6933,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_9_mux (
+  ) gpio_pmod1_ios_0_1_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_1]
     }),
-    .sel_i(gpio_ios_2_9_sel),
-    .out_o(gpio_ios_o[2][9])
+    .sel_i(gpio_pmod1_ios_0_1_sel),
+    .out_o(gpio_pmod1_ios_o[0][1])
   );
 
-  logic [1:0] gpio_ios_2_10_sel;
-  logic gpio_ios_2_10_sel_addressed;
+  logic [1:0] gpio_pmod1_ios_0_2_sel;
+  logic gpio_pmod1_ios_0_2_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_10_sel_addressed =
+  assign gpio_pmod1_ios_0_2_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 72 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 68 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_10_sel <= 2'b10;
+      gpio_pmod1_ios_0_2_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_10_sel_addressed) begin
-        gpio_ios_2_10_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_pmod1_ios_0_2_sel_addressed) begin
+        gpio_pmod1_ios_0_2_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -6733,33 +6967,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_10_mux (
+  ) gpio_pmod1_ios_0_2_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_2]
     }),
-    .sel_i(gpio_ios_2_10_sel),
-    .out_o(gpio_ios_o[2][10])
+    .sel_i(gpio_pmod1_ios_0_2_sel),
+    .out_o(gpio_pmod1_ios_o[0][2])
   );
 
-  logic [1:0] gpio_ios_2_11_sel;
-  logic gpio_ios_2_11_sel_addressed;
+  logic [1:0] gpio_pmod1_ios_0_3_sel;
+  logic gpio_pmod1_ios_0_3_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_11_sel_addressed =
+  assign gpio_pmod1_ios_0_3_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 72 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 68 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_11_sel <= 2'b10;
+      gpio_pmod1_ios_0_3_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_11_sel_addressed) begin
-        gpio_ios_2_11_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_pmod1_ios_0_3_sel_addressed) begin
+        gpio_pmod1_ios_0_3_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -6767,33 +7001,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_11_mux (
+  ) gpio_pmod1_ios_0_3_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_3]
     }),
-    .sel_i(gpio_ios_2_11_sel),
-    .out_o(gpio_ios_o[2][11])
+    .sel_i(gpio_pmod1_ios_0_3_sel),
+    .out_o(gpio_pmod1_ios_o[0][3])
   );
 
-  logic [1:0] gpio_ios_2_12_sel;
-  logic gpio_ios_2_12_sel_addressed;
+  logic [1:0] gpio_pmod1_ios_0_4_sel;
+  logic gpio_pmod1_ios_0_4_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_12_sel_addressed =
+  assign gpio_pmod1_ios_0_4_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 76 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 68 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_12_sel <= 2'b10;
+      gpio_pmod1_ios_0_4_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_12_sel_addressed) begin
-        gpio_ios_2_12_sel <= reg_wdata[0+:2];
+      if (reg_we & gpio_pmod1_ios_0_4_sel_addressed) begin
+        gpio_pmod1_ios_0_4_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -6801,33 +7035,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_12_mux (
+  ) gpio_pmod1_ios_0_4_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_4]
     }),
-    .sel_i(gpio_ios_2_12_sel),
-    .out_o(gpio_ios_o[2][12])
+    .sel_i(gpio_pmod1_ios_0_4_sel),
+    .out_o(gpio_pmod1_ios_o[0][4])
   );
 
-  logic [1:0] gpio_ios_2_13_sel;
-  logic gpio_ios_2_13_sel_addressed;
+  logic [1:0] gpio_pmod1_ios_0_5_sel;
+  logic gpio_pmod1_ios_0_5_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_13_sel_addressed =
+  assign gpio_pmod1_ios_0_5_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 76 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 72 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_13_sel <= 2'b10;
+      gpio_pmod1_ios_0_5_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_13_sel_addressed) begin
-        gpio_ios_2_13_sel <= reg_wdata[8+:2];
+      if (reg_we & gpio_pmod1_ios_0_5_sel_addressed) begin
+        gpio_pmod1_ios_0_5_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -6835,33 +7069,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_13_mux (
+  ) gpio_pmod1_ios_0_5_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_5]
     }),
-    .sel_i(gpio_ios_2_13_sel),
-    .out_o(gpio_ios_o[2][13])
+    .sel_i(gpio_pmod1_ios_0_5_sel),
+    .out_o(gpio_pmod1_ios_o[0][5])
   );
 
-  logic [1:0] gpio_ios_2_14_sel;
-  logic gpio_ios_2_14_sel_addressed;
+  logic [1:0] gpio_pmod1_ios_0_6_sel;
+  logic gpio_pmod1_ios_0_6_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_14_sel_addressed =
+  assign gpio_pmod1_ios_0_6_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 76 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 72 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_14_sel <= 2'b10;
+      gpio_pmod1_ios_0_6_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_14_sel_addressed) begin
-        gpio_ios_2_14_sel <= reg_wdata[16+:2];
+      if (reg_we & gpio_pmod1_ios_0_6_sel_addressed) begin
+        gpio_pmod1_ios_0_6_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -6869,33 +7103,33 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_14_mux (
+  ) gpio_pmod1_ios_0_6_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_6]
     }),
-    .sel_i(gpio_ios_2_14_sel),
-    .out_o(gpio_ios_o[2][14])
+    .sel_i(gpio_pmod1_ios_0_6_sel),
+    .out_o(gpio_pmod1_ios_o[0][6])
   );
 
-  logic [1:0] gpio_ios_2_15_sel;
-  logic gpio_ios_2_15_sel_addressed;
+  logic [1:0] gpio_pmod1_ios_0_7_sel;
+  logic gpio_pmod1_ios_0_7_sel_addressed;
 
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_15_sel_addressed =
+  assign gpio_pmod1_ios_0_7_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 76 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 72 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_15_sel <= 2'b10;
+      gpio_pmod1_ios_0_7_sel <= 2'b10;
     end else begin
-      if (reg_we & gpio_ios_2_15_sel_addressed) begin
-        gpio_ios_2_15_sel <= reg_wdata[24+:2];
+      if (reg_we & gpio_pmod1_ios_0_7_sel_addressed) begin
+        gpio_pmod1_ios_0_7_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -6903,559 +7137,15 @@ module pinmux
   prim_onehot_mux #(
     .Width(1),
     .Inputs(2)
-  ) gpio_ios_2_15_mux (
+  ) gpio_pmod1_ios_0_7_mux (
     .clk_i,
     .rst_ni,
     .in_i({
       1'b0,
       inout_from_pins_i[INOUT_PIN_PMOD1_7]
     }),
-    .sel_i(gpio_ios_2_15_sel),
-    .out_o(gpio_ios_o[2][15])
-  );
-
-  logic [1:0] gpio_ios_2_16_sel;
-  logic gpio_ios_2_16_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_16_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 80 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_16_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_16_sel_addressed) begin
-        gpio_ios_2_16_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_16_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_16_sel),
-    .out_o(gpio_ios_o[2][16])
-  );
-
-  logic [1:0] gpio_ios_2_17_sel;
-  logic gpio_ios_2_17_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_17_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 80 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_17_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_17_sel_addressed) begin
-        gpio_ios_2_17_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_17_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_17_sel),
-    .out_o(gpio_ios_o[2][17])
-  );
-
-  logic [1:0] gpio_ios_2_18_sel;
-  logic gpio_ios_2_18_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_18_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 80 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_18_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_18_sel_addressed) begin
-        gpio_ios_2_18_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_18_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_18_sel),
-    .out_o(gpio_ios_o[2][18])
-  );
-
-  logic [1:0] gpio_ios_2_19_sel;
-  logic gpio_ios_2_19_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_19_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 80 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_19_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_19_sel_addressed) begin
-        gpio_ios_2_19_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_19_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_19_sel),
-    .out_o(gpio_ios_o[2][19])
-  );
-
-  logic [1:0] gpio_ios_2_20_sel;
-  logic gpio_ios_2_20_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_20_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 84 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_20_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_20_sel_addressed) begin
-        gpio_ios_2_20_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_20_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_20_sel),
-    .out_o(gpio_ios_o[2][20])
-  );
-
-  logic [1:0] gpio_ios_2_21_sel;
-  logic gpio_ios_2_21_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_21_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 84 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_21_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_21_sel_addressed) begin
-        gpio_ios_2_21_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_21_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_21_sel),
-    .out_o(gpio_ios_o[2][21])
-  );
-
-  logic [1:0] gpio_ios_2_22_sel;
-  logic gpio_ios_2_22_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_22_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 84 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_22_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_22_sel_addressed) begin
-        gpio_ios_2_22_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_22_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_22_sel),
-    .out_o(gpio_ios_o[2][22])
-  );
-
-  logic [1:0] gpio_ios_2_23_sel;
-  logic gpio_ios_2_23_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_23_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 84 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_23_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_23_sel_addressed) begin
-        gpio_ios_2_23_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_23_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_23_sel),
-    .out_o(gpio_ios_o[2][23])
-  );
-
-  logic [1:0] gpio_ios_2_24_sel;
-  logic gpio_ios_2_24_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_24_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 88 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_24_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_24_sel_addressed) begin
-        gpio_ios_2_24_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_24_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_24_sel),
-    .out_o(gpio_ios_o[2][24])
-  );
-
-  logic [1:0] gpio_ios_2_25_sel;
-  logic gpio_ios_2_25_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_25_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 88 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_25_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_25_sel_addressed) begin
-        gpio_ios_2_25_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_25_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_25_sel),
-    .out_o(gpio_ios_o[2][25])
-  );
-
-  logic [1:0] gpio_ios_2_26_sel;
-  logic gpio_ios_2_26_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_26_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 88 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_26_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_26_sel_addressed) begin
-        gpio_ios_2_26_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_26_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_26_sel),
-    .out_o(gpio_ios_o[2][26])
-  );
-
-  logic [1:0] gpio_ios_2_27_sel;
-  logic gpio_ios_2_27_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_27_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 88 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_27_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_27_sel_addressed) begin
-        gpio_ios_2_27_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_27_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_27_sel),
-    .out_o(gpio_ios_o[2][27])
-  );
-
-  logic [1:0] gpio_ios_2_28_sel;
-  logic gpio_ios_2_28_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_28_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 92 &
-    reg_be[0] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_28_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_28_sel_addressed) begin
-        gpio_ios_2_28_sel <= reg_wdata[0+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_28_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_28_sel),
-    .out_o(gpio_ios_o[2][28])
-  );
-
-  logic [1:0] gpio_ios_2_29_sel;
-  logic gpio_ios_2_29_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_29_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 92 &
-    reg_be[1] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_29_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_29_sel_addressed) begin
-        gpio_ios_2_29_sel <= reg_wdata[8+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_29_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_29_sel),
-    .out_o(gpio_ios_o[2][29])
-  );
-
-  logic [1:0] gpio_ios_2_30_sel;
-  logic gpio_ios_2_30_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_30_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 92 &
-    reg_be[2] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_30_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_30_sel_addressed) begin
-        gpio_ios_2_30_sel <= reg_wdata[16+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_30_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_30_sel),
-    .out_o(gpio_ios_o[2][30])
-  );
-
-  logic [1:0] gpio_ios_2_31_sel;
-  logic gpio_ios_2_31_sel_addressed;
-
-  // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
-  assign gpio_ios_2_31_sel_addressed =
-    reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 92 &
-    reg_be[3] == 1'b1;
-
-  always @(posedge clk_i or negedge rst_ni) begin
-    if (!rst_ni) begin
-      // Select second input by default so that pins are connected to the first block that is specified in the configuration.
-      gpio_ios_2_31_sel <= 2'b10;
-    end else begin
-      if (reg_we & gpio_ios_2_31_sel_addressed) begin
-        gpio_ios_2_31_sel <= reg_wdata[24+:2];
-      end
-    end
-  end
-
-  prim_onehot_mux #(
-    .Width(1),
-    .Inputs(2)
-  ) gpio_ios_2_31_mux (
-    .clk_i,
-    .rst_ni,
-    .in_i({
-      1'b0,
-      1'b0
-    }),
-    .sel_i(gpio_ios_2_31_sel),
-    .out_o(gpio_ios_o[2][31])
+    .sel_i(gpio_pmod1_ios_0_7_sel),
+    .out_o(gpio_pmod1_ios_o[0][7])
   );
 
   logic [1:0] uart_rx_0_sel;
@@ -7464,8 +7154,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign uart_rx_0_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 96 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 72 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7473,7 +7163,7 @@ module pinmux
       uart_rx_0_sel <= 2'b10;
     end else begin
       if (reg_we & uart_rx_0_sel_addressed) begin
-        uart_rx_0_sel <= reg_wdata[0+:2];
+        uart_rx_0_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -7498,8 +7188,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign uart_rx_1_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 96 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 76 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7507,7 +7197,7 @@ module pinmux
       uart_rx_1_sel <= 2'b10;
     end else begin
       if (reg_we & uart_rx_1_sel_addressed) begin
-        uart_rx_1_sel <= reg_wdata[8+:2];
+        uart_rx_1_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -7532,8 +7222,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign uart_rx_2_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 96 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 76 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7541,7 +7231,7 @@ module pinmux
       uart_rx_2_sel <= 3'b10;
     end else begin
       if (reg_we & uart_rx_2_sel_addressed) begin
-        uart_rx_2_sel <= reg_wdata[16+:3];
+        uart_rx_2_sel <= reg_wdata[8+:3];
       end
     end
   end
@@ -7567,8 +7257,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign uart_rx_3_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 96 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 76 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7576,7 +7266,7 @@ module pinmux
       uart_rx_3_sel <= 4'b10;
     end else begin
       if (reg_we & uart_rx_3_sel_addressed) begin
-        uart_rx_3_sel <= reg_wdata[24+:4];
+        uart_rx_3_sel <= reg_wdata[16+:4];
       end
     end
   end
@@ -7603,8 +7293,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign uart_rx_4_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 100 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 76 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7612,7 +7302,7 @@ module pinmux
       uart_rx_4_sel <= 2'b10;
     end else begin
       if (reg_we & uart_rx_4_sel_addressed) begin
-        uart_rx_4_sel <= reg_wdata[0+:2];
+        uart_rx_4_sel <= reg_wdata[24+:2];
       end
     end
   end
@@ -7637,8 +7327,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign spi_rx_0_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 100 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 80 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7646,7 +7336,7 @@ module pinmux
       spi_rx_0_sel <= 2'b10;
     end else begin
       if (reg_we & spi_rx_0_sel_addressed) begin
-        spi_rx_0_sel <= reg_wdata[8+:2];
+        spi_rx_0_sel <= reg_wdata[0+:2];
       end
     end
   end
@@ -7671,8 +7361,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign spi_rx_1_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 100 &
-    reg_be[2] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 80 &
+    reg_be[1] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7680,7 +7370,7 @@ module pinmux
       spi_rx_1_sel <= 2'b10;
     end else begin
       if (reg_we & spi_rx_1_sel_addressed) begin
-        spi_rx_1_sel <= reg_wdata[16+:2];
+        spi_rx_1_sel <= reg_wdata[8+:2];
       end
     end
   end
@@ -7705,8 +7395,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign spi_rx_2_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 100 &
-    reg_be[3] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 80 &
+    reg_be[2] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7714,7 +7404,7 @@ module pinmux
       spi_rx_2_sel <= 2'b10;
     end else begin
       if (reg_we & spi_rx_2_sel_addressed) begin
-        spi_rx_2_sel <= reg_wdata[24+:2];
+        spi_rx_2_sel <= reg_wdata[16+:2];
       end
     end
   end
@@ -7739,8 +7429,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign spi_rx_3_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 104 &
-    reg_be[0] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 80 &
+    reg_be[3] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7748,7 +7438,7 @@ module pinmux
       spi_rx_3_sel <= 5'b10;
     end else begin
       if (reg_we & spi_rx_3_sel_addressed) begin
-        spi_rx_3_sel <= reg_wdata[0+:5];
+        spi_rx_3_sel <= reg_wdata[24+:5];
       end
     end
   end
@@ -7776,8 +7466,8 @@ module pinmux
   // Register addresses of 0x800 to 0xfff are block IO selectors, which are packed with 4 per 32-bit word.
   assign spi_rx_4_sel_addressed =
     reg_addr[RegAddrWidth-1] == 1'b1 &
-    reg_addr[RegAddrWidth-2:0] == 104 &
-    reg_be[1] == 1'b1;
+    reg_addr[RegAddrWidth-2:0] == 84 &
+    reg_be[0] == 1'b1;
 
   always @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
@@ -7785,7 +7475,7 @@ module pinmux
       spi_rx_4_sel <= 4'b10;
     end else begin
       if (reg_we & spi_rx_4_sel_addressed) begin
-        spi_rx_4_sel <= reg_wdata[8+:4];
+        spi_rx_4_sel <= reg_wdata[0+:4];
       end
     end
   end

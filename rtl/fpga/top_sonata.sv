@@ -221,17 +221,7 @@ module top_sonata
   logic pll_locked;
   logic rst_btn;
 
-  logic [4:0] nav_sw_n;
-  logic [7:0] user_sw_n;
-  logic [2:0] sel_sw_n;
-
   assign led_bootok = rst_sys_n;
-
-  // Switch inputs have pull-ups and switches pull to ground when on. Invert here so CPU sees 1 for
-  // on and 0 for off.
-  assign nav_sw_n = ~navSw;
-  assign user_sw_n = ~usrSw;
-  assign sel_sw_n = ~selSw;
 
   assign usrusb_spd = 1'b1;  // Full Speed operation.
 
@@ -287,29 +277,6 @@ module top_sonata
     .clk_hr90p_i    (clk_hr90p),
     .clk_hr3x_i     (clk_hr3x),
     .rst_hr_ni      (rst_hr_n),
-
-    // GPIO
-    .gp_i           ({
-                      14'b0,
-                      microsd_det, // MicroSD card insertion detection
-                      sel_sw_n, // Software selection switches
-                      mb9, // mikroBUS Click interrupt
-                      user_sw_n, // user switches
-                      nav_sw_n // joystick
-                    }),
-    .gp_o           ({
-                      unused_gp_o,
-                      mb0, // mikroBUS Click reset
-                      gp_mb1, // mikroBUS Click chip select
-                      gp_ah_tmpio10, // Arduino shield chip select
-                      gp_rph_g16_ce2, gp_rph_g17, gp_rph_g18, // R-Pi SPI1 chip selects [2:0]
-                      gp_rph_g7_ce1, gp_rph_g8_ce0, // R-Pi SPI0 chip selects [1:0]
-                      ethmac_rst, gp_ethmac_cs, // Ethernet
-                      gp_appspi_cs, // Flash
-                      usrLed, // User LEDs (8 bits)
-                      lcd_backlight, lcd_dc, lcd_rst, gp_lcd_cs // LCD screen
-                    }),
-    .gp_o_en        (),
 
     // Arduino Shield Analog(ue)
     .ard_an_di_i    (ard_an_di),
@@ -412,6 +379,13 @@ module top_sonata
   );
 
   // Input Pins
+  // Switch inputs have pull-ups and switches pull to ground when on. Invert
+  // here so CPU sees 1 for on and 0 for off.
+  assign in_from_pins[IN_PIN_SELSW_7:IN_PIN_SELSW_0] = ~selSw;
+  assign in_from_pins[IN_PIN_NAVSW_7:IN_PIN_NAVSW_0] = ~navSw;
+  assign in_from_pins[IN_PIN_USRSW_7:IN_PIN_USRSW_0] = ~usrSw;
+
+  assign in_from_pins[IN_PIN_MICROSD_DET ] = microsd_det;
   assign in_from_pins[IN_PIN_MICROSD_DAT0] = microsd_dat0;
   assign in_from_pins[IN_PIN_MB8         ] = mb8;
   assign in_from_pins[IN_PIN_MB3         ] = mb3;
@@ -425,6 +399,7 @@ module top_sonata
   // pull output pins low when their output isn't enabled.
   assign output_pins = out_to_pins_en & out_to_pins;
 
+  assign usrLed       = output_pins[OUT_PIN_USRLED_7:OUT_PIN_USRLED_0];
   assign microsd_dat3 = output_pins[OUT_PIN_MICROSD_DAT3];
   assign microsd_cmd  = output_pins[OUT_PIN_MICROSD_CMD ];
   assign microsd_clk  = output_pins[OUT_PIN_MICROSD_CLK ];

@@ -29,11 +29,6 @@ module sonata_system
   input logic                      clk_hr3x_i,
   input logic                      rst_hr_ni,
 
-  // General purpose input and output
-  input  logic [GPIO_IOS_WIDTH-1:0] gp_i,
-  output logic [GPIO_IOS_WIDTH-1:0] gp_o,
-  output logic [GPIO_IOS_WIDTH-1:0] gp_o_en,
-
   // Arduino shield analog(ue) inputs:
   // Digital version of inputs, then p & n true analog(ue) inputs
   input  logic [ArdAniWidth-1:0]   ard_an_di_i,
@@ -126,6 +121,15 @@ module sonata_system
 
   localparam int NrDevices = 4;
   localparam int NrHosts = 2;
+
+  typedef enum int {
+    GpioBoard,
+    GpioRph,
+    GpioAh,
+    GpioPmod0,
+    GpioPmod1,
+    GpioBlockNum
+  } gpio_block_e;
 
   // Signals for hardware revoker
   logic [127:0] hardware_revoker_control_reg_rdata;
@@ -286,8 +290,8 @@ module sonata_system
   tlul_pkg::tl_d2h_t tl_hyperram_us_d2h[2];
   tlul_pkg::tl_h2d_t tl_hyperram_ds_h2d;
   tlul_pkg::tl_d2h_t tl_hyperram_ds_d2h;
-  tlul_pkg::tl_h2d_t tl_gpio_h2d;
-  tlul_pkg::tl_d2h_t tl_gpio_d2h;
+  tlul_pkg::tl_h2d_t tl_gpio_h2d[GpioBlockNum];
+  tlul_pkg::tl_d2h_t tl_gpio_d2h[GpioBlockNum];
   tlul_pkg::tl_h2d_t tl_xadc_h2d;
   tlul_pkg::tl_d2h_t tl_xadc_d2h;
   tlul_pkg::tl_h2d_t tl_uart_h2d[UART_NUM];
@@ -336,8 +340,6 @@ module sonata_system
     .tl_hyperram_i    (tl_hyperram_us_d2h[0]),
     .tl_rev_tag_o     (tl_rev_tag_h2d),
     .tl_rev_tag_i     (tl_rev_tag_d2h),
-    .tl_gpio_o        (tl_gpio_h2d),
-    .tl_gpio_i        (tl_gpio_d2h),
     .tl_pwm_o         ('{tl_pwm_h2d}),
     .tl_pwm_i         ('{tl_pwm_d2h}),
     .tl_system_info_o (tl_system_info_h2d),
@@ -352,6 +354,16 @@ module sonata_system
     .tl_xadc_i        (tl_xadc_d2h),
     .tl_timer_o       (tl_timer_h2d),
     .tl_timer_i       (tl_timer_d2h),
+    .tl_gpio_board_o  (tl_gpio_h2d[GpioBoard:GpioBoard]),
+    .tl_gpio_board_i  (tl_gpio_d2h[GpioBoard:GpioBoard]),
+    .tl_gpio_rph_o    (tl_gpio_h2d[GpioRph:GpioRph]),
+    .tl_gpio_rph_i    (tl_gpio_d2h[GpioRph:GpioRph]),
+    .tl_gpio_ah_o     (tl_gpio_h2d[GpioAh:GpioAh]),
+    .tl_gpio_ah_i     (tl_gpio_d2h[GpioAh:GpioAh]),
+    .tl_gpio_pmod0_o  (tl_gpio_h2d[GpioPmod0:GpioPmod0]),
+    .tl_gpio_pmod0_i  (tl_gpio_d2h[GpioPmod0:GpioPmod0]),
+    .tl_gpio_pmod1_o  (tl_gpio_h2d[GpioPmod1:GpioPmod1]),
+    .tl_gpio_pmod1_i  (tl_gpio_d2h[GpioPmod1:GpioPmod1]),
     .tl_uart_o        (tl_uart_h2d),
     .tl_uart_i        (tl_uart_d2h),
     .tl_i2c_o         (tl_i2c_h2d),
@@ -820,32 +832,89 @@ module sonata_system
   );
 
   // GPIOs
-  // 0: General Purpose
-  // 1: Raspberry Pi HAT
-  // 2: Arduino Shield
-  // 3: Pmod
-  logic [GPIO_IOS_WIDTH-1:0] gpio_from_pins     [GPIO_NUM + 1];
-  logic [GPIO_IOS_WIDTH-1:0] gpio_to_pins       [GPIO_NUM + 1];
-  logic [GPIO_IOS_WIDTH-1:0] gpio_to_pins_enable[GPIO_NUM + 1];
-
-  assign gpio_from_pins[0] = gp_i;
-  assign gp_o              = gpio_to_pins       [0];
-  assign gp_o_en           = gpio_to_pins_enable[0];
-
+  logic [GPIO_BOARD_GPI_WIDTH-1:0] gpio_board_from_pins;
+  logic [GPIO_BOARD_GPO_WIDTH-1:0] gpio_board_to_pins;
   gpio #(
-    .GpiWidth     ( GPIO_IOS_WIDTH ),
-    .GpoWidth     ( GPIO_IOS_WIDTH ),
-    .NumInstances ( GPIO_NUM + 1   )
-  ) u_gpio (
-    .clk_i           (clk_sys_i),
-    .rst_ni          (rst_sys_ni),
+    .GpiWidth ( GPIO_BOARD_GPI_WIDTH ),
+    .GpoWidth ( GPIO_BOARD_GPO_WIDTH )
+  ) u_gpio_board (
+    .clk_i  (clk_sys_i),
+    .rst_ni (rst_sys_ni),
 
-    .tl_i         (tl_gpio_h2d),
-    .tl_o         (tl_gpio_d2h),
+    .tl_i   (tl_gpio_h2d[GpioBoard]),
+    .tl_o   (tl_gpio_d2h[GpioBoard]),
 
-    .gp_i(gpio_from_pins),
-    .gp_o(gpio_to_pins),
-    .gp_o_en(gpio_to_pins_enable)
+    .gp_i(gpio_board_from_pins),
+    .gp_o(gpio_board_to_pins),
+    .gp_o_en()
+  );
+
+  logic [GPIO_RPH_IOS_WIDTH-1:0] gpio_rph_from_pins;
+  logic [GPIO_RPH_IOS_WIDTH-1:0] gpio_rph_to_pins, gpio_rph_to_pins_enable;
+  gpio #(
+    .GpiWidth ( GPIO_RPH_IOS_WIDTH ),
+    .GpoWidth ( GPIO_RPH_IOS_WIDTH )
+  ) u_gpio_rph (
+    .clk_i  (clk_sys_i),
+    .rst_ni (rst_sys_ni),
+
+    .tl_i   (tl_gpio_h2d[GpioRph]),
+    .tl_o   (tl_gpio_d2h[GpioRph]),
+
+    .gp_i(gpio_rph_from_pins),
+    .gp_o(gpio_rph_to_pins),
+    .gp_o_en(gpio_rph_to_pins_enable)
+  );
+
+  logic [GPIO_AH_IOS_WIDTH-1:0] gpio_ah_from_pins;
+  logic [GPIO_AH_IOS_WIDTH-1:0] gpio_ah_to_pins, gpio_ah_to_pins_enable;
+  gpio #(
+    .GpiWidth ( GPIO_AH_IOS_WIDTH ),
+    .GpoWidth ( GPIO_AH_IOS_WIDTH )
+  ) u_gpio_ah (
+    .clk_i  (clk_sys_i),
+    .rst_ni (rst_sys_ni),
+
+    .tl_i   (tl_gpio_h2d[GpioAh]),
+    .tl_o   (tl_gpio_d2h[GpioAh]),
+
+    .gp_i(gpio_ah_from_pins),
+    .gp_o(gpio_ah_to_pins),
+    .gp_o_en(gpio_ah_to_pins_enable)
+  );
+
+  logic [GPIO_PMOD0_IOS_WIDTH-1:0] gpio_pmod0_from_pins;
+  logic [GPIO_PMOD0_IOS_WIDTH-1:0] gpio_pmod0_to_pins, gpio_pmod0_to_pins_enable;
+  gpio #(
+    .GpiWidth ( GPIO_PMOD0_IOS_WIDTH ),
+    .GpoWidth ( GPIO_PMOD0_IOS_WIDTH )
+  ) u_gpio_pmod0 (
+    .clk_i  (clk_sys_i),
+    .rst_ni (rst_sys_ni),
+
+    .tl_i   (tl_gpio_h2d[GpioPmod0]),
+    .tl_o   (tl_gpio_d2h[GpioPmod0]),
+
+    .gp_i(gpio_pmod0_from_pins),
+    .gp_o(gpio_pmod0_to_pins),
+    .gp_o_en(gpio_pmod0_to_pins_enable)
+  );
+
+  logic [GPIO_PMOD1_IOS_WIDTH-1:0] gpio_pmod1_from_pins;
+  logic [GPIO_PMOD1_IOS_WIDTH-1:0] gpio_pmod1_to_pins, gpio_pmod1_to_pins_enable;
+  gpio #(
+    .GpiWidth ( GPIO_PMOD1_IOS_WIDTH ),
+    .GpoWidth ( GPIO_PMOD1_IOS_WIDTH )
+  ) u_gpio_pmod1 (
+    .clk_i  (clk_sys_i),
+    .rst_ni (rst_sys_ni),
+
+    .tl_i   (tl_gpio_h2d[GpioPmod1]),
+    .tl_o   (tl_gpio_d2h[GpioPmod1]),
+
+    .gp_i(gpio_pmod1_from_pins),
+    .gp_o(gpio_pmod1_to_pins),
+    .gp_o_en(gpio_pmod1_to_pins_enable)
   );
 
   // Digital inputs from Arduino shield analog(ue) pins currently unused
@@ -1169,11 +1238,11 @@ module sonata_system
   );
 
   system_info #(
-    .SysClkFreq ( SysClkFreq ),
-    .GpioNum    (   GPIO_NUM ),
-    .UartNum    (   UART_NUM ),
-    .I2cNum     (    I2C_NUM ),
-    .SpiNum     (    SPI_NUM )
+    .SysClkFreq (   SysClkFreq ),
+    .GpioNum    ( GpioBlockNum ),
+    .UartNum    (     UART_NUM ),
+    .I2cNum     (      I2C_NUM ),
+    .SpiNum     (      SPI_NUM )
   ) u_system_info (
     .clk_i  (clk_sys_i),
     .rst_ni (rst_sys_ni),
@@ -1184,6 +1253,26 @@ module sonata_system
   pinmux u_pinmux (
     .clk_i(clk_sys_i),
     .rst_ni(rst_sys_ni),
+
+    .gpio_board_gpi_o(),
+    .gpio_board_gpo_i('{gpio_board_to_pins}),
+    .gpio_board_gpo_en_i('{'b1}),
+
+    .gpio_rph_ios_o('{gpio_rph_from_pins}),
+    .gpio_rph_ios_i('{gpio_rph_to_pins}),
+    .gpio_rph_ios_en_i('{gpio_rph_to_pins_enable}),
+
+    .gpio_ah_ios_o('{gpio_ah_from_pins}),
+    .gpio_ah_ios_i('{gpio_ah_to_pins}),
+    .gpio_ah_ios_en_i('{gpio_ah_to_pins_enable}),
+
+    .gpio_pmod0_ios_o('{gpio_pmod0_from_pins}),
+    .gpio_pmod0_ios_i('{gpio_pmod0_to_pins}),
+    .gpio_pmod0_ios_en_i('{gpio_pmod0_to_pins_enable}),
+
+    .gpio_pmod1_ios_o('{gpio_pmod1_from_pins}),
+    .gpio_pmod1_ios_i('{gpio_pmod1_to_pins}),
+    .gpio_pmod1_ios_en_i('{gpio_pmod1_to_pins_enable}),
 
     .pwm_ios_i('{pwm_modulated}),
     .pwm_ios_en_i('{'b1}),
@@ -1206,10 +1295,6 @@ module sonata_system
     .spi_sck_en_i('{default: 'b1}),
     .spi_cs_i(spi_cs),
     .spi_cs_en_i('{default: 'b1}),
-
-    .gpio_ios_o(gpio_from_pins[1:GPIO_NUM]),
-    .gpio_ios_i(gpio_to_pins[1:GPIO_NUM]),
-    .gpio_ios_en_i(gpio_to_pins_enable[1:GPIO_NUM]),
 
     .in_from_pins_i,
     .out_to_pins_o,

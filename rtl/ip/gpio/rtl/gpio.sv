@@ -7,8 +7,7 @@ module gpio #(
   parameter int unsigned GpoWidth     = 16,
   parameter int unsigned AddrWidth    = 32,
   parameter int unsigned DataWidth    = 32,
-  parameter int unsigned RegAddr      = 12,
-  parameter int unsigned NumInstances =  1
+  parameter int unsigned RegAddr      = 12
 ) (
   input  logic clk_i,
   input  logic rst_ni,
@@ -16,9 +15,9 @@ module gpio #(
   input  tlul_pkg::tl_h2d_t tl_i,
   output tlul_pkg::tl_d2h_t tl_o,
 
-  input  logic [GpiWidth-1:0] gp_i[NumInstances],
-  output logic [GpoWidth-1:0] gp_o[NumInstances],
-  output logic [GpoWidth-1:0] gp_o_en[NumInstances]
+  input  logic [GpiWidth-1:0] gp_i,
+  output logic [GpoWidth-1:0] gp_o,
+  output logic [GpoWidth-1:0] gp_o_en
 );
   localparam int unsigned RegAddrWidth  = 8;
 
@@ -35,13 +34,12 @@ module gpio #(
   // Tie off upper bits of address.
   assign device_addr[AddrWidth-1:RegAddrWidth] = '0;
 
-  gpio_array #(
-    .GpiWidth     ( GpiWidth     ),
-    .GpoWidth     ( GpoWidth     ),
-    .AddrWidth    ( AddrWidth    ),
-    .DataWidth    ( DataWidth    ),
-    .RegAddr      ( RegAddr      ),
-    .NumInstances ( NumInstances )
+  gpio_core #(
+    .GpiWidth,
+    .GpoWidth,
+    .AddrWidth,
+    .DataWidth,
+    .RegAddr
   ) u_gpio (
     .clk_i,
     .rst_ni,

@@ -7,20 +7,29 @@
 package sonata_pkg;
 
   // Number of Instances
-  localparam int unsigned GPIO_NUM = 3;
+  localparam int unsigned GPIO_BOARD_NUM = 1;
+  localparam int unsigned GPIO_RPH_NUM = 1;
+  localparam int unsigned GPIO_AH_NUM = 1;
+  localparam int unsigned GPIO_PMOD0_NUM = 1;
+  localparam int unsigned GPIO_PMOD1_NUM = 1;
   localparam int unsigned PWM_NUM = 1;
   localparam int unsigned UART_NUM = 5;
   localparam int unsigned I2C_NUM = 2;
   localparam int unsigned SPI_NUM = 5;
 
   // Width of block IO arrays
-  localparam int unsigned GPIO_IOS_WIDTH = 32;
+  localparam int unsigned GPIO_BOARD_GPO_WIDTH = 8;
+  localparam int unsigned GPIO_BOARD_GPI_WIDTH = 17;
+  localparam int unsigned GPIO_RPH_IOS_WIDTH = 28;
+  localparam int unsigned GPIO_AH_IOS_WIDTH = 14;
+  localparam int unsigned GPIO_PMOD0_IOS_WIDTH = 8;
+  localparam int unsigned GPIO_PMOD1_IOS_WIDTH = 8;
   localparam int unsigned PWM_IOS_WIDTH = 6;
   localparam int unsigned SPI_CS_WIDTH = 4;
 
   // Number of input, output, and inout pins
-  localparam int unsigned IN_PIN_NUM = 8;
-  localparam int unsigned OUT_PIN_NUM = 20;
+  localparam int unsigned IN_PIN_NUM = 25;
+  localparam int unsigned OUT_PIN_NUM = 28;
   localparam int unsigned INOUT_PIN_NUM = 64;
 
   localparam int unsigned IN_PIN_SER0_RX = 0;
@@ -31,6 +40,23 @@ package sonata_pkg;
   localparam int unsigned IN_PIN_MB3 = 5;
   localparam int unsigned IN_PIN_MB8 = 6;
   localparam int unsigned IN_PIN_MICROSD_DAT0 = 7;
+  localparam int unsigned IN_PIN_MICROSD_DET = 8;
+  localparam int unsigned IN_PIN_USRSW_0 = 9;
+  localparam int unsigned IN_PIN_USRSW_1 = 10;
+  localparam int unsigned IN_PIN_USRSW_2 = 11;
+  localparam int unsigned IN_PIN_USRSW_3 = 12;
+  localparam int unsigned IN_PIN_USRSW_4 = 13;
+  localparam int unsigned IN_PIN_USRSW_5 = 14;
+  localparam int unsigned IN_PIN_USRSW_6 = 15;
+  localparam int unsigned IN_PIN_USRSW_7 = 16;
+  localparam int unsigned IN_PIN_NAVSW_0 = 17;
+  localparam int unsigned IN_PIN_NAVSW_1 = 18;
+  localparam int unsigned IN_PIN_NAVSW_2 = 19;
+  localparam int unsigned IN_PIN_NAVSW_3 = 20;
+  localparam int unsigned IN_PIN_NAVSW_4 = 21;
+  localparam int unsigned IN_PIN_SELSW_0 = 22;
+  localparam int unsigned IN_PIN_SELSW_1 = 23;
+  localparam int unsigned IN_PIN_SELSW_2 = 24;
 
   localparam int unsigned OUT_PIN_SER0_TX = 0;
   localparam int unsigned OUT_PIN_SER1_TX = 1;
@@ -52,6 +78,14 @@ package sonata_pkg;
   localparam int unsigned OUT_PIN_MICROSD_CLK = 17;
   localparam int unsigned OUT_PIN_MICROSD_CMD = 18;
   localparam int unsigned OUT_PIN_MICROSD_DAT3 = 19;
+  localparam int unsigned OUT_PIN_USRLED_0 = 20;
+  localparam int unsigned OUT_PIN_USRLED_1 = 21;
+  localparam int unsigned OUT_PIN_USRLED_2 = 22;
+  localparam int unsigned OUT_PIN_USRLED_3 = 23;
+  localparam int unsigned OUT_PIN_USRLED_4 = 24;
+  localparam int unsigned OUT_PIN_USRLED_5 = 25;
+  localparam int unsigned OUT_PIN_USRLED_6 = 26;
+  localparam int unsigned OUT_PIN_USRLED_7 = 27;
 
   localparam int unsigned INOUT_PIN_SCL0 = 0;
   localparam int unsigned INOUT_PIN_SDA0 = 1;

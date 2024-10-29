@@ -219,13 +219,6 @@ module top_verilator (input logic clk_i, rst_ni);
   assign inout_from_pins[INOUT_PIN_MB5] = 1'b1;
   assign inout_from_pins[INOUT_PIN_MB6] = 1'b1;
 
-  // SPI CS outputs from GPIO pins; these are scheduled to be dropped but they are still required
-  // by the `gp_o` port presently.
-  logic gp_lcd_cs, gp_appspi_cs, gp_ethmac_cs;
-  logic gp_rph_g8_ce0, gp_rph_g7_ce1;
-  logic gp_rph_g18, gp_rph_g17, gp_rph_g16_ce2;
-  logic gp_ah_tmpio10, gp_mb1;
-
   // CS outputs to SPI peripherals from controllers.
   assign appspi_cs    = out_to_pins[OUT_PIN_APPSPI_CS];
   assign lcd_cs       = out_to_pins[OUT_PIN_LCD_CS];
@@ -238,12 +231,6 @@ module top_verilator (input logic clk_i, rst_ni);
   assign rph_g17      = inout_to_pins[INOUT_PIN_RPH_G17];
   assign rph_g16_ce2  = inout_to_pins[INOUT_PIN_RPH_G16_CE2];
   assign mb1          = out_to_pins[OUT_PIN_MB1];
-
-  wire unused_gp_spi_cs_ = ^{gp_lcd_cs, gp_appspi_cs, gp_ethmac_cs,
-                             gp_rph_g8_ce0, gp_rph_g7_ce1, gp_rph_g18, gp_rph_g17, gp_rph_g16_ce2,
-                             gp_ah_tmpio10, gp_mb1};
-
-  logic [8:0] unused_gp_o;
 
   // Loopback functionality used to verify the operation of the pinmux and GPIO pins;
   // these signals are re-timed through a single register stage simply to prevent Verilator
@@ -281,22 +268,6 @@ module top_verilator (input logic clk_i, rst_ni);
     .clk_hr90p_i    (1'b0),
     .clk_hr3x_i     (1'b0),
     .rst_hr_ni      (rst_hr_n),
-
-    .gp_i           (0),
-    .gp_o           ({
-                      unused_gp_o,
-                      mb0, // mikroBUS Click reset
-                      gp_mb1, // mikroBUS Click chip select
-                      gp_ah_tmpio10, // Arduino shield chip select
-                      gp_rph_g16_ce2, gp_rph_g17, gp_rph_g18, // R-Pi SPI1 chip selects [2:0]
-                      gp_rph_g7_ce1, gp_rph_g8_ce0, // R-Pi SPI0 chip selects [1:0]
-                      ethmac_rst, gp_ethmac_cs, // Ethernet
-                      gp_appspi_cs, // Flash
-                      usrLed, // User LEDs (8 bits)
-                      lcd_backlight, lcd_dc, lcd_rst, gp_lcd_cs // LCD screen
-                     }),
-
-    .gp_o_en      ( ),
 
     // Arduino Shield Analog(ue)
     .ard_an_di_i    (0),
