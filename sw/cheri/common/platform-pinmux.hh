@@ -240,11 +240,11 @@ class SonataPinmux : private utils::NoCopyNoMove {
     uart_2_rx           = 0x84d,
     uart_3_rx           = 0x84e,
     uart_4_rx           = 0x84f,
-    spi_0_rx            = 0x850,
-    spi_1_rx            = 0x851,
-    spi_2_rx            = 0x852,
-    spi_3_rx            = 0x853,
-    spi_4_rx            = 0x854,
+    spi_0_cipo          = 0x850,
+    spi_1_cipo          = 0x851,
+    spi_2_cipo          = 0x852,
+    spi_3_cipo          = 0x853,
+    spi_4_cipo          = 0x854,
   };
 
   /**
@@ -306,10 +306,10 @@ class SonataPinmux : private utils::NoCopyNoMove {
    */
   static constexpr uint8_t block_input_options(BlockInput block_input) {
     switch (block_input) {
-      case BlockInput::spi_3_rx:
+      case BlockInput::spi_3_cipo:
         return 5;
       case BlockInput::uart_3_rx:
-      case BlockInput::spi_4_rx:
+      case BlockInput::spi_4_cipo:
         return 4;
       case BlockInput::uart_2_rx:
         return 3;

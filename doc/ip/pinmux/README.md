@@ -19,14 +19,14 @@ The default value for all of these selectors is `'b10`.
 | 0x004 | `sda0` | 0, `i2c[0].sda` |
 | 0x005 | `scl1` | 0, `i2c[1].scl` |
 | 0x006 | `sda1` | 0, `i2c[1].sda` |
-| 0x007 | `appspi_d0` | 0, `spi[0].tx` |
-| 0x008 | `appspi_clk` | 0, `spi[0].sck` |
+| 0x007 | `appspi_d0` | 0, `spi[0].copi` |
+| 0x008 | `appspi_clk` | 0, `spi[0].sclk` |
 | 0x009 | `appspi_cs` | 0, `spi[0].cs[0]` |
-| 0x00a | `lcd_copi` | 0, `spi[1].tx` |
-| 0x00b | `lcd_clk` | 0, `spi[1].sck` |
+| 0x00a | `lcd_copi` | 0, `spi[1].copi` |
+| 0x00b | `lcd_clk` | 0, `spi[1].sclk` |
 | 0x00c | `lcd_cs` | 0, `spi[1].cs[0]` |
-| 0x00d | `ethmac_copi` | 0, `spi[2].tx` |
-| 0x00e | `ethmac_sclk` | 0, `spi[2].sck` |
+| 0x00d | `ethmac_copi` | 0, `spi[2].copi` |
+| 0x00e | `ethmac_sclk` | 0, `spi[2].sclk` |
 | 0x00f | `ethmac_cs` | 0, `spi[2].cs[0]` |
 | 0x010 | `rph_g0` | 0, `i2c[0].sda`, `gpio_rph[0].gpio[0]` |
 | 0x011 | `rph_g1` | 0, `i2c[0].scl`, `gpio_rph[0].gpio[1]` |
@@ -38,8 +38,8 @@ The default value for all of these selectors is `'b10`.
 | 0x017 | `rph_g7_ce1` | 0, `spi[3].cs[1]`, `gpio_rph[0].gpio[7]` |
 | 0x018 | `rph_g8_ce0` | 0, `spi[3].cs[0]`, `gpio_rph[0].gpio[8]` |
 | 0x019 | `rph_g9_cipo` | 0, `gpio_rph[0].gpio[9]` |
-| 0x01a | `rph_g10_copi` | 0, `spi[3].tx`, `gpio_rph[0].gpio[10]` |
-| 0x01b | `rph_g11_sclk` | 0, `spi[3].sck`, `gpio_rph[0].gpio[11]` |
+| 0x01a | `rph_g10_copi` | 0, `spi[3].copi`, `gpio_rph[0].gpio[10]` |
+| 0x01b | `rph_g11_sclk` | 0, `spi[3].sclk`, `gpio_rph[0].gpio[11]` |
 | 0x01c | `rph_g12` | 0, `gpio_rph[0].gpio[12]` |
 | 0x01d | `rph_g13` | 0, `gpio_rph[0].gpio[13]` |
 | 0x01e | `rph_txd0` | 0, `uart[2].tx`, `gpio_rph[0].gpio[14]` |
@@ -48,8 +48,8 @@ The default value for all of these selectors is `'b10`.
 | 0x021 | `rph_g17` | 0, `spi[4].cs[1]`, `gpio_rph[0].gpio[17]` |
 | 0x022 | `rph_g18` | 0, `spi[4].cs[0]`, `gpio_rph[0].gpio[18]` |
 | 0x023 | `rph_g19_cipo` | 0, `gpio_rph[0].gpio[19]` |
-| 0x024 | `rph_g20_copi` | 0, `spi[4].tx`, `gpio_rph[0].gpio[20]` |
-| 0x025 | `rph_g21_sclk` | 0, `spi[4].sck`, `gpio_rph[0].gpio[21]` |
+| 0x024 | `rph_g20_copi` | 0, `spi[4].copi`, `gpio_rph[0].gpio[20]` |
+| 0x025 | `rph_g21_sclk` | 0, `spi[4].sclk`, `gpio_rph[0].gpio[21]` |
 | 0x026 | `rph_g22` | 0, `gpio_rph[0].gpio[22]` |
 | 0x027 | `rph_g23` | 0, `gpio_rph[0].gpio[23]` |
 | 0x028 | `rph_g24` | 0, `gpio_rph[0].gpio[24]` |
@@ -67,34 +67,34 @@ The default value for all of these selectors is `'b10`.
 | 0x034 | `ah_tmpio8` | 0, `gpio_ah[0].gpio[8]` |
 | 0x035 | `ah_tmpio9` | 0, `gpio_ah[0].gpio[9]` |
 | 0x036 | `ah_tmpio10` | 0, `spi[3].cs[2]`, `gpio_ah[0].gpio[10]` |
-| 0x037 | `ah_tmpio11` | 0, `spi[3].tx`, `gpio_ah[0].gpio[11]` |
+| 0x037 | `ah_tmpio11` | 0, `spi[3].copi`, `gpio_ah[0].gpio[11]` |
 | 0x038 | `ah_tmpio12` | 0, `gpio_ah[0].gpio[12]` |
-| 0x039 | `ah_tmpio13` | 0, `spi[3].sck`, `gpio_ah[0].gpio[13]` |
+| 0x039 | `ah_tmpio13` | 0, `spi[3].sclk`, `gpio_ah[0].gpio[13]` |
 | 0x03a | `mb1` | 0, `spi[4].cs[3]` |
-| 0x03b | `mb2` | 0, `spi[4].sck` |
-| 0x03c | `mb4` | 0, `spi[4].tx` |
+| 0x03b | `mb2` | 0, `spi[4].sclk` |
+| 0x03c | `mb4` | 0, `spi[4].copi` |
 | 0x03d | `mb5` | 0, `i2c[1].sda` |
 | 0x03e | `mb6` | 0, `i2c[1].scl` |
 | 0x03f | `mb7` | 0, `uart[3].tx` |
 | 0x040 | `mb10` | 0, `pwm[0].pwm[0]` |
 | 0x041 | `pmod0_0` | 0, `gpio_pmod0[0].gpio[0]` |
-| 0x042 | `pmod0_1` | 0, `gpio_pmod0[0].gpio[1]`, `spi[3].tx`, `uart[2].tx` |
+| 0x042 | `pmod0_1` | 0, `gpio_pmod0[0].gpio[1]`, `spi[3].copi`, `uart[2].tx` |
 | 0x043 | `pmod0_2` | 0, `gpio_pmod0[0].gpio[2]`, `i2c[0].scl` |
-| 0x044 | `pmod0_3` | 0, `gpio_pmod0[0].gpio[3]`, `i2c[0].sda`, `spi[3].sck` |
+| 0x044 | `pmod0_3` | 0, `gpio_pmod0[0].gpio[3]`, `i2c[0].sda`, `spi[3].sclk` |
 | 0x045 | `pmod0_4` | 0, `gpio_pmod0[0].gpio[4]` |
 | 0x046 | `pmod0_5` | 0, `gpio_pmod0[0].gpio[5]` |
 | 0x047 | `pmod0_6` | 0, `gpio_pmod0[0].gpio[6]` |
 | 0x048 | `pmod0_7` | 0, `gpio_pmod0[0].gpio[7]` |
 | 0x049 | `pmod1_0` | 0, `gpio_pmod1[0].gpio[0]` |
-| 0x04a | `pmod1_1` | 0, `gpio_pmod1[0].gpio[1]`, `spi[4].tx`, `uart[3].tx` |
+| 0x04a | `pmod1_1` | 0, `gpio_pmod1[0].gpio[1]`, `spi[4].copi`, `uart[3].tx` |
 | 0x04b | `pmod1_2` | 0, `gpio_pmod1[0].gpio[2]`, `i2c[1].scl` |
-| 0x04c | `pmod1_3` | 0, `gpio_pmod1[0].gpio[3]`, `i2c[1].sda`, `spi[4].sck` |
+| 0x04c | `pmod1_3` | 0, `gpio_pmod1[0].gpio[3]`, `i2c[1].sda`, `spi[4].sclk` |
 | 0x04d | `pmod1_4` | 0, `gpio_pmod1[0].gpio[4]` |
 | 0x04e | `pmod1_5` | 0, `gpio_pmod1[0].gpio[5]` |
 | 0x04f | `pmod1_6` | 0, `gpio_pmod1[0].gpio[6]` |
 | 0x050 | `pmod1_7` | 0, `gpio_pmod1[0].gpio[7]` |
-| 0x051 | `microsd_clk` | 0, `spi[3].sck` |
-| 0x052 | `microsd_cmd` | 0, `spi[3].tx` |
+| 0x051 | `microsd_clk` | 0, `spi[3].sclk` |
+| 0x052 | `microsd_cmd` | 0, `spi[3].copi` |
 | 0x053 | `microsd_dat3` | 0, `spi[3].cs[3]` |
 | 0x054 | `usrled[0]` | 0, `gpio_board[0].gpo[0]` |
 | 0x055 | `usrled[1]` | 0, `gpio_board[0].gpo[1]` |
@@ -189,11 +189,11 @@ Besides the output pin selectors, there are also selectors for which pin should 
 | 0x84d | `uart[2].rx` | 1, `rph_rxd0`, `pmod0_2` |
 | 0x84e | `uart[3].rx` | 1, `ah_tmpio0`, `mb8`, `pmod1_2` |
 | 0x84f | `uart[4].rx` | 1, `rs232_rx` |
-| 0x850 | `spi[0].rx` | 0, `appspi_d1` |
-| 0x851 | `spi[1].rx` | 0, 0 |
-| 0x852 | `spi[2].rx` | 0, `ethmac_cipo` |
-| 0x853 | `spi[3].rx` | 0, `rph_g9_cipo`, `ah_tmpio12`, `pmod0_2`, `microsd_dat0` |
-| 0x854 | `spi[4].rx` | 0, `rph_g19_cipo`, `mb3`, `pmod1_2` |
+| 0x850 | `spi[0].cipo` | 0, `appspi_d1` |
+| 0x851 | `spi[1].cipo` | 0, 0 |
+| 0x852 | `spi[2].cipo` | 0, `ethmac_cipo` |
+| 0x853 | `spi[3].cipo` | 0, `rph_g9_cipo`, `ah_tmpio12`, `pmod0_2`, `microsd_dat0` |
+| 0x854 | `spi[4].cipo` | 0, `rph_g19_cipo`, `mb3`, `pmod1_2` |
 
 ## Regeneration
 
