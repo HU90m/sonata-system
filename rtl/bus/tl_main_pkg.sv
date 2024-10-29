@@ -24,15 +24,12 @@ package tl_main_pkg;
   localparam logic [31:0] ADDR_SPACE_UART0       = 32'h 80100000;
   localparam logic [31:0] ADDR_SPACE_UART1       = 32'h 80101000;
   localparam logic [31:0] ADDR_SPACE_UART2       = 32'h 80102000;
-  localparam logic [31:0] ADDR_SPACE_UART3       = 32'h 80103000;
-  localparam logic [31:0] ADDR_SPACE_UART4       = 32'h 80104000;
   localparam logic [31:0] ADDR_SPACE_I2C0        = 32'h 80200000;
   localparam logic [31:0] ADDR_SPACE_I2C1        = 32'h 80201000;
   localparam logic [31:0] ADDR_SPACE_SPI0        = 32'h 80300000;
   localparam logic [31:0] ADDR_SPACE_SPI1        = 32'h 80301000;
   localparam logic [31:0] ADDR_SPACE_SPI2        = 32'h 80302000;
   localparam logic [31:0] ADDR_SPACE_SPI3        = 32'h 80303000;
-  localparam logic [31:0] ADDR_SPACE_SPI4        = 32'h 80304000;
   localparam logic [31:0] ADDR_SPACE_USBDEV      = 32'h 80400000;
   localparam logic [31:0] ADDR_SPACE_RV_PLIC     = 32'h 88000000;
 
@@ -54,20 +51,17 @@ package tl_main_pkg;
   localparam logic [31:0] ADDR_MASK_UART0       = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_UART1       = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_UART2       = 32'h 00000fff;
-  localparam logic [31:0] ADDR_MASK_UART3       = 32'h 00000fff;
-  localparam logic [31:0] ADDR_MASK_UART4       = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_I2C0        = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_I2C1        = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_SPI0        = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_SPI1        = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_SPI2        = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_SPI3        = 32'h 00000fff;
-  localparam logic [31:0] ADDR_MASK_SPI4        = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_USBDEV      = 32'h 00000fff;
   localparam logic [31:0] ADDR_MASK_RV_PLIC     = 32'h 03ffffff;
 
   localparam int N_HOST   = 2;
-  localparam int N_DEVICE = 29;
+  localparam int N_DEVICE = 26;
 
   typedef enum int {
     TlSram = 0,
@@ -88,17 +82,14 @@ package tl_main_pkg;
     TlUart0 = 15,
     TlUart1 = 16,
     TlUart2 = 17,
-    TlUart3 = 18,
-    TlUart4 = 19,
-    TlI2C0 = 20,
-    TlI2C1 = 21,
-    TlSpi0 = 22,
-    TlSpi1 = 23,
-    TlSpi2 = 24,
-    TlSpi3 = 25,
-    TlSpi4 = 26,
-    TlUsbdev = 27,
-    TlRvPlic = 28
+    TlI2C0 = 18,
+    TlI2C1 = 19,
+    TlSpi0 = 20,
+    TlSpi1 = 21,
+    TlSpi2 = 22,
+    TlSpi3 = 23,
+    TlUsbdev = 24,
+    TlRvPlic = 25
   } tl_device_e;
 
   typedef enum int {

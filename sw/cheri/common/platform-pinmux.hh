@@ -51,98 +51,102 @@ class SonataPinmux : private utils::NoCopyNoMove {
    * https://github.com/newaetech/sonata-pcb/blob/649b11c2fb758f798966605a07a8b6b68dd434e9/sonata-schematics-r09.pdf
    */
   enum class OutputPin : uint16_t {
-    ser0_tx      = 0x000,
-    ser1_tx      = 0x001,
-    rs232_tx     = 0x002,
-    scl0         = 0x003,
-    sda0         = 0x004,
-    scl1         = 0x005,
-    sda1         = 0x006,
-    appspi_d0    = 0x007,
-    appspi_clk   = 0x008,
-    appspi_cs    = 0x009,
-    lcd_copi     = 0x00a,
-    lcd_clk      = 0x00b,
-    lcd_cs       = 0x00c,
-    ethmac_copi  = 0x00d,
-    ethmac_sclk  = 0x00e,
-    ethmac_cs    = 0x00f,
-    rph_g0       = 0x010,
-    rph_g1       = 0x011,
-    rph_g2_sda   = 0x012,
-    rph_g3_scl   = 0x013,
-    rph_g4       = 0x014,
-    rph_g5       = 0x015,
-    rph_g6       = 0x016,
-    rph_g7_ce1   = 0x017,
-    rph_g8_ce0   = 0x018,
-    rph_g9_cipo  = 0x019,
-    rph_g10_copi = 0x01a,
-    rph_g11_sclk = 0x01b,
-    rph_g12      = 0x01c,
-    rph_g13      = 0x01d,
-    rph_txd0     = 0x01e,
-    rph_rxd0     = 0x01f,
-    rph_g16_ce2  = 0x020,
-    rph_g17      = 0x021,
-    rph_g18      = 0x022,
-    rph_g19_cipo = 0x023,
-    rph_g20_copi = 0x024,
-    rph_g21_sclk = 0x025,
-    rph_g22      = 0x026,
-    rph_g23      = 0x027,
-    rph_g24      = 0x028,
-    rph_g25      = 0x029,
-    rph_g26      = 0x02a,
-    rph_g27      = 0x02b,
-    ah_tmpio0    = 0x02c,
-    ah_tmpio1    = 0x02d,
-    ah_tmpio2    = 0x02e,
-    ah_tmpio3    = 0x02f,
-    ah_tmpio4    = 0x030,
-    ah_tmpio5    = 0x031,
-    ah_tmpio6    = 0x032,
-    ah_tmpio7    = 0x033,
-    ah_tmpio8    = 0x034,
-    ah_tmpio9    = 0x035,
-    ah_tmpio10   = 0x036,
-    ah_tmpio11   = 0x037,
-    ah_tmpio12   = 0x038,
-    ah_tmpio13   = 0x039,
-    mb1          = 0x03a,
-    mb2          = 0x03b,
-    mb4          = 0x03c,
-    mb5          = 0x03d,
-    mb6          = 0x03e,
-    mb7          = 0x03f,
-    mb10         = 0x040,
-    pmod0_0      = 0x041,
-    pmod0_1      = 0x042,
-    pmod0_2      = 0x043,
-    pmod0_3      = 0x044,
-    pmod0_4      = 0x045,
-    pmod0_5      = 0x046,
-    pmod0_6      = 0x047,
-    pmod0_7      = 0x048,
-    pmod1_0      = 0x049,
-    pmod1_1      = 0x04a,
-    pmod1_2      = 0x04b,
-    pmod1_3      = 0x04c,
-    pmod1_4      = 0x04d,
-    pmod1_5      = 0x04e,
-    pmod1_6      = 0x04f,
-    pmod1_7      = 0x050,
-    microsd_clk  = 0x051,
-    microsd_cmd  = 0x052,
-    microsd_dat3 = 0x053,
-    usrled_0     = 0x054,
-    usrled_1     = 0x055,
-    usrled_2     = 0x056,
-    usrled_3     = 0x057,
-    usrled_4     = 0x058,
-    usrled_5     = 0x059,
-    usrled_6     = 0x05a,
-    usrled_7     = 0x05b,
+    usrled_0          = 0x000,
+    usrled_1          = 0x001,
+    usrled_2          = 0x002,
+    usrled_3          = 0x003,
+    usrled_4          = 0x004,
+    usrled_5          = 0x005,
+    usrled_6          = 0x006,
+    usrled_7          = 0x007,
+    ser0_tx           = 0x008,
+    ser1_tx           = 0x009,
+    rs232_tx          = 0x00a,
+    scl0              = 0x00b,
+    sda0              = 0x00c,
+    scl1              = 0x00d,
+    sda1              = 0x00e,
+    appspi_d0         = 0x00f,
+    appspi_clk        = 0x010,
+    appspi_cs         = 0x011,
+    ethmac_copi       = 0x012,
+    ethmac_sclk       = 0x013,
+    ethmac_cs         = 0x014,
+    ethmac_rst        = 0x015,
+    microsd_clk       = 0x016,
+    microsd_cmd       = 0x017,
+    microsd_dat3      = 0x018,
+    lcd_copi          = 0x019,
+    lcd_clk           = 0x01a,
+    lcd_cs            = 0x01b,
+    lcd_rst           = 0x01c,
+    lcd_dc            = 0x01d,
+    lcd_backlight     = 0x01e,
+    rph_g0            = 0x01f,
+    rph_g1            = 0x020,
+    rph_g2_sda        = 0x021,
+    rph_g3_scl        = 0x022,
+    rph_g4            = 0x023,
+    rph_g5            = 0x024,
+    rph_g6            = 0x025,
+    rph_g7_spi0_ce1   = 0x026,
+    rph_g8_spi0_ce0   = 0x027,
+    rph_g9_cipo       = 0x028,
+    rph_g10_copi      = 0x029,
+    rph_g11_sclk      = 0x02a,
+    rph_g12           = 0x02b,
+    rph_g13           = 0x02c,
+    rph_txd0          = 0x02d,
+    rph_rxd0          = 0x02e,
+    rph_g16_spi1_ce2  = 0x02f,
+    rph_g17_spi1_ce1  = 0x030,
+    rph_g18_spi1_ce0  = 0x031,
+    rph_g19_spi1_cipo = 0x032,
+    rph_g20_spi1_copi = 0x033,
+    rph_g21_spi1_sclk = 0x034,
+    rph_g22           = 0x035,
+    rph_g23           = 0x036,
+    rph_g24           = 0x037,
+    rph_g25           = 0x038,
+    rph_g26           = 0x039,
+    rph_g27           = 0x03a,
+    ah_tmpio0         = 0x03b,
+    ah_tmpio1         = 0x03c,
+    ah_tmpio2         = 0x03d,
+    ah_tmpio3         = 0x03e,
+    ah_tmpio4         = 0x03f,
+    ah_tmpio5         = 0x040,
+    ah_tmpio6         = 0x041,
+    ah_tmpio7         = 0x042,
+    ah_tmpio8         = 0x043,
+    ah_tmpio9         = 0x044,
+    ah_tmpio10        = 0x045,
+    ah_tmpio11        = 0x046,
+    ah_tmpio12        = 0x047,
+    ah_tmpio13        = 0x048,
+    mb1               = 0x049,
+    mb2               = 0x04a,
+    mb4               = 0x04b,
+    mb5               = 0x04c,
+    mb6               = 0x04d,
+    mb7               = 0x04e,
+    mb10              = 0x04f,
+    pmod0_0           = 0x050,
+    pmod0_1           = 0x051,
+    pmod0_2           = 0x052,
+    pmod0_3           = 0x053,
+    pmod0_4           = 0x054,
+    pmod0_5           = 0x055,
+    pmod0_6           = 0x056,
+    pmod0_7           = 0x057,
+    pmod1_0           = 0x058,
+    pmod1_1           = 0x059,
+    pmod1_2           = 0x05a,
+    pmod1_3           = 0x05b,
+    pmod1_4           = 0x05c,
+    pmod1_5           = 0x05d,
+    pmod1_6           = 0x05e,
+    pmod1_7           = 0x05f,
   };
 
   /**
@@ -238,13 +242,10 @@ class SonataPinmux : private utils::NoCopyNoMove {
     uart_0_rx           = 0x84b,
     uart_1_rx           = 0x84c,
     uart_2_rx           = 0x84d,
-    uart_3_rx           = 0x84e,
-    uart_4_rx           = 0x84f,
-    spi_0_cipo          = 0x850,
-    spi_1_cipo          = 0x851,
-    spi_2_cipo          = 0x852,
-    spi_3_cipo          = 0x853,
-    spi_4_cipo          = 0x854,
+    spi_0_cipo          = 0x84e,
+    spi_1_cipo          = 0x84f,
+    spi_2_cipo          = 0x850,
+    spi_3_cipo          = 0x851,
   };
 
   /**
@@ -262,30 +263,47 @@ class SonataPinmux : private utils::NoCopyNoMove {
   static constexpr uint8_t output_pin_options(OutputPin output_pin) {
     switch (output_pin) {
       case OutputPin::pmod0_1:
-      case OutputPin::pmod0_3:
       case OutputPin::pmod1_1:
+        return 5;
+      case OutputPin::rph_g18_spi1_ce0:
+      case OutputPin::rph_g20_spi1_copi:
+      case OutputPin::rph_g21_spi1_sclk:
+      case OutputPin::ah_tmpio10:
+      case OutputPin::ah_tmpio11:
+      case OutputPin::pmod0_3:
       case OutputPin::pmod1_3:
         return 4;
+      case OutputPin::lcd_backlight:
       case OutputPin::rph_g0:
       case OutputPin::rph_g1:
       case OutputPin::rph_g2_sda:
       case OutputPin::rph_g3_scl:
-      case OutputPin::rph_g7_ce1:
-      case OutputPin::rph_g8_ce0:
+      case OutputPin::rph_g7_spi0_ce1:
+      case OutputPin::rph_g8_spi0_ce0:
       case OutputPin::rph_g10_copi:
       case OutputPin::rph_g11_sclk:
+      case OutputPin::rph_g12:
+      case OutputPin::rph_g13:
       case OutputPin::rph_txd0:
-      case OutputPin::rph_g16_ce2:
-      case OutputPin::rph_g17:
-      case OutputPin::rph_g18:
-      case OutputPin::rph_g20_copi:
-      case OutputPin::rph_g21_sclk:
+      case OutputPin::rph_g16_spi1_ce2:
+      case OutputPin::rph_g17_spi1_ce1:
+      case OutputPin::rph_g19_spi1_cipo:
       case OutputPin::ah_tmpio1:
-      case OutputPin::ah_tmpio10:
-      case OutputPin::ah_tmpio11:
+      case OutputPin::ah_tmpio3:
+      case OutputPin::ah_tmpio5:
+      case OutputPin::ah_tmpio6:
+      case OutputPin::ah_tmpio9:
       case OutputPin::ah_tmpio13:
+      case OutputPin::pmod0_0:
       case OutputPin::pmod0_2:
+      case OutputPin::pmod0_5:
+      case OutputPin::pmod0_6:
+      case OutputPin::pmod0_7:
+      case OutputPin::pmod1_0:
       case OutputPin::pmod1_2:
+      case OutputPin::pmod1_5:
+      case OutputPin::pmod1_6:
+      case OutputPin::pmod1_7:
         return 3;
       default:
         return 2;
@@ -306,10 +324,11 @@ class SonataPinmux : private utils::NoCopyNoMove {
    */
   static constexpr uint8_t block_input_options(BlockInput block_input) {
     switch (block_input) {
+      case BlockInput::uart_1_rx:
+        return 6;
+      case BlockInput::spi_0_cipo:
+      case BlockInput::spi_2_cipo:
       case BlockInput::spi_3_cipo:
-        return 5;
-      case BlockInput::uart_3_rx:
-      case BlockInput::spi_4_cipo:
         return 4;
       case BlockInput::uart_2_rx:
         return 3;
