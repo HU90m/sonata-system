@@ -108,6 +108,12 @@ The default value for all of these selectors is `'b10`.
 | 0x05d | `pmod1_5` | 0, `gpio_pmod1[0].gpio[5]`, `pwm[0].pwm[4]` |
 | 0x05e | `pmod1_6` | 0, `gpio_pmod1[0].gpio[6]`, `spi[3].cs[1]` |
 | 0x05f | `pmod1_7` | 0, `gpio_pmod1[0].gpio[7]`, `spi[3].cs[2]` |
+| 0x060 | `pmodc_0` | 0, `gpio_pmodc[0].gpio[0]` |
+| 0x061 | `pmodc_1` | 0, `gpio_pmodc[0].gpio[1]` |
+| 0x062 | `pmodc_2` | 0, `gpio_pmodc[0].gpio[2]` |
+| 0x063 | `pmodc_3` | 0, `gpio_pmodc[0].gpio[3]` |
+| 0x064 | `pmodc_4` | 0, `gpio_pmodc[0].gpio[4]` |
+| 0x065 | `pmodc_5` | 0, `gpio_pmodc[0].gpio[5]` |
 
 Besides the output pin selectors, there are also selectors for which pin should drive block inputs:
 
@@ -188,13 +194,19 @@ Besides the output pin selectors, there are also selectors for which pin should 
 | 0x848 | `gpio_pmod1[0].gpio[5]` | 0, `pmod1_5` |
 | 0x849 | `gpio_pmod1[0].gpio[6]` | 0, `pmod1_6` |
 | 0x84a | `gpio_pmod1[0].gpio[7]` | 0, `pmod1_7` |
-| 0x84b | `uart[0].rx` | 1, `ser0_rx` |
-| 0x84c | `uart[1].rx` | 1, `ser1_rx`, `rph_rxd0`, `ah_tmpio0`, `mb8`, `pmod0_2` |
-| 0x84d | `uart[2].rx` | 1, `rs232_rx`, `pmod1_2` |
-| 0x84e | `spi[0].cipo` | 0, `appspi_d1`, `ethmac_cipo`, `microsd_dat0` |
-| 0x84f | `spi[1].cipo` | 0, 0 |
-| 0x850 | `spi[2].cipo` | 0, `rph_g9_cipo`, `ah_tmpio12`, `pmod0_2` |
-| 0x851 | `spi[3].cipo` | 0, `rph_g19_spi1_cipo`, `mb3`, `pmod1_2` |
+| 0x84b | `gpio_pmodc[0].gpio[0]` | 0, `pmodc_0` |
+| 0x84c | `gpio_pmodc[0].gpio[1]` | 0, `pmodc_1` |
+| 0x84d | `gpio_pmodc[0].gpio[2]` | 0, `pmodc_2` |
+| 0x84e | `gpio_pmodc[0].gpio[3]` | 0, `pmodc_3` |
+| 0x84f | `gpio_pmodc[0].gpio[4]` | 0, `pmodc_4` |
+| 0x850 | `gpio_pmodc[0].gpio[5]` | 0, `pmodc_5` |
+| 0x851 | `uart[0].rx` | 1, `ser0_rx` |
+| 0x852 | `uart[1].rx` | 1, `ser1_rx`, `rph_rxd0`, `ah_tmpio0`, `mb8`, `pmod0_2` |
+| 0x853 | `uart[2].rx` | 1, `rs232_rx`, `pmod1_2` |
+| 0x854 | `spi[0].cipo` | 0, `appspi_d1`, `ethmac_cipo`, `microsd_dat0` |
+| 0x855 | `spi[1].cipo` | 0, 0 |
+| 0x856 | `spi[2].cipo` | 0, `rph_g9_cipo`, `ah_tmpio12`, `pmod0_2` |
+| 0x857 | `spi[3].cipo` | 0, `rph_g19_spi1_cipo`, `mb3`, `pmod1_2` |
 
 ## Regeneration
 

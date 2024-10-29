@@ -12,6 +12,7 @@ package sonata_pkg;
   localparam int unsigned GPIO_AH_NUM = 1;
   localparam int unsigned GPIO_PMOD0_NUM = 1;
   localparam int unsigned GPIO_PMOD1_NUM = 1;
+  localparam int unsigned GPIO_PMODC_NUM = 1;
   localparam int unsigned PWM_NUM = 1;
   localparam int unsigned UART_NUM = 3;
   localparam int unsigned I2C_NUM = 2;
@@ -24,13 +25,14 @@ package sonata_pkg;
   localparam int unsigned GPIO_AH_GPIO_WIDTH = 14;
   localparam int unsigned GPIO_PMOD0_GPIO_WIDTH = 8;
   localparam int unsigned GPIO_PMOD1_GPIO_WIDTH = 8;
+  localparam int unsigned GPIO_PMODC_GPIO_WIDTH = 6;
   localparam int unsigned PWM_PWM_WIDTH = 7;
   localparam int unsigned SPI_CS_WIDTH = 4;
 
   // Number of input, output, and inout pins
   localparam int unsigned IN_PIN_NUM = 25;
   localparam int unsigned OUT_PIN_NUM = 32;
-  localparam int unsigned INOUT_PIN_NUM = 64;
+  localparam int unsigned INOUT_PIN_NUM = 70;
 
   localparam int unsigned IN_PIN_USRSW_0 = 0;
   localparam int unsigned IN_PIN_USRSW_1 = 1;
@@ -155,6 +157,12 @@ package sonata_pkg;
   localparam int unsigned INOUT_PIN_PMOD1_5 = 61;
   localparam int unsigned INOUT_PIN_PMOD1_6 = 62;
   localparam int unsigned INOUT_PIN_PMOD1_7 = 63;
+  localparam int unsigned INOUT_PIN_PMODC_0 = 64;
+  localparam int unsigned INOUT_PIN_PMODC_1 = 65;
+  localparam int unsigned INOUT_PIN_PMODC_2 = 66;
+  localparam int unsigned INOUT_PIN_PMODC_3 = 67;
+  localparam int unsigned INOUT_PIN_PMODC_4 = 68;
+  localparam int unsigned INOUT_PIN_PMODC_5 = 69;
 
   typedef logic [   IN_PIN_NUM-1:0] sonata_in_pins_t;
   typedef logic [  OUT_PIN_NUM-1:0] sonata_out_pins_t;
