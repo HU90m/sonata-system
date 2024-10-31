@@ -176,8 +176,8 @@ digraph {
         </tr>
         <tr><td port="clk">microsd_clk</td><td>sclk</td></tr>
         <tr><td port="dat0">microsd_dat0</td><td>cipo</td></tr>
-        <tr><td port="dat1">microsd_dat1</td><td>cipo</td></tr>
-        <tr><td port="dat2">microsd_dat2</td><td>cipo</td></tr>
+        <tr><td port="dat1">microsd_dat1</td></tr>
+        <tr><td port="dat2">microsd_dat2</td></tr>
         <tr><td port="dat3">microsd_dat3</td><td>cs</td></tr>
         <tr><td port="det">microsd_det</td><td>gpi</td></tr>
       </table>
